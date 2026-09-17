@@ -188,4 +188,4 @@ No film has yet been fully verified under the current methodology (dynamic perce
 - No film has yet been fully verified under the current methodology.
 - The framework's five-tier weighting and ceiling system reflect one researcher's judgment calls, documented explicitly so they can be examined, challenged, and revised — not presented as beyond question.
 
-- 
+  
