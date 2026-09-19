@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RPDI Scorer</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f6f3;
+    --card: #ffffff;
+    --border: rgba(0,0,0,0.08);
+    --text: #171613;
+    --text-dim: #6b6a63;
+    --text-faint: #9a998f;
+    --accent-bg: #171613;
+    --accent-text: #f7f6f3;
+    --met: #2e8f7a;
+    --warn: #b4790e;
+    --danger: #b23b2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #030303;
+      --card: #0a0a0a;
+      --border: rgba(255,255,255,0.08);
+      --text: #e8e6df;
+      --text-dim: #8f8e88;
+      --text-faint: #5c5b56;
+      --accent-bg: #ece9e2;
+      --accent-text: #0a0a0a;
+      --met: #4ECDC4;
+      --warn: #e0a800;
+      --danger: #c67b6b;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #030303;
+    --card: #0a0a0a;
+    --border: rgba(255,255,255,0.08);
+    --text: #e8e6df;
+    --text-dim: #8f8e88;
+    --text-faint: #5c5b56;
+    --accent-bg: #ece9e2;
+    --accent-text: #0a0a0a;
+    --met: #4ECDC4;
+    --warn: #e0a800;
+    --danger: #c67b6b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    padding: 32px 16px 80px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    margin: 0 0 4px;
+  }
+  .sub { color: var(--text-dim); font-size: 14px; margin: 0 0 28px; line-height: 1.5; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+  }
+  .card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    margin: 0 0 14px;
+  }
+  label { font-size: 12px; color: var(--text-dim); display: block; margin-bottom: 4px; }
+  input, select, textarea {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    width: 100%;
+  }
+  textarea { resize: vertical; }
+  button {
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    border-radius: 6px;
+    font-size: 14px;
+    border: none;
+    padding: 9px 18px;
+  }
+  .btn-primary { background: var(--accent-bg); color: var(--accent-text); font-weight: 500; }
+  .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+  .row > div { flex: 1; min-width: 110px; }
+  .quota-row { margin-bottom: 10px; }
+  .quota-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+  .bar-bg { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; transition: width 0.2s; }
+  .claim-item {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 10px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 8px;
+  }
+  .claim-item .remove { background: none; border: none; color: var(--text-faint); font-size: 16px; padding: 0 4px; }
+  .suggestion {
+    background: var(--bg); border: 1px dashed var(--border); border-radius: 8px;
+    padding: 10px 12px; font-size: 13px; margin: 10px 0; color: var(--text-dim);
+  }
+  .flag {
+    background: var(--bg); border-left: 3px solid var(--warn); border-radius: 4px;
+    padding: 8px 12px; font-size: 13px; margin-top: 8px; color: var(--text-dim);
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  th { color: var(--text-dim); font-weight: 500; }
+  .result-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 14px;
+  }
+  .result-value { font-family: 'Playfair Display', serif; font-size: 24px; }
+  pre {
+    white-space: pre-wrap; font-family: monospace; font-size: 12px;
+    background: var(--bg); padding: 14px; border-radius: 8px; color: var(--text-dim);
+    overflow-x: auto;
+  }
+  .badge {
+    display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px;
+    background: var(--bg); border: 1px solid var(--border); color: var(--text-dim);
+    margin-left: 6px;
+  }
+  .feel-domain {
+    border-top: 1px solid var(--border);
+    padding-top: 16px; margin-top: 16px;
+  }
+  .feel-domain:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+  .domain-desc { font-size: 12px; color: var(--text-dim); margin: 4px 0 8px; }
+  .domain-table { margin-bottom: 10px; }
+  .domain-table td:first-child { color: var(--text-dim); width: 40px; font-family: monospace; }
+  .domain-table td:last-child { color: var(--text-dim); }
+  .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+  .tab-btn {
+    background: transparent; border: 1px solid var(--border); color: var(--text-dim);
+    padding: 8px 16px;
+  }
+  .tab-btn.active { background: var(--accent-bg); color: var(--accent-text); border-color: var(--accent-bg); }
+  .ref-section { margin-bottom: 24px; }
+  .ref-section h3 { font-family: 'Playfair Display', serif; font-size: 16px; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>RPDI Scorer</h1>
+  <p class="sub">
+    Enforces the current claim distribution rule: Spine 10% (capped at 3, rounded down),
+    Soul 15%, Skeleton/Flesh/Skin 25% each — Skin absorbs rounding. Minimum 20 claims,
+    no maximum. You judge every claim's accuracy — this tool only does the math and
+    flags what needs a second look.
+  </p>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="tabScorer" onclick="showTab('scorer')">Scorer</button>
+    <button class="tab-btn" id="tabReference" onclick="showTab('reference')">Rules Reference</button>
+  </div>
+
+  <div id="scorerView">
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <label>Film title</label>
+        <input id="filmTitle" placeholder="Untitled" />
+      </div>
+      <div>
+        <label>Target claim count (min 20)</label>
+        <input id="targetCount" type="number" min="20" value="20" />
+      </div>
+      <div style="flex:0 0 auto; display:flex; gap:8px;">
+        <button class="btn-ghost" onclick="saveFilm()">Save</button>
+        <button class="btn-ghost" onclick="showLoadList()">Load</button>
+      </div>
+    </div>
+    <div id="loadList" style="margin-top:10px;"></div>
+    <p id="statusMsg" style="font-size:12px; color:var(--text-dim); margin:8px 0 0;"></p>
+  </div>
+
+  <div class="card">
+    <h2>Claim distribution — <span id="quotaHeader"></span></h2>
+    <div id="quotaBars"></div>
+    <p id="quotaFooter" style="font-size:12px; color:var(--text-faint); margin-top:10px;"></p>
+  </div>
+
+  <div class="card">
+    <h2>Add a claim</h2>
+    <textarea id="claimText" placeholder="Describe exactly what the film shows" rows="2"></textarea>
+    <div id="ceilingSuggestion"></div>
+    <div class="row" style="margin-top:10px;">
+      <div>
+        <label>Tier</label>
+        <select id="claimTier">
+          <option value="Spine">Spine (weight 5)</option>
+          <option value="Soul">Soul (weight 4)</option>
+          <option value="Skeleton">Skeleton (weight 3)</option>
+          <option value="Flesh">Flesh (weight 2)</option>
+          <option value="Skin">Skin (weight 1)</option>
+        </select>
+      </div>
+      <div>
+        <label>Accuracy (0–1)</label>
+        <input id="claimAccuracy" type="number" min="0" max="1" step="0.05" value="0.5" />
+      </div>
+      <div style="flex:0 0 auto;">
+        <button class="btn-primary" id="addClaimBtn" onclick="addClaim()">Add claim</button>
+      </div>
+    </div>
+    <div style="margin-top:10px;">
+      <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+        <input type="checkbox" id="absolutePremise" style="width:auto;" onchange="onAbsoluteToggle()" />
+        This is the film's single Absolute Premise claim — the one plot point the entire story depends on start to finish
+      </label>
+    </div>
+    <p id="claimError" style="color:var(--danger); font-size:13px; margin-top:8px;"></p>
+    <p style="font-size:11px; color:var(--text-faint); margin-top:10px;">
+      Default scoring uses 0 / 0.25 / 0.5 / 0.75 / 1.0. Use the finer 0.1 increments only
+      for claims with genuine nuance the default scale can't honestly capture.
+    </p>
+  </div>
+
+  <div class="card" id="claimsCard" style="display:none;">
+    <h2>Claims (<span id="claimCount">0</span>)</h2>
+    <div id="claimsList"></div>
+  </div>
+
+  <div class="card">
+    <h2>Feel score (S / P / F / E)</h2>
+    <p style="font-size:12px; color:var(--text-dim); margin-top:-6px;">
+      Cinematic portrayal technique, not audience feeling. Default weight is 1 for all four —
+      raise a weight only with a specific, citable reason from the film itself, never genre alone.
+    </p>
+
+    <div class="feel-domain">
+      <label style="font-size:13px; color:var(--text); font-weight:500;">S — Simplification of Reality</label>
+      <p class="domain-desc">How much real events, timelines, or situations are simplified, altered, or restructured for narrative convenience.</p>
+      <table class="domain-table">
+        <tr><td>0.0</td><td>No simplification — events presented with full detail, closely follows real-world complexity</td></tr>
+        <tr><td>0.25</td><td>Slight — minor condensation or omission, overall realism retained</td></tr>
+        <tr><td>0.5</td><td>Moderate — noticeable restructuring or merging of events</td></tr>
+        <tr><td>0.75</td><td>High — major alterations, combined or reordered events</td></tr>
+        <tr><td>1.0</td><td>Extreme — heavily reimagined, minimal resemblance to real structure</td></tr>
+      </table>
+      <input id="feelS" type="number" min="0" max="1" step="0.05" placeholder="Score 0–1" />
+    </div>
+
+    <div class="feel-domain">
+      <label style="font-size:13px; color:var(--text); font-weight:500;">P — Character Portrayal</label>
+      <p class="domain-desc">How realistically characters are depicted versus exaggerated into idealized heroes or simplified villains.</p>
+      <table class="domain-table">
+        <tr><td>0.0</td><td>Fully realistic — balanced strengths, weaknesses, limitations</td></tr>
+        <tr><td>0.25</td><td>Slight exaggeration — minor enhancement, still believable</td></tr>
+        <tr><td>0.5</td><td>Moderate — noticeable heroism/villainy, still within realistic bounds</td></tr>
+        <tr><td>0.75</td><td>High — strongly stylized, clear heroic/villainous extremes</td></tr>
+        <tr><td>1.0</td><td>Extreme — near-superhuman or purely symbolic figures</td></tr>
+      </table>
+      <input id="feelP" type="number" min="0" max="1" step="0.05" placeholder="Score 0–1" />
+    </div>
+
+    <div class="feel-domain">
+      <label style="font-size:13px; color:var(--text); font-weight:500;">F — Narrative Framing</label>
+      <p class="domain-desc">Whether events and characters are presented in a balanced manner versus a biased or one-sided narrative.</p>
+      <table class="domain-table">
+        <tr><td>0.0</td><td>Fully balanced — multiple perspectives, minimal bias</td></tr>
+        <tr><td>0.25</td><td>Slight bias — some preference, alternative views still visible</td></tr>
+        <tr><td>0.5</td><td>Moderate bias — clearly favors one side, not excessively</td></tr>
+        <tr><td>0.75</td><td>High bias — strongly promotes one perspective, limited nuance</td></tr>
+        <tr><td>1.0</td><td>Extreme — heavily one-sided, opposing views absent or oversimplified</td></tr>
+      </table>
+      <input id="feelF" type="number" min="0" max="1" step="0.05" placeholder="Score 0–1" />
+    </div>
+
+    <div class="feel-domain">
+      <label style="font-size:13px; color:var(--text); font-weight:500;">E — Cinematic Exaggeration</label>
+      <p class="domain-desc">How much scenes are dramatized beyond realistic physical, visual, or situational limits.</p>
+      <table class="domain-table">
+        <tr><td>0.0</td><td>Fully realistic — real-world physical/situational constraints</td></tr>
+        <tr><td>0.25</td><td>Slight — minor enhancement, still plausible</td></tr>
+        <tr><td>0.5</td><td>Moderate — noticeable dramatization, still somewhat believable</td></tr>
+        <tr><td>0.75</td><td>High — strong stylization, clear departure from realism</td></tr>
+        <tr><td>1.0</td><td>Extreme — defies physical or logical constraints</td></tr>
+      </table>
+      <input id="feelE" type="number" min="0" max="1" step="0.05" placeholder="Score 0–1" />
+    </div>
+
+    <div class="row" style="margin-top:14px;">
+      <div><label>Weight S</label><input id="weightS" type="number" min="1" max="3" step="0.5" value="1" /></div>
+      <div><label>Weight P</label><input id="weightP" type="number" min="1" max="3" step="0.5" value="1" /></div>
+      <div><label>Weight F</label><input id="weightF" type="number" min="1" max="3" step="0.5" value="1" /></div>
+      <div><label>Weight E</label><input id="weightE" type="number" min="1" max="3" step="0.5" value="1" /></div>
+    </div>
+    <div style="margin-top:10px;">
+      <label>Evidence note (required if any weight above is raised past 1)</label>
+      <input id="feelEvidence" placeholder="e.g. director stated combat was deliberately exaggerated for spectacle" />
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Result</h2>
+    <div class="result-grid">
+      <div><label>D score</label><div class="result-value" id="dScore">—</div></div>
+      <div><label>L score</label><div class="result-value" id="lScore">—</div></div>
+      <div><label>RPDI</label><div class="result-value" id="rpdiScore">—</div></div>
+      <div><label>Gap</label><div class="result-value" id="gapScore">—</div></div>
+    </div>
+    <p id="classificationLine" style="font-size:13px; color:var(--text-dim); margin-top:12px;"></p>
+    <div id="flags"></div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="align-items:center; margin-bottom:10px;">
+      <h2 style="margin:0;">Medium-ready summary</h2>
+      <div style="flex:0 0 auto;">
+        <button class="btn-ghost" onclick="copySummary()">Copy</button>
+      </div>
+    </div>
+    <pre id="summaryOutput"></pre>
+  </div>
+
+  <div class="card">
+    <div class="row" style="align-items:center; margin-bottom:10px;">
+      <h2 style="margin:0;">Publish to website</h2>
+      <div style="flex:0 0 auto;">
+        <button class="btn-ghost" onclick="copyWebsiteEntry()">Copy</button>
+      </div>
+    </div>
+    <p style="font-size:12px; color:var(--text-dim); margin-top:-6px;">
+      This does not push live to your site automatically — your RPDI Score site
+      and this tool aren't connected to a shared backend. Copy this entry, paste
+      it into your website's film data file, then push to GitHub so Vercel
+      redeploys. Field names below are a reasonable default — rename to match
+      whatever your site's existing film objects actually use.
+    </p>
+    <pre id="websiteOutput"></pre>
+  </div>
+  </div><!-- /scorerView -->
+
+  <div id="referenceView" style="display:none;">
+    <div class="card">
+      <div class="ref-section">
+        <h3>The Formula</h3>
+        <pre>D = 1 − (Σ weight × accuracy) / (Σ weight)
+L = (wS·S + wP·P + wF·F + wE·E) / (wS+wP+wF+wE)
+RPDI = 0.6(D) + 0.4(L)
+Gap = |D − L|</pre>
+      </div>
+
+      <div class="ref-section">
+        <h3>Weight Tiers</h3>
+        <table>
+          <tr><th>Weight</th><th>Tier</th><th>Definition</th></tr>
+          <tr><td>5</td><td>Spine</td><td>Central premise — story collapses without it</td></tr>
+          <tr><td>4</td><td>Soul</td><td>Character motivation</td></tr>
+          <tr><td>3</td><td>Skeleton</td><td>Major documented historical events</td></tr>
+          <tr><td>2</td><td>Flesh</td><td>Personal/biographical details</td></tr>
+          <tr><td>1</td><td>Skin</td><td>Visual/costume/prop accuracy</td></tr>
+        </table>
+      </div>
+
+      <div class="ref-section">
+        <h3>Claim Distribution (dynamic, min 20 claims)</h3>
+        <table>
+          <tr><th>Tier</th><th>% of Total</th><th>Rule</th></tr>
+          <tr><td>Spine</td><td>10%</td><td>Capped at 3, always rounds down</td></tr>
+          <tr><td>Soul</td><td>15%</td><td>Rounds to nearest whole</td></tr>
+          <tr><td>Skeleton</td><td>25%</td><td>Rounds to nearest whole</td></tr>
+          <tr><td>Flesh</td><td>25%</td><td>Rounds to nearest whole</td></tr>
+          <tr><td>Skin</td><td>25%</td><td>Absorbs rounding remainder</td></tr>
+        </table>
+      </div>
+
+      <div class="ref-section">
+        <h3>Accuracy Scale</h3>
+        <p style="font-size:12px; color:var(--text-dim); margin-bottom:8px;">
+          Default: 0, 0.25, 0.5, 0.75, 1.0. Extended (0.1 steps) reserved for genuine nuance only.
+        </p>
+        <table>
+          <tr><td>0.0</td><td>Completely Fabricated</td></tr>
+          <tr><td>0.1</td><td>Almost Entirely Fabricated</td></tr>
+          <tr><td>0.2</td><td>Heavily Fictionalized</td></tr>
+          <tr><td>0.3</td><td>Mostly Invented</td></tr>
+          <tr><td>0.4</td><td>More Fictional Than Factual</td></tr>
+          <tr><td>0.5</td><td>Equally Fictional and Factual</td></tr>
+          <tr><td>0.6</td><td>More Factual Than Fictional</td></tr>
+          <tr><td>0.7</td><td>Mostly Accurate</td></tr>
+          <tr><td>0.8</td><td>Well Documented (single source / family account)</td></tr>
+          <tr><td>0.9</td><td>Strong Primary Verification</td></tr>
+          <tr><td>1.0</td><td>Fully Verified (2+ independent sources)</td></tr>
+        </table>
+      </div>
+
+      <div class="ref-section">
+        <h3>Ceilings and Exceptions</h3>
+        <p style="font-size:12px; color:var(--text-dim); margin-bottom:8px;">
+          Intuition-based approximations, not mathematically derived — stated plainly, not dressed up as more precise than they are.
+        </p>
+        <table>
+          <tr><td>Dialogue / Exact Quote</td><td>0.9</td></tr>
+          <tr><td>Character Motivation / Intent</td><td>0.75</td></tr>
+          <tr><td>Romantic / Personal Relationship</td><td>0.6</td></tr>
+          <tr><td>Military Biopic Personal Life</td><td>0.8</td></tr>
+          <tr><td>Classified / Covert Operation</td><td>0.6</td></tr>
+          <tr><td>Costume / Visual, no photo evidence</td><td>0.75</td></tr>
+          <tr><td>Mythology-Only Source</td><td>0.3</td></tr>
+          <tr><td>Two Documents Contradict</td><td>Fixed at 0.5</td></tr>
+          <tr><td>Two+ Sources Confirm</td><td>Can reach 1.0</td></tr>
+        </table>
+      </div>
+
+      <div class="ref-section">
+        <h3>Spine-Floor Rule</h3>
+        <p style="font-size:13px; color:var(--text-dim);">
+          If any Spine claim scores ≤0.2, OR the single tagged Absolute Premise claim scores ≤0.3,
+          the final classification cannot register below High — regardless of the raw weighted average.
+          Raw D is still calculated and shown; only the label overrides. A fabricated central premise
+          disqualifies a film from a low score, no matter how accurate the background details are.
+        </p>
+      </div>
+
+      <div class="ref-section">
+        <h3>Classification Scales</h3>
+        <table>
+          <tr><th>Score</th><th>RPDI</th><th>Gap</th></tr>
+          <tr><td>0.00–0.24</td><td>Minimal</td><td>Honest / Consistent</td></tr>
+          <tr><td>0.25–0.49</td><td>Moderate</td><td>Partially Misleading</td></tr>
+          <tr><td>0.50–0.74</td><td>High</td><td>Gaslighting</td></tr>
+          <tr><td>0.75–1.00</td><td>Extreme</td><td>Extreme Gaslighting</td></tr>
+        </table>
+        <p style="font-size:11px; color:var(--text-faint); margin-top:6px;">
+          Gap thresholds are provisional — pending a larger scored dataset to confirm real breakpoints.
+        </p>
+      </div>
+
+      <div class="ref-section">
+        <h3>Feel Score Weighting Rule</h3>
+        <p style="font-size:13px; color:var(--text-dim);">
+          All four dimensions (S/P/F/E) default to weight 1. A weight may only be raised with specific,
+          citable evidence from the film itself — never genre assumption alone.
+        </p>
+      </div>
+
+      <div class="ref-section">
+        <h3>Known Limitations</h3>
+        <p style="font-size:13px; color:var(--text-dim);">
+          Single-rater subjectivity (no inter-rater check exists). Ceilings and the 0.6/0.4 RPDI
+          weighting are judgment calls, not derived constants. Gap thresholds are provisional.
+          Skin's actual share drifts slightly above 25% at higher claim counts since it absorbs
+          rounding. No film has yet been fully re-verified under this current rule set.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(tab) {
+  document.getElementById('scorerView').style.display = tab === 'scorer' ? '' : 'none';
+  document.getElementById('referenceView').style.display = tab === 'reference' ? '' : 'none';
+  document.getElementById('tabScorer').classList.toggle('active', tab === 'scorer');
+  document.getElementById('tabReference').classList.toggle('active', tab === 'reference');
+}
+</script>
+
+<script>
+const TIERS = {
+  Spine:    { weight: 5, color: '#D50000' },
+  Soul:     { weight: 4, color: '#FF6D00' },
+  Skeleton: { weight: 3, color: '#c9a227' },
+  Flesh:    { weight: 2, color: '#3a9188' },
+  Skin:     { weight: 1, color: '#8888' },
+};
+
+// Locked from the current, final Part 5 ceilings — honest, intuition-based, stated as such.
+const CEILING_RULES = [
+  { name: 'Dialogue / Exact Quote', pattern: /\b(said|declared|told|replied|stated|shouted|whispered)\b/i, ceiling: 0.9,
+    reason: "Exact quotes are rarely verbatim-verified." },
+  { name: 'Character Motivation / Intent', pattern: /\b(because|wanted to|believed|intended|motivated by|in order to)\b/i, ceiling: 0.75,
+    reason: "Internal motivation is interpretive even when the underlying event is documented." },
+  { name: 'Romantic / Personal Relationship', pattern: /\b(loved|married|affair|romance|in love with)\b/i, ceiling: 0.6,
+    reason: "Emotional intimacy between real people is always partly dramatized." },
+  { name: 'Military Biopic Personal Life', pattern: /\b(soldier|military|army|war hero)('s)? (family|wife|husband|children|personal life)\b/i, ceiling: 0.8,
+    reason: "Personal life details in military biopics carry the same interpretive risk as motivation." },
+  { name: 'Classified / Covert Operation', pattern: /\b(classified|covert|intelligence op|secret operation|black ops)\b/i, ceiling: 0.6,
+    reason: "Classified material is unverifiable by definition." },
+  { name: 'Costume / Visual (no photo evidence)', pattern: /\b(wore|costume|uniform|dressed in|set design|prop)\b/i, ceiling: 0.75,
+    reason: "Capped unless photographic evidence of the specific detail exists." },
+  { name: 'Mythology-Only Source', pattern: /\b(legend|myth|folklore|oral tradition)\b/i, ceiling: 0.3,
+    reason: "No concrete evidence base — mythology-only sourcing." },
+];
+
+let claims = [];
+let editingIndex = null; // null = adding new, otherwise index being edited
+
+function suggestCeiling(text) {
+  for (const rule of CEILING_RULES) {
+    if (rule.pattern.test(text)) return rule;
+  }
+  return null;
+}
+
+document.getElementById('claimText').addEventListener('input', (e) => {
+  const suggestion = suggestCeiling(e.target.value);
+  const box = document.getElementById('ceilingSuggestion');
+  if (suggestion) {
+    box.innerHTML = `<div class="suggestion"><strong>${suggestion.name}</strong> detected — suggested ceiling ${suggestion.ceiling}. ${suggestion.reason}<br>This is a suggestion only. You decide the final score.</div>`;
+  } else {
+    box.innerHTML = '';
+  }
+});
+
+function onAbsoluteToggle() {
+  const checked = document.getElementById('absolutePremise').checked;
+  if (checked) {
+    // Absolute Premise must be a Spine claim by definition
+    document.getElementById('claimTier').value = 'Spine';
+  }
+}
+
+function calcQuota(total) {
+  total = Math.max(20, total);
+  const spine = Math.min(3, Math.floor(total * 0.10));
+  const soul = Math.round(total * 0.15);
+  const skeleton = Math.round(total * 0.25);
+  const flesh = Math.round(total * 0.25);
+  const skin = total - spine - soul - skeleton - flesh; // absorbs rounding
+  return { Spine: spine, Soul: soul, Skeleton: skeleton, Flesh: flesh, Skin: skin, total };
+}
+
+function tierCounts(excludeIndex) {
+  const counts = { Spine: 0, Soul: 0, Skeleton: 0, Flesh: 0, Skin: 0 };
+  claims.forEach((c, i) => { if (i !== excludeIndex) counts[c.tier]++; });
+  return counts;
+}
+
+function renderQuota() {
+  const target = parseInt(document.getElementById('targetCount').value) || 20;
+  const quota = calcQuota(target);
+  const counts = tierCounts();
+  document.getElementById('quotaHeader').textContent = `${claims.length} / ${quota.total}`;
+
+  let html = '';
+  Object.keys(TIERS).forEach(tier => {
+    const need = quota[tier];
+    const have = counts[tier];
+    const pct = need > 0 ? Math.min(100, (have / need) * 100) : 100;
+    const met = have >= need;
+    const over = have > need;
+    html += `
+      <div class="quota-row">
+        <div class="quota-label">
+          <span>${tier} (weight ${TIERS[tier].weight})</span>
+          <span style="color:${over ? 'var(--danger)' : met ? 'var(--met)' : 'var(--text-dim)'}">${have} / ${need}${over ? ' — full' : ''}</span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" style="width:${pct}%; background:${over ? 'var(--danger)' : met ? 'var(--met)' : TIERS[tier].color}"></div></div>
+      </div>`;
+  });
+  document.getElementById('quotaBars').innerHTML = html;
+
+  // Disable tier options that are already full, unless currently editing a claim in that tier
+  const tierSelect = document.getElementById('claimTier');
+  Array.from(tierSelect.options).forEach(opt => {
+    const tier = opt.value;
+    const isCurrentEditTier = editingIndex !== null && claims[editingIndex] && claims[editingIndex].tier === tier;
+    const full = counts[tier] >= quota[tier] && !isCurrentEditTier;
+    opt.disabled = full;
+    opt.textContent = `${tier} (weight ${TIERS[tier].weight})` + (full ? ' — full' : '');
+  });
+
+  const totalWeight = claims.reduce((s, c) => s + TIERS[c.tier].weight, 0);
+  const quotaWeight = Object.keys(TIERS).reduce((s, t) => s + quota[t] * TIERS[t].weight, 0);
+  document.getElementById('quotaFooter').textContent =
+    `Weight sum: ${totalWeight} / ${quotaWeight} target${totalWeight >= quotaWeight && Object.keys(TIERS).every(t => counts[t] >= quota[t]) ? ' — quota satisfied' : ''}`;
+}
+
+function addClaim() {
+  const text = document.getElementById('claimText').value.trim();
+  const tier = document.getElementById('claimTier').value;
+  const accuracy = parseFloat(document.getElementById('claimAccuracy').value);
+  const isAbsolute = document.getElementById('absolutePremise').checked;
+  const errorEl = document.getElementById('claimError');
+
+  if (!text) { errorEl.textContent = 'Enter the claim text first.'; return; }
+  if (isNaN(accuracy) || accuracy < 0 || accuracy > 1) { errorEl.textContent = 'Accuracy must be between 0 and 1.'; return; }
+
+  // Quota cap check — a tier cannot exceed its target unless we're editing
+  // the claim already occupying that slot.
+  const target = parseInt(document.getElementById('targetCount').value) || 20;
+  const quota = calcQuota(target);
+  const counts = tierCounts(editingIndex);
+  if (counts[tier] >= quota[tier]) {
+    errorEl.textContent = `${tier} is already full (${quota[tier]} claims). Remove one from ${tier} first, or raise the target claim count.`;
+    return;
+  }
+
+  // Absolute Premise cap — only one per film, must be Spine, must be a
+  // genuinely low-scoring claim to matter (warn otherwise, don't block).
+  if (isAbsolute) {
+    const existingAbsolute = claims.findIndex((c, i) => c.absolutePremise && i !== editingIndex);
+    if (existingAbsolute !== -1) {
+      errorEl.textContent = 'Only one claim per film can be marked Absolute Premise. Unmark the existing one first.';
+      return;
+    }
+  }
+
+  errorEl.textContent = '';
+  const suggestion = suggestCeiling(text);
+  const claimData = { text, tier, accuracy, ceiling: suggestion ? suggestion.name : null, absolutePremise: isAbsolute };
+
+  if (editingIndex !== null) {
+    claims[editingIndex] = claimData;
+    editingIndex = null;
+    document.getElementById('addClaimBtn').textContent = 'Add claim';
+  } else {
+    claims.push(claimData);
+  }
+
+  document.getElementById('claimText').value = '';
+  document.getElementById('ceilingSuggestion').innerHTML = '';
+  document.getElementById('claimAccuracy').value = '0.5';
+  document.getElementById('absolutePremise').checked = false;
+  renderAll();
+}
+
+function editClaim(i) {
+  const c = claims[i];
+  document.getElementById('claimText').value = c.text;
+  document.getElementById('claimTier').value = c.tier;
+  document.getElementById('claimAccuracy').value = c.accuracy;
+  document.getElementById('absolutePremise').checked = !!c.absolutePremise;
+  editingIndex = i;
+  document.getElementById('addClaimBtn').textContent = 'Save changes';
+  document.getElementById('claimText').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  renderQuota(); // unlock this claim's tier in the dropdown while editing
+}
+
+function cancelEdit() {
+  editingIndex = null;
+  document.getElementById('claimText').value = '';
+  document.getElementById('claimAccuracy').value = '0.5';
+  document.getElementById('absolutePremise').checked = false;
+  document.getElementById('addClaimBtn').textContent = 'Add claim';
+  renderAll();
+}
+
+function removeClaim(i) {
+  claims.splice(i, 1);
+  if (editingIndex === i) cancelEdit();
+  renderAll();
+}
+
+function renderClaims() {
+  const card = document.getElementById('claimsCard');
+  const list = document.getElementById('claimsList');
+  document.getElementById('claimCount').textContent = claims.length;
+  if (claims.length === 0) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  list.innerHTML = claims.map((c, i) => `
+    <div class="claim-item" style="${editingIndex === i ? 'border-color:var(--met);' : ''}">
+      <div>
+        <span style="color:${TIERS[c.tier].color}; font-weight:500;">${c.tier}·${TIERS[c.tier].weight}</span>
+        ${c.absolutePremise ? '<span class="badge" style="border-color:var(--danger); color:var(--danger);">Absolute Premise</span>' : ''}
+        <span>${c.text}</span>
+        <span style="color:var(--text-faint);"> acc ${c.accuracy}</span>
+      </div>
+      <div style="display:flex; gap:6px; flex:0 0 auto;">
+        <button class="remove" style="font-size:12px; color:var(--text-dim);" onclick="editClaim(${i})">Edit</button>
+        <button class="remove" onclick="removeClaim(${i})">×</button>
+      </div>
+    </div>`).join('');
+}
+
+function calcResults() {
+  let D = null, L = null, RPDI = null, Gap = null;
+  if (claims.length > 0) {
+    const sumWA = claims.reduce((s, c) => s + TIERS[c.tier].weight * c.accuracy, 0);
+    const sumW = claims.reduce((s, c) => s + TIERS[c.tier].weight, 0);
+    D = 1 - (sumWA / sumW);
+  }
+  const S = parseFloat(document.getElementById('feelS').value);
+  const P = parseFloat(document.getElementById('feelP').value);
+  const F = parseFloat(document.getElementById('feelF').value);
+  const E = parseFloat(document.getElementById('feelE').value);
+  const wS = parseFloat(document.getElementById('weightS').value) || 1;
+  const wP = parseFloat(document.getElementById('weightP').value) || 1;
+  const wF = parseFloat(document.getElementById('weightF').value) || 1;
+  const wE = parseFloat(document.getElementById('weightE').value) || 1;
+  if ([S, P, F, E].every(v => !isNaN(v) && v >= 0 && v <= 1)) {
+    L = (wS * S + wP * P + wF * F + wE * E) / (wS + wP + wF + wE);
+  }
+  if (D !== null && L !== null) {
+    RPDI = 0.6 * D + 0.4 * L;
+    Gap = Math.abs(D - L);
+  }
+  return { D, L, RPDI, Gap, weights: { wS, wP, wF, wE } };
+}
+
+function classify(v) {
+  if (v < 0.25) return 'Minimal';
+  if (v < 0.5) return 'Moderate';
+  if (v < 0.75) return 'High';
+  return 'Extreme';
+}
+
+// Spine-Floor Rule: a film whose central premise is substantially
+// fabricated cannot be classified as Minimal or Moderate, regardless
+// of how accurate its lower-weight claims are. D is still calculated
+// and displayed normally — only the classification label overrides.
+//
+// This fires on EITHER: any Spine claim at or below 0.2, OR the
+// single Absolute Premise claim (the one plot point the entire film
+// depends on) scoring at or below 0.3 — a slightly more lenient
+// threshold since this claim, by definition, has already been
+// identified as the most consequential one in the film.
+function spineFloorApplies() {
+  const anySpineFails = claims.some(c => c.tier === 'Spine' && c.accuracy <= 0.2);
+  const absolutePremiseFails = claims.some(c => c.absolutePremise && c.accuracy <= 0.3);
+  return anySpineFails || absolutePremiseFails;
+}
+
+function classifyWithFloor(v) {
+  const base = classify(v);
+  if (spineFloorApplies() && (base === 'Minimal' || base === 'Moderate')) {
+    return { label: 'High', overridden: true, raw: base };
+  }
+  return { label: base, overridden: false, raw: base };
+}
+function classifyGap(v) {
+  if (v < 0.25) return 'Honest / Consistent';
+  if (v < 0.5) return 'Partially Misleading';
+  if (v < 0.75) return 'Gaslighting';
+  return 'Extreme Gaslighting';
+}
+function round(n) { return Math.round(n * 1000) / 1000; }
+
+function renderResults() {
+  const { D, L, RPDI, Gap, weights } = calcResults();
+  document.getElementById('dScore').textContent = D !== null ? round(D) : '—';
+  document.getElementById('lScore').textContent = L !== null ? round(L) : '—';
+  document.getElementById('rpdiScore').textContent = RPDI !== null ? round(RPDI) : '—';
+  document.getElementById('gapScore').textContent = Gap !== null ? round(Gap) : '—';
+
+  const line = document.getElementById('classificationLine');
+  if (RPDI !== null) {
+    const cls = classifyWithFloor(RPDI);
+    if (cls.overridden) {
+      line.innerHTML = `<strong>${cls.label} distortion</strong> · ${classifyGap(Gap)}` +
+        `<br><span style="color:var(--warn);">Spine-Floor Rule applied — raw weighted score classified as ${cls.raw}, ` +
+        `overridden to High because a Spine-tier claim scored 0.2 or below. ` +
+        `A fabricated central premise is disqualifying on its own.</span>`;
+    } else {
+      line.textContent = `${cls.label} distortion · ${classifyGap(Gap)}`;
+    }
+  } else {
+    line.textContent = '';
+  }
+
+  const flags = [];
+  const target = parseInt(document.getElementById('targetCount').value) || 20;
+  const quota = calcQuota(target);
+  const counts = tierCounts();
+  const quotaMet = Object.keys(TIERS).every(t => counts[t] >= quota[t]);
+  if (claims.length > 0 && !quotaMet) {
+    flags.push('Quota not yet met — this D score is provisional until every tier hits its required count.');
+  }
+  const spineClaims = claims.filter(c => c.tier === 'Spine');
+  if (spineClaims.some(c => c.accuracy <= 0.2)) {
+    flags.push('Spine-Floor Rule is active — a Spine-tier claim scored 0.2 or below, so the classification is floored at High regardless of the weighted average. The raw D score above is unchanged and remains the real calculated value.');
+  }
+  if (claims.length > 0) {
+    const counts2 = {};
+    claims.forEach(c => counts2[c.accuracy] = (counts2[c.accuracy] || 0) + 1);
+    const maxShare = Math.max(...Object.values(counts2)) / claims.length;
+    if (maxShare > 0.5) flags.push('More than half your claims share the exact same accuracy score — check this is genuine judgment, not clustering.');
+  }
+  ['S','P','F','E'].forEach((k, idx) => {
+    const w = [weights.wS, weights.wP, weights.wF, weights.wE][idx];
+    if (w > 1 && !document.getElementById('feelEvidence').value.trim()) {
+      flags.push(`Weight for ${k} raised above 1 with no evidence note. This requires a citable reason, not a genre guess.`);
+    }
+  });
+
+  document.getElementById('flags').innerHTML = flags.map(f => `<div class="flag">${f}</div>`).join('');
+}
+
+function generateSummary() {
+  const title = document.getElementById('filmTitle').value || 'Untitled';
+  const target = parseInt(document.getElementById('targetCount').value) || 20;
+  const quota = calcQuota(target);
+  const counts = tierCounts();
+  const { D, L, RPDI, Gap } = calcResults();
+  let lines = [`Film: ${title}`, '', 'Claim distribution:'];
+  Object.keys(TIERS).forEach(t => lines.push(`- ${t} (weight ${TIERS[t].weight}): ${counts[t]}/${quota[t]}`));
+  lines.push('');
+  if (D !== null) lines.push(`D score: ${round(D)}`);
+  if (L !== null) lines.push(`L score: ${round(L)}`);
+  if (RPDI !== null) {
+    const cls = classifyWithFloor(RPDI);
+    lines.push(`RPDI: ${round(RPDI)} (${cls.label})`);
+    if (cls.overridden) {
+      lines.push(`  ^ Spine-Floor Rule applied: raw score classifies as ${cls.raw}, floored to High`);
+    }
+    lines.push(`Gap: ${round(Gap)} (${classifyGap(Gap)})`);
+  }
+  return lines.join('\n');
+}
+
+function copySummary() {
+  const text = generateSummary();
+  try {
+    navigator.clipboard.writeText(text);
+    document.getElementById('statusMsg').textContent = 'Summary copied.';
+  } catch (e) {
+    document.getElementById('statusMsg').textContent = 'Copy failed — select the text manually.';
+  }
+  setTimeout(() => document.getElementById('statusMsg').textContent = '', 1500);
+}
+
+function generateWebsiteEntry() {
+  const title = document.getElementById('filmTitle').value || 'Untitled';
+  const { D, L, RPDI, Gap } = calcResults();
+  const target = parseInt(document.getElementById('targetCount').value) || 20;
+  const quota = calcQuota(target);
+  const counts = tierCounts();
+  const quotaMet = Object.keys(TIERS).every(t => counts[t] >= quota[t]);
+  const today = new Date().toISOString().split('T')[0];
+
+  if (D === null || L === null) {
+    return '// Not ready to publish — D and L both need real values first.\n// D needs claims scored; L needs S/P/F/E all filled in.';
+  }
+
+  const cls = classifyWithFloor(RPDI);
+  const obj = {
+    title: title,
+    dateScored: today,
+    claimCount: claims.length,
+    quotaMet: quotaMet,
+    D: round(D),
+    L: round(L),
+    RPDI: round(RPDI),
+    Gap: round(Gap),
+    RPDIClassification: cls.label,
+    spineFloorApplied: cls.overridden,
+    GapClassification: classifyGap(Gap),
+  };
+
+  return '{\n' + Object.entries(obj).map(([k, v]) =>
+    `  ${k}: ${typeof v === 'string' ? `"${v}"` : v},`
+  ).join('\n') + '\n},';
+}
+
+function copyWebsiteEntry() {
+  const text = generateWebsiteEntry();
+  try {
+    navigator.clipboard.writeText(text);
+    document.getElementById('statusMsg').textContent = 'Website entry copied.';
+  } catch (e) {
+    document.getElementById('statusMsg').textContent = 'Copy failed — select the text manually.';
+  }
+  setTimeout(() => document.getElementById('statusMsg').textContent = '', 1500);
+}
+
+function saveFilm() {
+  const title = document.getElementById('filmTitle').value.trim();
+  if (!title) { document.getElementById('statusMsg').textContent = 'Name the film before saving.'; return; }
+  const payload = {
+    title, claims,
+    target: document.getElementById('targetCount').value,
+    feel: {
+      S: document.getElementById('feelS').value, P: document.getElementById('feelP').value,
+      F: document.getElementById('feelF').value, E: document.getElementById('feelE').value,
+      wS: document.getElementById('weightS').value, wP: document.getElementById('weightP').value,
+      wF: document.getElementById('weightF').value, wE: document.getElementById('weightE').value,
+      evidence: document.getElementById('feelEvidence').value,
+    }
+  };
+  try {
+    localStorage.setItem('rpdi_film_' + title, JSON.stringify(payload));
+    const list = JSON.parse(localStorage.getItem('rpdi_film_list') || '[]');
+    if (!list.includes(title)) { list.push(title); localStorage.setItem('rpdi_film_list', JSON.stringify(list)); }
+    document.getElementById('statusMsg').textContent = 'Saved.';
+  } catch (e) {
+    document.getElementById('statusMsg').textContent = 'Save failed — your browser may be blocking local storage.';
+  }
+  setTimeout(() => document.getElementById('statusMsg').textContent = '', 1500);
+}
+
+function showLoadList() {
+  let list = [];
+  try { list = JSON.parse(localStorage.getItem('rpdi_film_list') || '[]'); } catch (e) {}
+  const box = document.getElementById('loadList');
+  if (list.length === 0) { box.innerHTML = '<p style="font-size:13px; color:var(--text-faint);">No saved films yet.</p>'; return; }
+  box.innerHTML = '<select id="loadSelect" onchange="loadFilm(this.value)"><option value="">Select a saved film…</option>' +
+    list.map(t => `<option value="${t}">${t}</option>`).join('') + '</select>';
+}
+
+function loadFilm(title) {
+  if (!title) return;
+  try {
+    const payload = JSON.parse(localStorage.getItem('rpdi_film_' + title));
+    document.getElementById('filmTitle').value = payload.title;
+    document.getElementById('targetCount').value = payload.target || 20;
+    claims = payload.claims || [];
+    if (payload.feel) {
+      document.getElementById('feelS').value = payload.feel.S || '';
+      document.getElementById('feelP').value = payload.feel.P || '';
+      document.getElementById('feelF').value = payload.feel.F || '';
+      document.getElementById('feelE').value = payload.feel.E || '';
+      document.getElementById('weightS').value = payload.feel.wS || 1;
+      document.getElementById('weightP').value = payload.feel.wP || 1;
+      document.getElementById('weightF').value = payload.feel.wF || 1;
+      document.getElementById('weightE').value = payload.feel.wE || 1;
+      document.getElementById('feelEvidence').value = payload.feel.evidence || '';
+    }
+    document.getElementById('statusMsg').textContent = `Loaded ${title}.`;
+    renderAll();
+  } catch (e) {
+    document.getElementById('statusMsg').textContent = 'Load failed.';
+  }
+  setTimeout(() => document.getElementById('statusMsg').textContent = '', 1500);
+}
+
+function renderAll() {
+  renderQuota();
+  renderClaims();
+  renderResults();
+  document.getElementById('summaryOutput').textContent = generateSummary();
+  document.getElementById('websiteOutput').textContent = generateWebsiteEntry();
+}
+
+['targetCount','feelS','feelP','feelF','feelE','weightS','weightP','weightF','weightE','feelEvidence','filmTitle']
+  .forEach(id => document.getElementById(id).addEventListener('input', renderAll));
+
+renderAll();
+</script>
+</body>
+</html>
