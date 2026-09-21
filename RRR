@@ -1,0 +1,23 @@
+{
+  "title": "RRR",
+  "director": "SS Rajamouli",
+  "cast": "JR NTR, Ram Charan, Alia Bhatt",
+  "year": 2022,
+  "language": "Telugu",
+  "country": "India",
+  "runtime": 187,
+  "period": "1920s",
+  "streaming": "Zee5 / Netflix",
+  "imdb": 7.8,
+  "D": 0.716,
+  "L": 0.9167,
+  "RPDI": 0.7963,
+  "Gap": 0.2006,
+  "classification": "Extreme",
+  "gapClassification": "Partially Misleading",
+  "spineFloorFired": true,
+  "spineFloorReason": "Absolute Premise claim (Ram and Bheem's friendship) scored 0.0",
+  "claimCount": 21,
+  "pendingCount": 0,
+  "notes": "This RPDI figure (0.7963) supersedes all earlier RRR numbers (0.740, 0.559 deprecated). F-weight-2 evidence auto-migrated from shared-evidence format; needs manual re-verification that it actually justifies the Framing dimension specifically, not just Exaggeration."
+}
