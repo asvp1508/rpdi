@@ -1,61 +1,57 @@
-# RPDI — Reality-Portrayal Distortion Index
-## Full Methodology Document
+# RPDI Methodology
+
+**Reality-Portrayal Distortion Index** — an original composite-index framework measuring historical distortion in cinema. Author: Arjun Pathi.
+
+RPDI separates two independent things:
+- **D (Distortion Score)** — how factually accurate a film's claims are
+- **L (Liberty/Portrayal Score)** — how the film constructs its portrayal through cinematic technique
+
+Combined into a composite **RPDI**, plus a third original metric, **Gap**, identifying films that are factually accurate but narratively manipulative — "cinematic gaslighting."
 
 ---
 
-## 1. Purpose
+## 1. Core Formulas
 
-RPDI measures how much a historical film distorts documented reality, by separating two independent things: how factually accurate the film's claims are (D), and how the film constructs its portrayal through cinematic technique (L). The two scores are combined into one composite (RPDI), and a third measure (Gap) identifies films where accurate facts and manipulative portrayal coexist.
+```
+D    = 1 − (Σ weight × accuracy) / (Σ weight)
+L    = (wS·S + wP·P + wF·F + wE·E) / (wS + wP + wF + wE)
+RPDI = 0.6(D) + 0.4(L)
+Gap  = |D − L|
+```
 
----
-
-## 2. Inputs
-
-- One film (title, year)
-- A minimum of 20 extracted claims, shown on screen, distributed across five weight tiers per the quota below
-- Four Feel-dimension scores (S, P, F, E) assessed once for the whole film
-
----
-
-## 3. The Claim Weight System — 5 Tiers
+## 2. The Five Weight Tiers
 
 | Weight | Tier | Definition |
 |---|---|---|
-| 5 | Spine | The central premise — the claim the film's entire story depends on |
-| 4 | Soul | Character motivation — why someone did what they did, according to the film |
-| 3 | Skeleton | Major documented historical events depicted |
-| 2 | Flesh | Personal, biographical, or relationship details specific to real people |
-| 1 | Skin | Visual accuracy — sets, props, costumes |
+| 5 | Spine | Central premise — story collapses without it |
+| 4 | Soul | Character motivation — why someone did what they did |
+| 3 | Skeleton | Major documented historical events |
+| 2 | Flesh | Personal/biographical/relationship details |
+| 1 | Skin | Visual/costume/prop/setting accuracy |
 
-*(Note: an earlier 4-tier version — Plot Device/Character Motive/Personality Traits/Locations-Sets, weights 4-3-2-1 — was the first attempt. It was replaced by this 5-tier system after finding that Weight 4 wasn't heavy enough to separate a film's central premise from ordinary plot points.)*
+An earlier 4-tier system (weights 4-3-2-1) was replaced — Weight 4 wasn't heavy enough to separate a film's central premise from ordinary plot points.
 
----
+## 3. Dynamic Claim Distribution Quota
 
-## 4. The Fixed Claim Distribution (Dynamic, Percentage-Based)
-
-Claims are distributed as fixed percentages of the total, not a fixed count — since 20 is a minimum, not a ceiling. This prevents selective claim extraction from skewing a film's score, at any scale.
+Claims are distributed as **fixed percentages** of the total, not a fixed count (20 is a minimum, not a ceiling; 50 is the maximum):
 
 | Tier | % of Total | Special Rule |
 |---|---|---|
-| Spine | 10% | Capped at 3 claims regardless of total; always rounds down |
-| Soul | 15% | Rounds to nearest whole number |
-| Skeleton | 25% | Rounds to nearest whole number |
-| Flesh | 25% | Rounds to nearest whole number |
+| Spine | 10% | Hard-capped at 3 claims regardless of total; always rounds down |
+| Soul | 15% | Rounds to nearest whole |
+| Skeleton | 25% | Rounds to nearest whole |
+| Flesh | 25% | Rounds to nearest whole |
 | Skin | 25% | Absorbs any rounding remainder |
 
-At exactly 20 claims this produces 2/3/5/5/5 (weight sum 52) — the original fixed version this replaced.
+At exactly 20 claims this produces 2/3/5/5/5 (weight sum 52) — the original fixed quota this replaced. Verified against every film scored so far (20-, 21-claim sets all land on quota exactly).
 
-Spine's cap and rounding-down rule exist because a film rarely has more than 1-2 claims its entire premise depends on. Scaling that number up with total claim count would pressure the researcher into promoting ordinary plot points to Spine status just to hit a ratio — exactly the kind of quiet bias this rule exists to prevent.
+**Claim count is capped at 50**, enforced in the input field and calculation logic. Skin's share of total *weight* stabilizes around 13–15% even at high counts, but the Skin-to-Spine *claim ratio* grows unbounded (2.5x at 20 claims → 22x at 200) — capping at 50 keeps this meaningful.
 
-A film's D score is not treated as final until this distribution is met in full.
+## 4. Accuracy Scoring — Two Scales
 
----
+**Default** (used for the large majority of claims): 0, 0.25, 0.5, 0.75, 1.0
 
-## 5. Accuracy Scoring — Two Scales, One Purpose
-
-**Default scale (used for the large majority of claims):** 0, 0.25, 0.5, 0.75, 1.0
-
-**Extended scale (reserved for claims with genuine, specific nuance the 5-point scale can't honestly capture):** 0.0 through 1.0 in increments of 0.1
+**Extended** (reserved for genuine nuance the default scale can't capture): 0.0–1.0 in 0.1 steps
 
 | Score | Meaning |
 |---|---|
@@ -67,15 +63,13 @@ A film's D score is not treated as final until this distribution is met in full.
 | 0.5 | Equally Fictional and Factual |
 | 0.6 | More Factual Than Fictional |
 | 0.7 | Mostly Accurate |
-| 0.8 | Well Documented (a single source heavily supports it — family account) |
+| 0.8 | Well Documented (single source / family account) |
 | 0.9 | Strong Primary Verification |
-| 1.0 | Fully Verified (2+ independent sources substantiate it) |
+| 1.0 | Fully Verified (2+ independent sources) |
 
-The extended scale should be used sparingly and only when a claim genuinely doesn't fit one of the five default points. Excessive use of it can reintroduce bias, which this model avoids.
+Claims can be left **PENDING** (accuracy blank) at capture time and scored later after real research, so accuracy decisions don't get rushed while watching. Pending claims are fully excluded from D calculation and from Spine-Floor checks until scored.
 
----
-
-## 6. Ceilings and Exceptions
+## 5. Ceilings and Exceptions
 
 | Claim Type | Ceiling |
 |---|---|
@@ -89,77 +83,50 @@ The extended scale should be used sparingly and only when a claim genuinely does
 | Two Documents Contradict | Fixed at 0.5 |
 | Two+ Independent Sources Confirm | Can reach 1.0 |
 
-**Honest note on these numbers:** these ceilings are not mathematically derived. They are intuition and approximation, calibrated by eye against the 0.0–1.0 accuracy scale, and were revised once already from an earlier version because the new values felt more accurate in practice. This is stated plainly rather than presented as more precise than it is — the same standard applied to the 0.6/0.4 RPDI weighting below.
+These ceilings are intuition-calibrated, not mathematically derived — stated plainly here, not dressed up as more precise than they are. They were revised once from an earlier draft (0.8/0.8/0.8/0.7/0.2) to current values.
 
-A ceiling constrains claim *type*, not scoring precision — it applies identically whether the default or extended scale is in use, and the stricter of (claim-type ceiling, source-verification ceiling) always wins.
+**The 1.0 Requirement:** 1.0 is never a default — it requires two or more independent sources confirming the exact same claim, with extra weight on Spine claims specifically since an unearned 1.0 on a film's central premise is the single most damaging place for bias to hide. **This is currently not enforced in code** — only documented. See LIMITATIONS.md.
 
-**The 1.0 Requirement:** 1.0 is not a default outcome — it is a requirement, met only when two or more independent primary sources confirm the exact same claim. This applies with extra weight to Spine-tier claims specifically, since an unearned 1.0 on a film's central premise would be the single most damaging place for bias to hide.
+## 6. The L Score — Cinematic Portrayal Technique
 
----
-
-## 7. The D Score (Distortion / Factual Accuracy)
-
-D = 1 − (Σ weight × accuracy) / (Σ weight)
-
-
-D measures pure factual accuracy against primary sources — nothing about how the film chose to portray those facts.
-
-**Spine-floor consideration (identified, formalization in progress):** a film with one or more Spine-tier claims scoring very low (≤0.2) may need a classification floor beyond what the raw weighted average shows, since a fabricated central premise can be understated by the weighted average when outnumbered by accurate low-weight claims. This was identified during RRR's scoring and is not yet a finalized rule — currently handled as a manual review flag rather than an automatic override.
-
----
-
-## 8. The L Score (Cinematic Portrayal Technique)
-
-**Locked definition:** L measures the film's cinematic portrayal technique — the craft-level choices used to construct the story — not subjective audience emotional response. This is deliberately distinct from D: D asks whether a claim is true; L asks how the film chose to show it, independent of a viewer's personal reaction.
-
-### The Four Dimensions
+L measures craft-level portrayal choices, NOT audience emotional response. Distinct from D: D asks whether a claim is true; L asks how the film chose to show it.
 
 | Dimension | 0.0 | 1.0 |
 |---|---|---|
-| S — Simplification of Reality | No simplification, full complexity preserved | Extreme — heavily reimagined, minimal resemblance to real structure |
-| P — Character Portrayal | Fully realistic, balanced strengths and flaws | Extreme exaggeration — near-superhuman or symbolic |
-| F — Narrative Framing | Fully balanced, multiple perspectives presented | Extreme bias — one-sided, opposing perspectives absent |
-| E — Cinematic Exaggeration | Fully realistic, real-world physical constraints | Extreme — defies physical or logical constraints |
+| S — Simplification | Full complexity preserved | Heavily reimagined, minimal resemblance to real structure |
+| P — Portrayal | Fully realistic, balanced | Near-superhuman/symbolic |
+| F — Framing | Fully balanced, multiple perspectives | One-sided, opposing views absent |
+| E — Exaggeration | Real-world physical constraints | Defies physical/logical constraints |
 
-### The Weighted L Formula
+All four dimensions default to weight 1. A weight may only be raised with specific, citable evidence from the film itself — never genre assumption alone.
 
-L = (wS×S + wP×P + wF×F + wE×E) / (wS + wP + wF + wE)
+**Per-dimension evidence (critical fix, this session):** previously a single shared evidence text box covered all raised weights. This was a real, live bug, proven using RRR's own saved data: F and E were both weighted to 2, but the single shared evidence string only genuinely justified E (a quote about "hyper-physics" and exaggerated action) — nothing in it justified Framing. **Each raised dimension now gets its own independent, required evidence field.** Old saved films with the shared-evidence format auto-migrate on load, with the text copied into each raised dimension but flagged `[MIGRATED — VERIFY THIS ACTUALLY JUSTIFIES THIS SPECIFIC DIMENSION]`. RRR's Framing weight-2 evidence still needs this re-verification.
 
+## 7. The Spine-Floor Rule
 
-**The weighting rule:** All four weights default to 1 (equal). A dimension may only be raised above 1 with specific, citable evidence from the film itself — a director's stated intent, a documented pattern across multiple scenes, something concrete. Genre may suggest where to look for evidence, but genre alone is never sufficient justification to raise a weight. This mirrors the same evidence-based discipline already applied to the D-score ceilings — a claim's type doesn't get special treatment without proof, and neither does a portrayal dimension.
+If any Spine-tier claim scores ≤0.2, OR the tagged Absolute Premise claim scores ≤0.3, the final classification cannot register below "High" — regardless of the raw weighted average. Raw D still calculates and displays unchanged; only the label overrides.
 
----
+**Why it exists:** a film with one fully fabricated Spine claim and otherwise-excellent accuracy across 20 claims produced D=0.153 ("Minimal"). At 60 claims, D dropped further to 0.093 — dilution got *worse*, not better, as claim count grew.
 
-## 9. The Composite RPDI Score
+**Why it's an override and not a bigger weight:** raising Spine's weight to 6 still failed — the dilution just took longer (still landed "Minimal" even with 100+ extra accurate claims added). A bigger weight is still a vote that can be outvoted; the floor is a disqualifier.
 
-RPDI = 0.6(D) + 0.4(L)
+**Proven on real data:** fired correctly on Dhurandhar's fabricated spy character and RRR's fabricated central friendship, independent of whether the composite RPDI would've reached "High" on its own. Correctly stays silent on Amaran and Sardar Udham, where no Spine claim and no Absolute Premise claim drops that low.
 
+## 8. Absolute Premise Tag
 
-**Why D counts for more than L:** A historical film's first job is to tell you what happened; what it makes you feel about that comes second. This weighting is not derived from a deeper mathematical truth — it is a design decision, informed by a small original survey (n=23 respondents): 91% agreed that inaccurate historical films can negatively affect public understanding of real history, and 65% named historical accuracy as one of the things that matters most to them when watching. This supports the *direction* of the weighting (facts should count for more) but not the *exact* numbers — 0.6 and 0.4 could be defended differently, and are stated here as a reasoned starting point, not a proven constant.
+One claim per film (Spine tier only) can be flagged as the single most central plot point — triggers the same Spine-Floor override at a more lenient 0.3 threshold, since it's already identified as the most consequential claim.
 
-### RPDI Classification
+## 9. The Gap Metric
 
-| Score | Classification |
-|---|---|
-| 0.00–0.24 | Minimal |
-| 0.25–0.49 | Moderate |
-| 0.50–0.74 | High |
-| 0.75–1.00 | Extreme |
-
----
-
-## 10. The Gap Metric
-
+```
 Gap = |D − L|
+```
 
+Measures the distance between factual accuracy and dramatization intensity — NOT a claim about intent. A film can produce a large Gap without anyone intending to deceive; Gap measures effect, not motive.
 
-**What Gap measures:** the distance between a film's factual accuracy and the intensity of its dramatized portrayal — identifying cases where accurate facts and manipulative presentation coexist, independent of any claim about the filmmaker's intent. Gap does not measure motive; it measures a mismatch in effect. A film can produce a large Gap without anyone intending to deceive.
+"Director Manipulation" and "Directional Accuracy" were considered and rejected as names — the former implies knowledge of intent the framework can't actually measure.
 
-**Naming history:** early candidate names — "Director Manipulation," "Directional Accuracy" — were considered and rejected. "Director Manipulation" specifically was rejected because it implies knowledge of intent, which nothing in this framework can actually measure.
-
-### Gap Classification
-
-Uses the same scale as everything else in the framework — no separately-derived thresholds:
+**Classification** (same neutral 0/.25/.5/.75/1 scale as RPDI, explicitly provisional):
 
 | Score | Classification |
 |---|---|
@@ -168,24 +135,22 @@ Uses the same scale as everything else in the framework — no separately-derive
 | 0.50–0.74 | Gaslighting |
 | 0.75–1.00 | Extreme Gaslighting |
 
-**Status of these thresholds:** provisional, stated explicitly as such. Once a real dataset of multiple fully-scored films exists, these boundaries should be revisited to check whether the real distribution of scores clusters and splits at these exact points, or whether sharper thresholds are better supported by the actual data. The thresholds should be earned by evidence, not assumed in advance.
+Thresholds are provisional — to be revisited once a larger real dataset exists, checking whether real breakpoints (possibly ~0.26/0.41) are better supported than the current clean-quarter values.
 
----
+## 10. The 0.6/0.4 RPDI Weighting
 
-## 11. Verified Scores To Date
+D counts for more because a film's first job is to tell you what happened; what it makes you feel comes second. Not purely arbitrary — supported by original survey data (n=23): 91% agreed inaccurate historical films can negatively affect public understanding of real history; 65% named historical accuracy as what matters most when watching. This justifies the *direction* (D > L), not the *exact* numbers — a design decision, stated honestly as such.
 
-No film has yet been fully verified under the current methodology (dynamic percentage quota + current ceilings). Earlier scoring work, including an initial pass on RRR, predates these rules and needs re-verification using the live scoring tool before any result is treated as final.
+## 11. Three Additional Rules (added this session)
 
----
+**A. First-Encounter Rule** — closes a bias gap the quota alone didn't cover: the quota controls which *tier* gets how many claims, but not which *specific claim within a tier* gets picked when multiple candidates exist. Fix: claims are logged in the order narratively encountered, decided on significance/specificity alone — never on a prediction of how they'll score. Once logged, a claim cannot be swapped for a "better" one in the same tier. Only valid removal reason: structural defect (too vague, not a real checkable assertion) — never preference.
 
-## 12. Known Limitations
+**B. Generalization Validity Rule** — caught via RRR: a specific British character, Jenny, helps Komaram Bheem — this cannot be reworded into "the British were helpful to Indians," a sweeping claim about an entire nationality from one instance. Two parts: (1) No solo generalization — an individual's specific action can never be reworded into a claim about their nationality/group. (2) Generalization requires a real repeated pattern across multiple distinct instances, not one scene — even then, capped at 0.3 (same logic as the mythology-only ceiling).
 
-- Accuracy scores rely on researcher interpretation of primary sources, constrained but not eliminated by the ceiling and exception system above.
-- Ceiling values (Section 6) are intuition-based approximations, not mathematically derived, and were revised once already during development.
-- The 0.6/0.4 D-vs-L weighting is informed by survey data but is a design decision, not a mathematically derived constant.
-- The Gap classification thresholds are provisional, set from the same neutral scale used elsewhere in the framework, pending revision once a larger real dataset exists.
-- The Spine-floor consideration (Section 7) has been identified as a real gap between the framework's stated logic and its mathematical behavior, but is not yet formalized as an automatic rule.
-- No film has yet been fully verified under the current methodology.
-- The framework's five-tier weighting and ceiling system reflect one researcher's judgment calls, documented explicitly so they can be examined, challenged, and revised — not presented as beyond question.
+**C. Tier Assignment Decision Procedure** — caught via RRR's derailment scene (where the two protagonists meet): is it Flesh (personal/relationship-introduction detail) or Spine (the scene the entire fictional plot depends on)? Fix, applied in strict order:
+1. **Spine Test, always checked first:** "If this claim were false, does the film's central premise structurally stop holding together — not just become less compelling, but stop making sense as the story it claims to be?" If yes → Spine, regardless of surface content (the 2–3 claim cap still governs how many claims can actually hold this tier).
+2. **If Spine fails, classify by content type:** Soul asks *why* (motivation); Skeleton asks *what documented event*; Flesh asks *personal/relationship detail, not load-bearing, not broadly historical*; Skin asks *purely visual, no bearing on plot/motive*.
+3. **Exhaustiveness guarantee:** if a claim fits nowhere, it's too vague — tighten it, never discard it.
+4. **Hybrid claims split** into separate claims per content type rather than being forced into one tier.
 
-  
+All three rules are live in the app's Rules Reference tab. See RULES.md for the operational reference version.
