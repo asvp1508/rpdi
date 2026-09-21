@@ -168,6 +168,7 @@
 
   <div class="tabs">
     <button class="tab-btn active" id="tabScorer" onclick="showTab('scorer')">Scorer</button>
+    <button class="tab-btn" id="tabLibrary" onclick="showTab('library')">Scored Films</button>
     <button class="tab-btn" id="tabReference" onclick="showTab('reference')">Rules Reference</button>
   </div>
 
@@ -180,15 +181,23 @@
         <input id="filmTitle" placeholder="Untitled" />
       </div>
       <div>
-        <label>Target claim count (min 20)</label>
-        <input id="targetCount" type="number" min="20" value="20" />
+        <label>Target claim count (20–50)</label>
+        <input id="targetCount" type="number" min="20" max="50" value="20" />
+        <p style="font-size:10px; color:var(--text-faint); margin:4px 0 0;">Capped at 50 — Skin's share of total weight flattens out well before this, so more claims add noise, not signal.</p>
       </div>
       <div style="flex:0 0 auto; display:flex; gap:8px;">
         <button class="btn-ghost" onclick="saveFilm()">Save</button>
         <button class="btn-ghost" onclick="showLoadList()">Load</button>
+        <button class="btn-ghost" onclick="exportAllFilms()">Export all</button>
+        <label class="btn-ghost" style="cursor:pointer; margin:0; display:inline-flex; align-items:center; padding:9px 18px; border-radius:6px; font-size:14px; font-family:'Inter',sans-serif;">
+          Import
+          <input type="file" accept=".json" onchange="importAllFilms(event)" style="display:none;" />
+        </label>
       </div>
     </div>
     <div id="loadList" style="margin-top:10px;"></div>
+    <div id="exportBackupArea" style="margin-top:10px;"></div>
+    <p id="storageStatus" style="font-size:11px; color:var(--text-faint); margin:6px 0 0;">Checking storage…</p>
     <p id="statusMsg" style="font-size:12px; color:var(--text-dim); margin:8px 0 0;"></p>
   </div>
 
@@ -201,6 +210,11 @@
   <div class="card">
     <h2>Add a claim</h2>
     <textarea id="claimText" placeholder="Describe exactly what the film shows" rows="2"></textarea>
+    <div style="margin-top:6px;">
+      <a id="searchClaimLink" href="https://www.google.com/search?q=" target="_blank" rel="noopener noreferrer" class="btn-ghost" style="font-size:12px; padding:5px 12px; text-decoration:none; display:inline-block;">🔍 Search this claim</a>
+      <button type="button" id="micBtn" class="btn-ghost" style="font-size:12px; padding:5px 12px; margin-left:6px;" onclick="toggleSpeech()">🎤 Speak claim</button>
+      <span id="micStatus" style="font-size:11px; color:var(--text-faint); margin-left:8px;">Opens a search in a new tab — you still read the source and decide the score.</span>
+    </div>
     <div id="ceilingSuggestion"></div>
     <div class="row" style="margin-top:10px;">
       <div>
@@ -214,8 +228,12 @@
         </select>
       </div>
       <div>
-        <label>Accuracy (0–1)</label>
-        <input id="claimAccuracy" type="number" min="0" max="1" step="0.05" value="0.5" />
+        <label>Accuracy (0–1) — optional now, verify later</label>
+        <input id="claimAccuracy" type="number" min="0" max="1" step="0.05" placeholder="Leave blank while watching" />
+      </div>
+      <div>
+        <label>Timestamp (optional)</label>
+        <input id="claimTimestamp" placeholder="mm:ss" style="width:80px;" />
       </div>
       <div style="flex:0 0 auto;">
         <button class="btn-primary" id="addClaimBtn" onclick="addClaim()">Add claim</button>
@@ -234,9 +252,33 @@
     </p>
   </div>
 
+  <div class="card">
+    <h2>Bulk import</h2>
+    <p style="font-size:12px; color:var(--text-dim); margin-top:-6px;">
+      Paste a claims table — the same pipe-delimited format (| Tier | Weight | Claim | Accuracy |)
+      you'd get from anywhere else in this project. Header and separator rows are detected and
+      skipped automatically. Add "(Absolute Premise)" in a claim's text to tag it on import.
+    </p>
+    <textarea id="bulkImportText" placeholder="| # | Tier | Weight | Claim | Accuracy |
+|---|---|---|---|---|
+| 1 | Spine | 5 | Example claim text | 0.5 |" rows="6" style="width:100%; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:6px; padding:10px; font-family:monospace; font-size:12px; resize:vertical;"></textarea>
+    <div style="margin-top:10px;">
+      <button class="btn-primary" onclick="parseBulkImport()">Parse and add claims</button>
+    </div>
+    <div id="bulkImportResult" style="margin-top:12px; font-size:13px;"></div>
+  </div>
+
   <div class="card" id="claimsCard" style="display:none;">
     <h2>Claims (<span id="claimCount">0</span>)</h2>
     <div id="claimsList"></div>
+  </div>
+
+  <div class="card" id="timelineCard" style="display:none;">
+    <h2>Claim timeline</h2>
+    <p style="font-size:12px; color:var(--text-dim); margin-top:-6px;">
+      Where in the film your claims cluster — only shows up once a claim has a timestamp.
+    </p>
+    <div id="timelineChart"></div>
   </div>
 
   <div class="card">
@@ -299,14 +341,25 @@
     </div>
 
     <div class="row" style="margin-top:14px;">
-      <div><label>Weight S</label><input id="weightS" type="number" min="1" max="3" step="0.5" value="1" /></div>
-      <div><label>Weight P</label><input id="weightP" type="number" min="1" max="3" step="0.5" value="1" /></div>
-      <div><label>Weight F</label><input id="weightF" type="number" min="1" max="3" step="0.5" value="1" /></div>
-      <div><label>Weight E</label><input id="weightE" type="number" min="1" max="3" step="0.5" value="1" /></div>
+      <div><label>Weight S</label><input id="weightS" type="number" min="1" max="3" step="0.5" value="1" onchange="renderWeightEvidence()" /></div>
+      <div><label>Weight P</label><input id="weightP" type="number" min="1" max="3" step="0.5" value="1" onchange="renderWeightEvidence()" /></div>
+      <div><label>Weight F</label><input id="weightF" type="number" min="1" max="3" step="0.5" value="1" onchange="renderWeightEvidence()" /></div>
+      <div><label>Weight E</label><input id="weightE" type="number" min="1" max="3" step="0.5" value="1" onchange="renderWeightEvidence()" /></div>
     </div>
+    <div id="weightEvidenceArea" style="margin-top:10px;"></div>
+  </div>
+
+  <div class="card">
+    <h2>Distortion fingerprint</h2>
+    <p style="font-size:12px; color:var(--text-dim); margin-top:-6px;">
+      S/P/F/E plotted as a shape — each film's fingerprint. Compare against a saved film below.
+    </p>
+    <div id="radarChart" style="text-align:center;"></div>
     <div style="margin-top:10px;">
-      <label>Evidence note (required if any weight above is raised past 1)</label>
-      <input id="feelEvidence" placeholder="e.g. director stated combat was deliberately exaggerated for spectacle" />
+      <label>Overlay a saved film for comparison</label>
+      <select id="radarOverlay" onchange="renderRadar()">
+        <option value="">None</option>
+      </select>
     </div>
   </div>
 
@@ -323,6 +376,18 @@
   </div>
 
   <div class="card">
+    <h2>Score card</h2>
+    <p style="font-size:12px; color:var(--text-dim); margin-top:-6px;">
+      A clean, single-image summary — built for actually posting, not just sitting in a spreadsheet.
+    </p>
+    <button class="btn-ghost" onclick="generateScoreCard()">Generate score card</button>
+    <div style="margin-top:12px;">
+      <canvas id="scoreCardCanvas" width="600" height="400" style="max-width:100%; border-radius:8px; display:none;"></canvas>
+    </div>
+    <button id="downloadScoreCardBtn" class="btn-ghost" style="display:none; margin-top:10px;" onclick="downloadScoreCard()">Download as PNG</button>
+  </div>
+
+  <div class="card">
     <div class="row" style="align-items:center; margin-bottom:10px;">
       <h2 style="margin:0;">Medium-ready summary</h2>
       <div style="flex:0 0 auto;">
@@ -330,6 +395,40 @@
       </div>
     </div>
     <pre id="summaryOutput"></pre>
+  </div>
+
+  <div class="card">
+    <h2>Website metadata (optional)</h2>
+    <p style="font-size:12px; color:var(--text-dim); margin-top:-6px;">
+      Fills in the fields your website's FILMS array actually uses, so the export
+      below is genuinely paste-ready instead of needing manual reformatting.
+      Distortions and the summary paragraph are left for you to write — that's
+      editorial judgment, not something to auto-generate.
+    </p>
+    <div class="row">
+      <div><label>Year</label><input id="metaYear" type="number" /></div>
+      <div><label>Director</label><input id="metaDirector" /></div>
+      <div><label>Language</label><input id="metaLanguage" /></div>
+      <div><label>Country</label><input id="metaCountry" /></div>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <div><label>Runtime (minutes)</label><input id="metaRuntime" type="number" /></div>
+      <div><label>Streaming platform</label><input id="metaStreaming" /></div>
+      <div><label>IMDb rating</label><input id="metaImdb" type="number" step="0.1" /></div>
+      <div><label>Confidence (1–5)</label><input id="metaConfidence" type="number" min="1" max="5" /></div>
+    </div>
+    <div style="margin-top:10px;">
+      <label>Cast (comma-separated)</label>
+      <input id="metaCast" placeholder="Actor One, Actor Two, Actor Three" />
+    </div>
+    <div style="margin-top:10px;">
+      <label>Historical subject</label>
+      <input id="metaSubject" placeholder="What the film is about, in a few words" />
+    </div>
+    <div style="margin-top:10px;">
+      <label>Period</label>
+      <input id="metaPeriod" placeholder="e.g. 1999–2009" />
+    </div>
   </div>
 
   <div class="card">
@@ -342,13 +441,17 @@
     <p style="font-size:12px; color:var(--text-dim); margin-top:-6px;">
       This does not push live to your site automatically — your RPDI Score site
       and this tool aren't connected to a shared backend. Copy this entry, paste
-      it into your website's film data file, then push to GitHub so Vercel
-      redeploys. Field names below are a reasonable default — rename to match
-      whatever your site's existing film objects actually use.
+      it into your website's FILMS array, then push to GitHub so Vercel redeploys.
+      Matches your site's real schema — distortions and summary need your own
+      write-up before this is truly ready to publish.
     </p>
     <pre id="websiteOutput"></pre>
   </div>
   </div><!-- /scorerView -->
+
+  <div id="libraryView" style="display:none;">
+    <div id="libraryContent"></div>
+  </div>
 
   <div id="referenceView" style="display:none;">
     <div class="card">
@@ -433,6 +536,45 @@ Gap = |D − L|</pre>
       </div>
 
       <div class="ref-section">
+        <h3>Tier Assignment — The Decision Procedure</h3>
+        <p style="font-size:13px; color:var(--text-dim);">
+          Applied in strict order for every claim. Step 1 — the Spine Test, checked first, always:
+          "If this claim were false, does the film's central premise structurally stop holding together —
+          not just become less compelling, but stop making sense as the story it claims to be?" If yes,
+          it's Spine regardless of surface content (the existing 2–3 claim cap still governs how many
+          claims can actually hold this tier). If no, classify by content type: Soul asks why a character
+          acted; Skeleton asks what documented event occurred; Flesh asks whether it's a personal or
+          relationship detail that isn't load-bearing or broadly historical; Skin asks whether it's purely
+          visual with no bearing on plot or motive. If a properly specific claim still fits nowhere, the
+          claim is too vague — tighten it rather than discard it. A claim mixing two content types
+          (an event and a motive) gets split into two separate claims, never forced into one tier.
+        </p>
+      </div>
+
+      <div class="ref-section">
+        <h3>First-Encounter Rule</h3>
+        <p style="font-size:13px; color:var(--text-dim);">
+          Claims are logged in the order they're narratively encountered, decided on significance and
+          specificity alone — never on a prediction about how they'll score. Once logged, a claim cannot
+          be swapped for a different one in the same tier just because it might score better or worse.
+          The only valid reason to remove a logged claim is a structural defect — too vague, not a real
+          checkable assertion — never preference for a different candidate.
+        </p>
+      </div>
+
+      <div class="ref-section">
+        <h3>Generalization Validity Rule</h3>
+        <p style="font-size:13px; color:var(--text-dim);">
+          A claim about one specific individual's action can never be reworded into a claim about their
+          nationality or group — that's the researcher's inference, not something the film asserts. A
+          group-level claim only becomes extractable when the film shows the same pattern through
+          multiple distinct instances, not one scene — and even then it's capped at 0.3, the same logic
+          as the mythology-only ceiling: inferring something categorical from a handful of instances
+          remains weak evidence.
+        </p>
+      </div>
+
+      <div class="ref-section">
         <h3>Classification Scales</h3>
         <table>
           <tr><th>Score</th><th>RPDI</th><th>Gap</th></tr>
@@ -470,9 +612,306 @@ Gap = |D − L|</pre>
 <script>
 function showTab(tab) {
   document.getElementById('scorerView').style.display = tab === 'scorer' ? '' : 'none';
+  document.getElementById('libraryView').style.display = tab === 'library' ? '' : 'none';
   document.getElementById('referenceView').style.display = tab === 'reference' ? '' : 'none';
   document.getElementById('tabScorer').classList.toggle('active', tab === 'scorer');
+  document.getElementById('tabLibrary').classList.toggle('active', tab === 'library');
   document.getElementById('tabReference').classList.toggle('active', tab === 'reference');
+  if (tab === 'library') renderLibrary();
+}
+
+// Durable storage lives in this artifact's own database (survives page
+// republishes and reloads) — browser localStorage is kept only as a
+// redundant, same-session backup layer, not the primary store anymore.
+let dbInstance = null;
+let dbReady = (async () => {
+  try {
+    dbInstance = await claude.use('db');
+  } catch (e) {
+    dbInstance = null;
+  }
+  const status = document.getElementById('storageStatus');
+  if (status) {
+    status.textContent = dbInstance
+      ? 'Durable storage connected — saves survive tool updates.'
+      : 'Durable storage unavailable right now — saves only live in this browser until it reconnects.';
+    status.style.color = dbInstance ? 'var(--met)' : 'var(--warn)';
+  }
+})();
+
+let downloadsInstance = null;
+let downloadsReady = (async () => {
+  try {
+    downloadsInstance = await claude.use('downloads');
+  } catch (e) {
+    downloadsInstance = null;
+  }
+})();
+
+function sanitizeDocId(title) {
+  return (title || '').trim().toLowerCase()
+    .replace(/[^a-z0-9_.~:@+-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 190) || 'untitled';
+}
+
+async function loadSavedFilm(title) {
+  await dbReady;
+  if (dbInstance) {
+    try {
+      const snap = await dbInstance.collection('films').doc(sanitizeDocId(title)).get();
+      if (snap.exists) return snap.data();
+    } catch (e) {
+      // fall through to localStorage below
+    }
+  }
+  try {
+    return JSON.parse(localStorage.getItem('rpdi_film_' + title));
+  } catch (e) {
+    return null;
+  }
+}
+
+async function listSavedFilmTitles() {
+  await dbReady;
+  if (dbInstance) {
+    try {
+      const snap = await dbInstance.collection('films').get();
+      if (!snap.empty) return snap.docs.map(d => (d.data() || {}).title || d.id);
+    } catch (e) {
+      // fall through to localStorage below
+    }
+  }
+  try {
+    return JSON.parse(localStorage.getItem('rpdi_film_list') || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+async function persistFilm(title, payload) {
+  await dbReady;
+  let dbOk = false;
+  if (dbInstance) {
+    try {
+      await dbInstance.collection('films').doc(sanitizeDocId(title)).set(payload);
+      dbOk = true;
+    } catch (e) {
+      dbOk = false;
+    }
+  }
+  // Always also write localStorage — a same-session backup that costs
+  // nothing and doesn't depend on db being available.
+  try {
+    localStorage.setItem('rpdi_film_' + title, JSON.stringify(payload));
+    const list = JSON.parse(localStorage.getItem('rpdi_film_list') || '[]');
+    if (!list.includes(title)) { list.push(title); localStorage.setItem('rpdi_film_list', JSON.stringify(list)); }
+  } catch (e) {}
+  return dbOk;
+}
+
+async function deleteSavedFilm(title) {
+  await dbReady;
+  if (dbInstance) {
+    try { await dbInstance.collection('films').doc(sanitizeDocId(title)).delete(); } catch (e) {}
+  }
+  try {
+    localStorage.removeItem('rpdi_film_' + title);
+    const list = JSON.parse(localStorage.getItem('rpdi_film_list') || '[]');
+    localStorage.setItem('rpdi_film_list', JSON.stringify(list.filter(t => t !== title)));
+  } catch (e) {}
+}
+
+function computeFilmStats(payload) {
+  const cls = payload.claims || [];
+  const pendingCount = cls.filter(c => c.accuracy === null || c.accuracy === undefined).length;
+  let D = null;
+  if (cls.length > 0 && pendingCount === 0) {
+    const sumWA = cls.reduce((s, c) => s + TIERS[c.tier].weight * c.accuracy, 0);
+    const sumW = cls.reduce((s, c) => s + TIERS[c.tier].weight, 0);
+    D = sumW > 0 ? 1 - sumWA / sumW : null;
+  }
+  let L = null;
+  if (payload.feel) {
+    const f = payload.feel;
+    const S = parseFloat(f.S), P = parseFloat(f.P), Fr = parseFloat(f.F), E = parseFloat(f.E);
+    const wS = parseFloat(f.wS) || 1, wP = parseFloat(f.wP) || 1, wF = parseFloat(f.wF) || 1, wE = parseFloat(f.wE) || 1;
+    if ([S, P, Fr, E].every(v => !isNaN(v))) {
+      L = (wS * S + wP * P + wF * Fr + wE * E) / (wS + wP + wF + wE);
+    }
+  }
+  const RPDI = (D !== null && L !== null) ? 0.6 * D + 0.4 * L : null;
+  const Gap = (D !== null && L !== null) ? Math.abs(D - L) : null;
+  // Only claims with a real accuracy value count toward Spine-Floor — a
+  // pending claim must never be misread as an already-failed one.
+  const scoredClaims = cls.filter(c => c.accuracy !== null && c.accuracy !== undefined);
+  const spineFloor = scoredClaims.some(c => c.tier === 'Spine' && c.accuracy <= 0.2) ||
+                      scoredClaims.some(c => c.absolutePremise && c.accuracy <= 0.3);
+  let rpdiLabel = null, overridden = false;
+  if (RPDI !== null) {
+    rpdiLabel = classify(RPDI);
+    if (spineFloor && (rpdiLabel === 'Minimal' || rpdiLabel === 'Moderate')) {
+      overridden = true;
+      rpdiLabel = 'High';
+    }
+  }
+  return { D, L, RPDI, Gap, rpdiLabel, overridden, claimCount: cls.length, pendingCount };
+}
+
+function renderDatasetScatter(entries) {
+  const size = 280, pad = 30;
+  const scale = v => pad + v * (size - 2*pad);
+
+  const points = entries.map(({title, payload}) => {
+    if (!payload) return null;
+    const stats = computeFilmStats(payload);
+    if (stats.D === null || stats.L === null) return null;
+    return { title, D: stats.D, L: stats.L };
+  }).filter(Boolean);
+
+  if (points.length === 0) {
+    return `<div class="card" style="margin-bottom:20px;"><p style="font-size:13px; color:var(--text-faint);">No fully-scored films yet — the D-vs-L map fills in as you complete more.</p></div>`;
+  }
+
+  const dots = points.map(p => {
+    const x = scale(p.D), y = scale(1 - p.L);
+    const color = getGapColor(Math.abs(p.D - p.L));
+    return `<circle cx="${x}" cy="${y}" r="5" fill="${color}" stroke="var(--bg)" stroke-width="1.5">
+      <title>${p.title}: D=${round(p.D)}, L=${round(p.L)}</title>
+    </circle>
+    <text x="${x}" y="${y - 9}" text-anchor="middle" font-size="9" fill="var(--text-faint)">${p.title.length > 14 ? p.title.slice(0,12)+'…' : p.title}</text>`;
+  }).join('');
+
+  const mid = scale(0.5);
+  return `
+    <div class="card" style="margin-bottom:20px;">
+      <h2 style="font-family:'Playfair Display',serif; font-size:18px; margin:0 0 4px;">D vs. L across your dataset</h2>
+      <p style="font-size:12px; color:var(--text-dim); margin:0 0 12px;">
+        Bottom-left: honestly bad. Top-left: the Gaslighting quadrant — low accuracy dressed as restraint. Top-right: honestly dramatized.
+      </p>
+      <svg viewBox="0 0 ${size} ${size}" style="width:100%; max-width:340px; display:block; margin:0 auto;">
+        <line x1="${pad}" y1="${mid}" x2="${size-pad}" y2="${mid}" stroke="var(--border)" stroke-dasharray="3,3"/>
+        <line x1="${mid}" y1="${pad}" x2="${mid}" y2="${size-pad}" stroke="var(--border)" stroke-dasharray="3,3"/>
+        <text x="${pad}" y="${size-8}" font-size="10" fill="var(--text-faint)">D →</text>
+        <text x="8" y="${pad+4}" font-size="10" fill="var(--text-faint)">L ↑</text>
+        ${dots}
+      </svg>
+    </div>`;
+}
+
+function getGapColor(gap) {
+  if (gap < 0.25) return '#4ECDC4';
+  if (gap < 0.5) return '#c9a227';
+  if (gap < 0.75) return '#e0a800';
+  return '#c67b6b';
+}
+
+async function renderLibrary() {
+  const list = await listSavedFilmTitles();
+
+  const container = document.getElementById('libraryContent');
+
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div class="card" style="text-align:center; padding:48px 20px;">
+        <p style="color:var(--text-dim); font-size:14px;">No films saved yet. Score one in the Scorer tab and hit Save — it'll show up here.</p>
+      </div>`;
+    return;
+  }
+
+  const payloads = await Promise.all(list.map(title => loadSavedFilm(title)));
+  const entries = list.map((title, i) => ({ title, payload: payloads[i] }));
+
+  const cards = entries.map(({title, payload}) => {
+    if (!payload) return '';
+    const stats = computeFilmStats(payload);
+    const color = stats.rpdiLabel === 'Extreme' ? '#c67b6b' : stats.rpdiLabel === 'High' ? '#e0a800'
+                : stats.rpdiLabel === 'Moderate' ? '#c9a227' : stats.rpdiLabel === 'Minimal' ? '#4ECDC4' : 'var(--text-faint)';
+    return `
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
+          <div>
+            <h3 style="font-family:'Playfair Display',serif; font-size:18px; margin:0 0 4px;">${title}</h3>
+            <p style="font-size:12px; color:var(--text-faint); margin:0;">${stats.claimCount} claims logged${stats.pendingCount > 0 ? `, <span style="color:var(--warn);">${stats.pendingCount} pending</span>` : ''}</p>
+          </div>
+          <div style="text-align:right;">
+            ${stats.RPDI !== null ? `
+              <div style="font-family:'Playfair Display',serif; font-size:22px; color:${color};">${round(stats.RPDI)}</div>
+              <div style="font-size:12px; color:${color};">${stats.rpdiLabel}${stats.overridden ? ' (Spine-Floor)' : ''}</div>
+            ` : `<div style="font-size:12px; color:var(--text-faint);">${stats.pendingCount > 0 ? `${stats.pendingCount} claim${stats.pendingCount === 1 ? '' : 's'} still pending` : 'Incomplete — no L score yet'}</div>`}
+          </div>
+        </div>
+        ${stats.D !== null ? `
+          <div style="display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--border); font-size:12px; color:var(--text-dim);">
+            <span>D: ${round(stats.D)}</span>
+            ${stats.L !== null ? `<span>L: ${round(stats.L)}</span>` : ''}
+            ${stats.Gap !== null ? `<span>Gap: ${round(stats.Gap)}</span>` : ''}
+          </div>` : ''}
+        <div style="display:flex; gap:8px; margin-top:14px;" id="actions-${title.replace(/[^a-zA-Z0-9]/g, '_')}">
+          <button onclick="continueEditing('${title.replace(/'/g, "\\'")}')" style="background:transparent; border:1px solid var(--border); color:var(--text); border-radius:6px; padding:7px 14px; font-size:13px;">Continue editing</button>
+          <button onclick="viewFilmDetail('${title.replace(/'/g, "\\'")}')" style="background:transparent; border:1px solid var(--border); color:var(--text); border-radius:6px; padding:7px 14px; font-size:13px;">View claims</button>
+          <button onclick="askDeleteFilm('${title.replace(/'/g, "\\'")}')" style="background:transparent; border:1px solid var(--danger); color:var(--danger); border-radius:6px; padding:7px 14px; font-size:13px; margin-left:auto;">Delete</button>
+        </div>
+        <div id="detail-${title.replace(/[^a-zA-Z0-9]/g, '_')}" style="display:none; margin-top:14px; padding-top:14px; border-top:1px solid var(--border);"></div>
+      </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="card" style="margin-bottom:20px;">
+      <h2 style="font-family:'Playfair Display',serif; font-size:20px; margin:0 0 4px;">Scored Films (${list.length})</h2>
+      <p style="font-size:13px; color:var(--text-dim); margin:0;">Everything you've saved, backed by durable per-artifact storage — not just this browser.</p>
+    </div>
+    ${renderDatasetScatter(entries)}
+    ${cards}
+  `;
+}
+
+async function continueEditing(title) {
+  await loadFilm(title);
+  showTab('scorer');
+}
+
+function askDeleteFilm(title) {
+  const safeId = 'actions-' + title.replace(/[^a-zA-Z0-9]/g, '_');
+  const el = document.getElementById(safeId);
+  if (!el) return;
+  el.innerHTML = `
+    <span style="font-size:13px; color:var(--danger); align-self:center;">Delete "${title}"? This can't be undone.</span>
+    <button onclick="confirmDeleteFilm('${title.replace(/'/g, "\\'")}')" style="background:var(--danger); color:#fff; border:none; border-radius:6px; padding:7px 14px; font-size:13px; margin-left:auto;">Yes, delete</button>
+    <button onclick="renderLibrary()" style="background:transparent; border:1px solid var(--border); color:var(--text); border-radius:6px; padding:7px 14px; font-size:13px;">Cancel</button>
+  `;
+}
+
+async function confirmDeleteFilm(title) {
+  await deleteSavedFilm(title);
+  renderLibrary();
+}
+
+async function viewFilmDetail(title) {
+  const safeId = 'detail-' + title.replace(/[^a-zA-Z0-9]/g, '_');
+  const el = document.getElementById(safeId);
+  if (!el) return;
+  if (el.style.display === 'block') { el.style.display = 'none'; return; }
+
+  const payload = await loadSavedFilm(title);
+  if (!payload) return;
+  const tierOrder = ['Spine', 'Soul', 'Skeleton', 'Flesh', 'Skin'];
+  const claims = (payload.claims || []).slice().sort(
+    (a, b) => tierOrder.indexOf(a.tier) - tierOrder.indexOf(b.tier)
+  );
+
+  el.innerHTML = claims.map(c => `
+    <div style="display:flex; justify-content:space-between; gap:10px; padding:6px 0; font-size:12px; border-bottom:1px solid var(--border);">
+      <div>
+        <span style="color:${TIERS[c.tier].color}; font-weight:500;">${c.tier}·${TIERS[c.tier].weight}</span>
+        ${c.absolutePremise ? '<span class="badge" style="border-color:var(--danger); color:var(--danger);">Absolute Premise</span>' : ''}
+        <span style="color:var(--text-dim);">${c.text}</span>
+      </div>
+      <span style="color:${(c.accuracy === null || c.accuracy === undefined) ? 'var(--warn)' : 'var(--text-faint)'}; flex-shrink:0;">${(c.accuracy === null || c.accuracy === undefined) ? 'PENDING' : 'acc ' + c.accuracy}</span>
+    </div>`).join('') || '<p style="font-size:12px; color:var(--text-faint);">No claims logged.</p>';
+
+  el.style.display = 'block';
 }
 </script>
 
@@ -503,7 +942,123 @@ const CEILING_RULES = [
     reason: "No concrete evidence base — mythology-only sourcing." },
 ];
 
+// Suggestion-only tier hints by keyword — same discipline as the ceiling rules
+// above: a starting hint, never a final assignment. The tier dropdown stays
+// fully editable regardless of what's suggested.
+const TIER_HINTS = [
+  { tier: 'Spine', pattern: /\b(entire plot|central premise|story depends on|main mission|core operation)\b/i },
+  { tier: 'Soul', pattern: /\b(because|wanted to|believed|motivated by|in order to|loyal to|driven by)\b/i },
+  { tier: 'Skeleton', pattern: /\b(attack|operation|killed|assassinat|war|invasion|treaty|hijack|bombing)\b/i },
+  { tier: 'Flesh', pattern: /\b(son|daughter|wife|husband|family|married|wedding|funeral|childhood)\b/i },
+  { tier: 'Skin', pattern: /\b(wore|costume|uniform|set design|visual|aesthetic|dressed in|location looked)\b/i },
+];
+
+function suggestTier(text) {
+  for (const rule of TIER_HINTS) {
+    if (rule.pattern.test(text)) return rule.tier;
+  }
+  return null;
+}
+
+// Duplicate/near-duplicate detection — catches claims that are the same
+// underlying assertion worded differently (paraphrased while watching),
+// not just exact-text repeats. This only ever cautions; it never blocks
+// or auto-merges, since two genuinely different claims can share wording.
+//
+// Uses fuzzy word matching (tolerates a 1-character typo/transposition,
+// e.g. "Rehamn" vs "Rehman") and an overlap coefficient rather than
+// Jaccard similarity — dividing by the SMALLER claim's word count, not
+// the union, since a quick shorthand note ("Rehamn died Aug 09") and a
+// fuller claim about the same fact shouldn't be penalized just for
+// having very different lengths.
+const STOPWORDS = new Set(['the','a','an','is','was','were','are','in','on','at','to','of','and','or','with','by','for','as','that','this','his','her','their']);
+
+function tokenize(text) {
+  const words = (text.toLowerCase().match(/[a-z0-9]+/g) || []);
+  return [...new Set(words.filter(w => !STOPWORDS.has(w) && w.length > 2))];
+}
+
+function damerauLevenshtein(s1, s2) {
+  const d = {};
+  for (let i = -1; i <= s1.length; i++) d[`${i},-1`] = i + 1;
+  for (let j = -1; j <= s2.length; j++) d[`-1,${j}`] = j + 1;
+  for (let i = 0; i < s1.length; i++) {
+    for (let j = 0; j < s2.length; j++) {
+      const cost = s1[i] === s2[j] ? 0 : 1;
+      d[`${i},${j}`] = Math.min(
+        d[`${i-1},${j}`] + 1,
+        d[`${i},${j-1}`] + 1,
+        d[`${i-1},${j-1}`] + cost
+      );
+      if (i > 0 && j > 0 && s1[i] === s2[j-1] && s1[i-1] === s2[j]) {
+        d[`${i},${j}`] = Math.min(d[`${i},${j}`], d[`${i-2},${j-2}`] + cost);
+      }
+    }
+  }
+  return d[`${s1.length-1},${s2.length-1}`];
+}
+
+function fuzzyWordMatch(w1, w2) {
+  if (w1 === w2) return true;
+  if (Math.abs(w1.length - w2.length) > 2) return false;
+  return damerauLevenshtein(w1, w2) <= 1;
+}
+
+function textSimilarity(a, b) {
+  const ta = tokenize(a), tb = tokenize(b);
+  if (ta.length === 0 || tb.length === 0) return 0;
+  const matched = new Set();
+  for (const wa of ta) {
+    for (const wb of tb) {
+      if (fuzzyWordMatch(wa, wb)) { matched.add(wa); break; }
+    }
+  }
+  const smaller = Math.min(ta.length, tb.length);
+  return smaller > 0 ? matched.size / smaller : 0;
+}
+
+function findSimilarClaim(text, excludeIndex) {
+  let best = null, bestScore = 0;
+  claims.forEach((c, i) => {
+    if (i === excludeIndex) return;
+    const score = textSimilarity(text, c.text);
+    if (score > bestScore) { bestScore = score; best = c; }
+  });
+  return bestScore >= 0.6 ? { claim: best, score: bestScore } : null;
+}
+
 let claims = [];
+
+// Per-dimension evidence for raised Feel weights — kept in JS state
+// rather than re-read from the DOM each time, so typing in one box
+// doesn't get wiped if another dimension's weight changes mid-edit.
+let weightEvidence = { S: '', P: '', F: '', E: '' };
+
+function renderWeightEvidence() {
+  const weights = {
+    S: parseFloat(document.getElementById('weightS').value) || 1,
+    P: parseFloat(document.getElementById('weightP').value) || 1,
+    F: parseFloat(document.getElementById('weightF').value) || 1,
+    E: parseFloat(document.getElementById('weightE').value) || 1,
+  };
+  const area = document.getElementById('weightEvidenceArea');
+  const labels = { S: 'Simplification', P: 'Portrayal', F: 'Framing', E: 'Exaggeration' };
+  const raised = Object.keys(weights).filter(k => weights[k] > 1);
+
+  if (raised.length === 0) {
+    area.innerHTML = '';
+  } else {
+    area.innerHTML = raised.map(dim => `
+      <div style="margin-bottom:8px;">
+        <label>Evidence for raising ${labels[dim]} (${dim}) to weight ${weights[dim]} — required</label>
+        <input id="evidence${dim}" value="${(weightEvidence[dim] || '').replace(/"/g, '&quot;')}"
+               placeholder="A specific, citable reason from the film itself — never genre alone, and never another dimension's evidence reused here"
+               oninput="weightEvidence['${dim}'] = this.value;" />
+      </div>
+    `).join('');
+  }
+  renderAll();
+}
 let editingIndex = null; // null = adding new, otherwise index being edited
 
 function suggestCeiling(text) {
@@ -513,14 +1068,38 @@ function suggestCeiling(text) {
   return null;
 }
 
+// Keep the search link pointed at whatever's currently in the claim box —
+// real anchor navigation, not a scripted popup, so it isn't at risk of
+// being silently blocked the way window.open() can be. Called both from
+// the typing listener below AND from editClaim(), since editClaim sets
+// the textarea's value programmatically and that doesn't fire 'input'.
+function updateSearchLink(text) {
+  const searchLink = document.getElementById('searchClaimLink');
+  searchLink.href = text.trim()
+    ? `https://www.google.com/search?q=${encodeURIComponent(text.trim())}`
+    : 'https://www.google.com/search?q=';
+}
+
 document.getElementById('claimText').addEventListener('input', (e) => {
-  const suggestion = suggestCeiling(e.target.value);
+  const text = e.target.value;
+  updateSearchLink(text);
+
+  const suggestion = suggestCeiling(text);
   const box = document.getElementById('ceilingSuggestion');
+  let html = '';
   if (suggestion) {
-    box.innerHTML = `<div class="suggestion"><strong>${suggestion.name}</strong> detected — suggested ceiling ${suggestion.ceiling}. ${suggestion.reason}<br>This is a suggestion only. You decide the final score.</div>`;
-  } else {
-    box.innerHTML = '';
+    html += `<div class="suggestion"><strong>${suggestion.name}</strong> detected — suggested ceiling ${suggestion.ceiling}. ${suggestion.reason}<br>This is a suggestion only. You decide the final score.</div>`;
   }
+  const tierHint = suggestTier(text);
+  if (tierHint && editingIndex === null) {
+    document.getElementById('claimTier').value = tierHint;
+    html += `<div class="suggestion" style="border-style:dotted;">Tier auto-set to <strong>${tierHint}</strong> based on wording — change it if this isn't right.</div>`;
+  }
+  const dup = text.trim().length > 8 ? findSimilarClaim(text, editingIndex) : null;
+  if (dup) {
+    html += `<div class="suggestion" style="border-color:var(--warn);">Caution — this looks similar to an existing claim (${Math.round(dup.score*100)}% word overlap): "${dup.claim.text}". Could be a genuine duplicate you caught while paraphrasing, or just coincidental wording. Your call.</div>`;
+  }
+  box.innerHTML = html;
 });
 
 function onAbsoluteToggle() {
@@ -532,7 +1111,7 @@ function onAbsoluteToggle() {
 }
 
 function calcQuota(total) {
-  total = Math.max(20, total);
+  total = Math.max(20, Math.min(50, total)); // enforced both ends — input max alone can be bypassed
   const spine = Math.min(3, Math.floor(total * 0.10));
   const soul = Math.round(total * 0.15);
   const skeleton = Math.round(total * 0.25);
@@ -590,12 +1169,36 @@ function renderQuota() {
 function addClaim() {
   const text = document.getElementById('claimText').value.trim();
   const tier = document.getElementById('claimTier').value;
-  const accuracy = parseFloat(document.getElementById('claimAccuracy').value);
+  const accuracyRaw = document.getElementById('claimAccuracy').value.trim();
+  const timestampRaw = document.getElementById('claimTimestamp').value.trim();
   const isAbsolute = document.getElementById('absolutePremise').checked;
   const errorEl = document.getElementById('claimError');
 
   if (!text) { errorEl.textContent = 'Enter the claim text first.'; return; }
-  if (isNaN(accuracy) || accuracy < 0 || accuracy > 1) { errorEl.textContent = 'Accuracy must be between 0 and 1.'; return; }
+
+  // Accuracy is optional at capture time — leave it blank while watching,
+  // come back and verify properly afterward. Only validate it if something
+  // was actually typed.
+  let accuracy = null;
+  if (accuracyRaw !== '') {
+    accuracy = parseFloat(accuracyRaw);
+    if (isNaN(accuracy) || accuracy < 0 || accuracy > 1) { errorEl.textContent = 'Accuracy must be between 0 and 1, or left blank to verify later.'; return; }
+  }
+
+  // Timestamp is also optional — "mm:ss" or a bare number of minutes.
+  let timestamp = null;
+  if (timestampRaw !== '') {
+    const mmss = timestampRaw.match(/^(\d+):(\d{1,2})$/);
+    const bareMinutes = timestampRaw.match(/^\d+$/);
+    if (mmss) {
+      timestamp = parseInt(mmss[1]) * 60 + parseInt(mmss[2]);
+    } else if (bareMinutes) {
+      timestamp = parseInt(timestampRaw) * 60;
+    } else {
+      errorEl.textContent = 'Timestamp should look like mm:ss, or just leave it blank.';
+      return;
+    }
+  }
 
   // Quota cap check — a tier cannot exceed its target unless we're editing
   // the claim already occupying that slot.
@@ -619,7 +1222,7 @@ function addClaim() {
 
   errorEl.textContent = '';
   const suggestion = suggestCeiling(text);
-  const claimData = { text, tier, accuracy, ceiling: suggestion ? suggestion.name : null, absolutePremise: isAbsolute };
+  const claimData = { text, tier, accuracy, timestamp, ceiling: suggestion ? suggestion.name : null, absolutePremise: isAbsolute };
 
   if (editingIndex !== null) {
     claims[editingIndex] = claimData;
@@ -630,17 +1233,136 @@ function addClaim() {
   }
 
   document.getElementById('claimText').value = '';
+  updateSearchLink('');
   document.getElementById('ceilingSuggestion').innerHTML = '';
-  document.getElementById('claimAccuracy').value = '0.5';
+  document.getElementById('claimAccuracy').value = '';
+  document.getElementById('claimTimestamp').value = '';
   document.getElementById('absolutePremise').checked = false;
+  renderAll();
+}
+
+function parseBulkImport() {
+  const raw = document.getElementById('bulkImportText').value;
+  const resultEl = document.getElementById('bulkImportResult');
+  const validTiers = Object.keys(TIERS); // Spine, Soul, Skeleton, Flesh, Skin
+
+  if (!raw.trim()) {
+    resultEl.innerHTML = '<span style="color:var(--danger);">Paste a claims table first.</span>';
+    return;
+  }
+
+  const rawLines = raw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+  const parsed = [];
+  const skipped = [];
+
+  for (const originalLine of rawLines) {
+    // Normalize any delimiter (pipes, tabs) into spaces so the same logic
+    // works regardless of how the claim was formatted or copied.
+    let line = originalLine.replace(/[\|\t]/g, '  ');
+
+    if (/^[\-\s]+$/.test(line)) continue; // pure separator row
+
+    const tierMatch = line.match(new RegExp(`\\b(${validTiers.join('|')})\\b`, 'i'));
+    if (!tierMatch) { skipped.push({ line: originalLine, reason: 'no recognizable tier (Spine/Soul/Skeleton/Flesh/Skin)' }); continue; }
+    const tier = validTiers.find(t => t.toLowerCase() === tierMatch[1].toLowerCase());
+    const expectedWeight = TIERS[tier].weight;
+
+    const numRegex = /\d+\.?\d*/g;
+    let m, numbers = [];
+    while ((m = numRegex.exec(line)) !== null) {
+      numbers.push({ value: parseFloat(m[0]), index: m.index, raw: m[0] });
+    }
+
+    // Accuracy is always the LAST number on the line that falls between 0 and 1 —
+    // true across every format used in this project (tables, tab-separated, the
+    // app's own claim-list display).
+    const accCandidates = numbers.filter(n => n.value >= 0 && n.value <= 1);
+    if (accCandidates.length === 0) { skipped.push({ line: originalLine, reason: 'no valid accuracy (0-1) found' }); continue; }
+    const accEntry = accCandidates[accCandidates.length - 1];
+    const accuracy = accEntry.value;
+
+    // The weight column, if present, will exactly match this tier's known weight
+    // and appear before the accuracy number — strip it so it doesn't pollute the claim text.
+    const weightEntry = numbers.find(n => n.value === expectedWeight && n.index < accEntry.index && n.index !== accEntry.index);
+
+    const removals = [
+      { start: tierMatch.index, end: tierMatch.index + tierMatch[0].length },
+      { start: accEntry.index, end: accEntry.index + accEntry.raw.length },
+    ];
+    if (weightEntry) removals.push({ start: weightEntry.index, end: weightEntry.index + weightEntry.raw.length });
+    removals.sort((a, b) => b.start - a.start);
+
+    let text = line;
+    for (const r of removals) {
+      text = text.slice(0, r.start) + ' ' + text.slice(r.end);
+    }
+
+    text = text.replace(/^\s*\d+\s*[.)\-:]?\s*/, '');   // leading row index like "1." or "1)"
+    text = text.replace(/\b(acc|accuracy)\s*[:=]?\s*$/i, '');
+    text = text.replace(/^[·:,\-\s]+|[·:,\-\s]+$/g, '');
+    text = text.replace(/\s{2,}/g, ' ').trim();
+
+    const isAbsolute = /\(absolute premise\)/i.test(text);
+    text = text.replace(/\s*\(absolute premise\)\s*/i, '').trim();
+    text = text.replace(/^[.\-\s]+|[.\-\s]+$/g, '').trim();
+
+    if (!text) { skipped.push({ line: originalLine, reason: 'claim text was empty after parsing' }); continue; }
+
+    parsed.push({ text, tier, accuracy, ceiling: suggestCeiling(text) ? suggestCeiling(text).name : null, absolutePremise: isAbsolute });
+  }
+
+  if (parsed.length === 0) {
+    resultEl.innerHTML = `<span style="color:var(--danger);">Nothing parsed. Each line needs a recognizable tier name (Spine/Soul/Skeleton/Flesh/Skin) and a number between 0 and 1 for accuracy — any layout works.</span>`;
+    return;
+  }
+
+  // Check quota room before committing anything — never silently overfill a tier
+  const target = parseInt(document.getElementById('targetCount').value) || 20;
+  const quota = calcQuota(target);
+  const currentCounts = tierCounts();
+  const added = [];
+  const rejected = [];
+
+  for (const claim of parsed) {
+    const projectedCount = currentCounts[claim.tier] + added.filter(a => a.tier === claim.tier).length;
+    if (projectedCount >= quota[claim.tier]) {
+      rejected.push({ claim, reason: `${claim.tier} already full (${quota[claim.tier]})` });
+      continue;
+    }
+    if (claim.absolutePremise) {
+      const alreadyHasAbsolute = claims.some(c => c.absolutePremise) || added.some(a => a.absolutePremise);
+      if (alreadyHasAbsolute) {
+        rejected.push({ claim, reason: 'Absolute Premise already assigned to another claim' });
+        continue;
+      }
+    }
+    added.push(claim);
+  }
+
+  claims.push(...added);
+
+  let summary = `<span style="color:var(--met);">Added ${added.length} claim${added.length === 1 ? '' : 's'}.</span>`;
+  if (rejected.length > 0) {
+    summary += `<br><span style="color:var(--warn);">${rejected.length} skipped (quota/duplicate conflicts):</span>`;
+    summary += rejected.map(r => `<br>&nbsp;&nbsp;- "${r.claim.text.slice(0, 50)}${r.claim.text.length > 50 ? '…' : ''}" — ${r.reason}`).join('');
+  }
+  if (skipped.length > 0) {
+    summary += `<br><span style="color:var(--text-faint);">${skipped.length} row${skipped.length === 1 ? '' : 's'} couldn't be parsed:</span>`;
+    summary += skipped.map(s => `<br>&nbsp;&nbsp;- "${s.line.slice(0, 60)}${s.line.length > 60 ? '…' : ''}" — ${s.reason}`).join('');
+  }
+  resultEl.innerHTML = summary;
+
+  document.getElementById('bulkImportText').value = '';
   renderAll();
 }
 
 function editClaim(i) {
   const c = claims[i];
   document.getElementById('claimText').value = c.text;
+  updateSearchLink(c.text);
   document.getElementById('claimTier').value = c.tier;
-  document.getElementById('claimAccuracy').value = c.accuracy;
+  document.getElementById('claimAccuracy').value = (c.accuracy === null || c.accuracy === undefined) ? '' : c.accuracy;
+  document.getElementById('claimTimestamp').value = (c.timestamp === null || c.timestamp === undefined) ? '' : `${Math.floor(c.timestamp/60)}:${String(c.timestamp%60).padStart(2,'0')}`;
   document.getElementById('absolutePremise').checked = !!c.absolutePremise;
   editingIndex = i;
   document.getElementById('addClaimBtn').textContent = 'Save changes';
@@ -651,7 +1373,9 @@ function editClaim(i) {
 function cancelEdit() {
   editingIndex = null;
   document.getElementById('claimText').value = '';
-  document.getElementById('claimAccuracy').value = '0.5';
+  updateSearchLink('');
+  document.getElementById('claimAccuracy').value = '';
+  document.getElementById('claimTimestamp').value = '';
   document.getElementById('absolutePremise').checked = false;
   document.getElementById('addClaimBtn').textContent = 'Add claim';
   renderAll();
@@ -663,19 +1387,64 @@ function removeClaim(i) {
   renderAll();
 }
 
+function renderTimeline() {
+  const card = document.getElementById('timelineCard');
+  const chart = document.getElementById('timelineChart');
+  const timed = claims.filter(c => c.timestamp !== null && c.timestamp !== undefined);
+
+  if (timed.length === 0) {
+    card.style.display = 'none';
+    return;
+  }
+  card.style.display = 'block';
+
+  const runtimeMin = parseFloat(document.getElementById('metaRuntime').value);
+  const maxSeconds = (!isNaN(runtimeMin) && runtimeMin > 0)
+    ? runtimeMin * 60
+    : Math.max(...timed.map(c => c.timestamp)) * 1.1;
+
+  const width = 600, height = 60, pad = 10;
+  const markers = timed.map(c => {
+    const x = pad + (c.timestamp / maxSeconds) * (width - 2*pad);
+    const color = TIERS[c.tier].color;
+    const mins = Math.floor(c.timestamp / 60), secs = c.timestamp % 60;
+    return `<circle cx="${x}" cy="30" r="5" fill="${color}" fill-opacity="0.8" stroke="var(--bg)" stroke-width="1">
+      <title>${mins}:${String(secs).padStart(2,'0')} — ${c.text}</title>
+    </circle>`;
+  }).join('');
+
+  chart.innerHTML = `
+    <svg viewBox="0 0 ${width} ${height}" style="width:100%;">
+      <line x1="${pad}" y1="30" x2="${width-pad}" y2="30" stroke="var(--border)" stroke-width="2"/>
+      ${markers}
+      <text x="${pad}" y="52" font-size="10" fill="var(--text-faint)">0:00</text>
+      <text x="${width-pad}" y="52" font-size="10" fill="var(--text-faint)" text-anchor="end">${Math.floor(maxSeconds/60)}:00${(!isNaN(runtimeMin) && runtimeMin > 0) ? '' : ' (est.)'}</text>
+    </svg>
+    <p style="font-size:11px; color:var(--text-faint); margin-top:4px;">Hover a dot for the claim. Color = tier. ${(!isNaN(runtimeMin) && runtimeMin > 0) ? '' : 'Set runtime in Website metadata for an accurate scale.'}</p>
+  `;
+}
+
 function renderClaims() {
   const card = document.getElementById('claimsCard');
   const list = document.getElementById('claimsList');
   document.getElementById('claimCount').textContent = claims.length;
   if (claims.length === 0) { card.style.display = 'none'; return; }
   card.style.display = 'block';
-  list.innerHTML = claims.map((c, i) => `
+
+  // Display sorted Spine -> Skin, but keep each row's edit/remove buttons
+  // pointing at the claim's real position in the underlying array —
+  // sorting is presentation-only, it never reorders actual stored data.
+  const tierOrder = ['Spine', 'Soul', 'Skeleton', 'Flesh', 'Skin'];
+  const withIndex = claims.map((c, i) => ({ c, i }));
+  withIndex.sort((a, b) => tierOrder.indexOf(a.c.tier) - tierOrder.indexOf(b.c.tier));
+
+  list.innerHTML = withIndex.map(({ c, i }) => `
     <div class="claim-item" style="${editingIndex === i ? 'border-color:var(--met);' : ''}">
       <div>
         <span style="color:${TIERS[c.tier].color}; font-weight:500;">${c.tier}·${TIERS[c.tier].weight}</span>
         ${c.absolutePremise ? '<span class="badge" style="border-color:var(--danger); color:var(--danger);">Absolute Premise</span>' : ''}
         <span>${c.text}</span>
-        <span style="color:var(--text-faint);"> acc ${c.accuracy}</span>
+        <span style="color:${(c.accuracy === null || c.accuracy === undefined) ? 'var(--warn)' : 'var(--text-faint)'};"> ${(c.accuracy === null || c.accuracy === undefined) ? 'PENDING' : 'acc ' + c.accuracy}</span>
       </div>
       <div style="display:flex; gap:6px; flex:0 0 auto;">
         <button class="remove" style="font-size:12px; color:var(--text-dim);" onclick="editClaim(${i})">Edit</button>
@@ -686,7 +1455,8 @@ function renderClaims() {
 
 function calcResults() {
   let D = null, L = null, RPDI = null, Gap = null;
-  if (claims.length > 0) {
+  const pendingCount = claims.filter(c => c.accuracy === null || c.accuracy === undefined).length;
+  if (claims.length > 0 && pendingCount === 0) {
     const sumWA = claims.reduce((s, c) => s + TIERS[c.tier].weight * c.accuracy, 0);
     const sumW = claims.reduce((s, c) => s + TIERS[c.tier].weight, 0);
     D = 1 - (sumWA / sumW);
@@ -706,7 +1476,7 @@ function calcResults() {
     RPDI = 0.6 * D + 0.4 * L;
     Gap = Math.abs(D - L);
   }
-  return { D, L, RPDI, Gap, weights: { wS, wP, wF, wE } };
+  return { D, L, RPDI, Gap, weights: { wS, wP, wF, wE }, pendingCount };
 }
 
 function classify(v) {
@@ -747,9 +1517,84 @@ function classifyGap(v) {
 }
 function round(n) { return Math.round(n * 1000) / 1000; }
 
+function radarPoints(S, P, F, E, cx, cy, maxR) {
+  const angles = { S: -Math.PI/2, P: 0, F: Math.PI/2, E: Math.PI };
+  const vals = { S, P, F, E };
+  return ['S','P','F','E'].map(axis => {
+    const r = vals[axis] * maxR;
+    return [cx + r * Math.cos(angles[axis]), cy + r * Math.sin(angles[axis])];
+  });
+}
+
+async function renderRadar() {
+  const container = document.getElementById('radarChart');
+  const cx = 100, cy = 100, maxR = 75;
+
+  const S = parseFloat(document.getElementById('feelS').value);
+  const P = parseFloat(document.getElementById('feelP').value);
+  const F = parseFloat(document.getElementById('feelF').value);
+  const E = parseFloat(document.getElementById('feelE').value);
+  const hasCurrent = [S,P,F,E].every(v => !isNaN(v) && v >= 0 && v <= 1);
+
+  // Populate the overlay dropdown with saved films, once
+  const overlaySelect = document.getElementById('radarOverlay');
+  if (overlaySelect.options.length <= 1) {
+    const list = await listSavedFilmTitles();
+    list.forEach(title => {
+      const opt = document.createElement('option');
+      opt.value = title; opt.textContent = title;
+      overlaySelect.appendChild(opt);
+    });
+  }
+
+  const gridRings = [0.25, 0.5, 0.75, 1.0].map(frac => {
+    const pts = radarPoints(frac, frac, frac, frac, cx, cy, maxR);
+    return `<polygon points="${pts.map(p => p.join(',')).join(' ')}" fill="none" stroke="var(--border)" stroke-width="1"/>`;
+  }).join('');
+
+  const axisLines = ['S','P','F','E'].map(axis => {
+    const pt = radarPoints(axis==='S'?1:0, axis==='P'?1:0, axis==='F'?1:0, axis==='E'?1:0, cx, cy, maxR)
+      .find((_, i) => ['S','P','F','E'][i] === axis);
+    return `<line x1="${cx}" y1="${cy}" x2="${pt[0]}" y2="${pt[1]}" stroke="var(--border)" stroke-width="1"/>`;
+  }).join('');
+
+  const labels = `
+    <text x="${cx}" y="${cy-maxR-10}" text-anchor="middle" font-size="11" fill="var(--text-dim)">S</text>
+    <text x="${cx+maxR+12}" y="${cy+4}" text-anchor="middle" font-size="11" fill="var(--text-dim)">P</text>
+    <text x="${cx}" y="${cy+maxR+18}" text-anchor="middle" font-size="11" fill="var(--text-dim)">F</text>
+    <text x="${cx-maxR-12}" y="${cy+4}" text-anchor="middle" font-size="11" fill="var(--text-dim)">E</text>`;
+
+  let currentShape = '';
+  if (hasCurrent) {
+    const pts = radarPoints(S, P, F, E, cx, cy, maxR);
+    currentShape = `<polygon points="${pts.map(p => p.join(',')).join(' ')}" fill="var(--met)" fill-opacity="0.25" stroke="var(--met)" stroke-width="2"/>`;
+  }
+
+  let overlayShape = '';
+  const overlayTitle = overlaySelect.value;
+  if (overlayTitle) {
+    const payload = await loadSavedFilm(overlayTitle);
+    if (payload && payload.feel) {
+      const oS = parseFloat(payload.feel.S), oP = parseFloat(payload.feel.P), oF = parseFloat(payload.feel.F), oE = parseFloat(payload.feel.E);
+      if ([oS,oP,oF,oE].every(v => !isNaN(v))) {
+        const pts = radarPoints(oS, oP, oF, oE, cx, cy, maxR);
+        overlayShape = `<polygon points="${pts.map(p => p.join(',')).join(' ')}" fill="var(--danger)" fill-opacity="0.15" stroke="var(--danger)" stroke-width="2" stroke-dasharray="4,3"/>`;
+      }
+    }
+  }
+
+  container.innerHTML = `
+    <svg viewBox="0 0 200 210" style="width:100%; max-width:280px;">
+      ${gridRings}${axisLines}${labels}${overlayShape}${currentShape}
+    </svg>
+    ${!hasCurrent ? '<p style="font-size:12px; color:var(--text-faint);">Fill in S/P/F/E to see this film\'s shape.</p>' : ''}
+    ${overlayTitle ? `<p style="font-size:11px; color:var(--danger);">Dashed = ${overlayTitle}</p>` : ''}
+  `;
+}
+
 function renderResults() {
-  const { D, L, RPDI, Gap, weights } = calcResults();
-  document.getElementById('dScore').textContent = D !== null ? round(D) : '—';
+  const { D, L, RPDI, Gap, weights, pendingCount } = calcResults();
+  document.getElementById('dScore').textContent = D !== null ? round(D) : (pendingCount > 0 ? '—' : '—');
   document.getElementById('lScore').textContent = L !== null ? round(L) : '—';
   document.getElementById('rpdiScore').textContent = RPDI !== null ? round(RPDI) : '—';
   document.getElementById('gapScore').textContent = Gap !== null ? round(Gap) : '—';
@@ -765,6 +1610,8 @@ function renderResults() {
     } else {
       line.textContent = `${cls.label} distortion · ${classifyGap(Gap)}`;
     }
+  } else if (pendingCount > 0) {
+    line.innerHTML = `<span style="color:var(--warn);">${pendingCount} claim${pendingCount === 1 ? '' : 's'} still need${pendingCount === 1 ? 's' : ''} an accuracy score before D can be calculated.</span>`;
   } else {
     line.textContent = '';
   }
@@ -777,24 +1624,123 @@ function renderResults() {
   if (claims.length > 0 && !quotaMet) {
     flags.push('Quota not yet met — this D score is provisional until every tier hits its required count.');
   }
-  const spineClaims = claims.filter(c => c.tier === 'Spine');
+  // Only claims with a REAL accuracy value count toward the Spine-Floor check —
+  // a pending (unscored) claim must never be treated as if it already failed.
+  const spineClaims = claims.filter(c => c.tier === 'Spine' && c.accuracy !== null && c.accuracy !== undefined);
   if (spineClaims.some(c => c.accuracy <= 0.2)) {
     flags.push('Spine-Floor Rule is active — a Spine-tier claim scored 0.2 or below, so the classification is floored at High regardless of the weighted average. The raw D score above is unchanged and remains the real calculated value.');
   }
-  if (claims.length > 0) {
+  const scoredClaims = claims.filter(c => c.accuracy !== null && c.accuracy !== undefined);
+  if (scoredClaims.length > 0) {
     const counts2 = {};
-    claims.forEach(c => counts2[c.accuracy] = (counts2[c.accuracy] || 0) + 1);
-    const maxShare = Math.max(...Object.values(counts2)) / claims.length;
-    if (maxShare > 0.5) flags.push('More than half your claims share the exact same accuracy score — check this is genuine judgment, not clustering.');
+    scoredClaims.forEach(c => counts2[c.accuracy] = (counts2[c.accuracy] || 0) + 1);
+    const maxShare = Math.max(...Object.values(counts2)) / scoredClaims.length;
+    if (maxShare > 0.5) flags.push('More than half your scored claims share the exact same accuracy value — check this is genuine judgment, not clustering.');
   }
   ['S','P','F','E'].forEach((k, idx) => {
     const w = [weights.wS, weights.wP, weights.wF, weights.wE][idx];
-    if (w > 1 && !document.getElementById('feelEvidence').value.trim()) {
-      flags.push(`Weight for ${k} raised above 1 with no evidence note. This requires a citable reason, not a genre guess.`);
+    if (w > 1 && !(weightEvidence[k] || '').trim()) {
+      flags.push(`Weight for ${k} raised above 1 with no evidence specifically for ${k}. Each raised dimension needs its own citable reason — evidence for a different dimension doesn't automatically justify this one.`);
     }
   });
 
   document.getElementById('flags').innerHTML = flags.map(f => `<div class="flag">${f}</div>`).join('');
+}
+
+function getVerdictLine(rpdiLabel, gapLabel) {
+  if (gapLabel === 'Extreme Gaslighting') return 'Loudly dramatic. Quietly rewriting what happened.';
+  if (gapLabel === 'Gaslighting') return 'Uses real facts as cover for a manipulated feeling.';
+  if (rpdiLabel === 'Minimal') return 'What you see is close to what actually happened.';
+  if (gapLabel === 'Honest / Consistent') return "Distorted, but it's not pretending otherwise.";
+  return 'A mix of fact and invention, honestly not fully sorted out.';
+}
+
+function generateScoreCard() {
+  const title = document.getElementById('filmTitle').value || 'Untitled';
+  const { D, L, RPDI, Gap } = calcResults();
+  const canvas = document.getElementById('scoreCardCanvas');
+  const downloadBtn = document.getElementById('downloadScoreCardBtn');
+
+  if (D === null || L === null) {
+    document.getElementById('statusMsg').textContent = 'Score card needs a complete D and L first — finish scoring before generating this.';
+    setTimeout(() => document.getElementById('statusMsg').textContent = '', 2500);
+    return;
+  }
+
+  const cls = classifyWithFloor(RPDI);
+  const gapCls = classifyGap(Gap);
+  const color = { Minimal: '#4ECDC4', Moderate: '#c9a227', High: '#e0a800', Extreme: '#c67b6b' }[cls.label];
+
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  // Background
+  ctx.fillStyle = '#0a0a0a';
+  ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(10, 10, W-20, H-20);
+
+  // Eyebrow
+  ctx.fillStyle = '#8f8e88';
+  ctx.font = '13px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('RPDI SCORE', W/2, 50);
+
+  // Title
+  ctx.fillStyle = '#e8e6df';
+  ctx.font = 'bold 30px Georgia, serif';
+  const displayTitle = title.length > 28 ? title.slice(0, 26) + '…' : title;
+  ctx.fillText(displayTitle, W/2, 90);
+
+  // Big RPDI number
+  ctx.fillStyle = color;
+  ctx.font = 'bold 90px Georgia, serif';
+  ctx.fillText(round(RPDI).toFixed(3), W/2, 190);
+
+  // Classification
+  ctx.font = '18px monospace';
+  ctx.fillText(`${cls.label.toUpperCase()} DISTORTION`, W/2, 225);
+
+  // D / L / Gap row
+  ctx.font = '14px monospace';
+  ctx.fillStyle = '#8f8e88';
+  ctx.textAlign = 'left';
+  ctx.fillText(`D  ${round(D)}`, 80, 270);
+  ctx.fillText(`L  ${round(L)}`, 260, 270);
+  ctx.fillText(`Gap  ${round(Gap)} (${gapCls})`, 400, 270);
+
+  // Verdict line
+  ctx.fillStyle = '#c7c5bd';
+  ctx.font = 'italic 16px Georgia, serif';
+  ctx.textAlign = 'center';
+  const verdict = getVerdictLine(cls.label, gapCls);
+  ctx.fillText(verdict, W/2, 320);
+
+  // Footer
+  ctx.fillStyle = '#5c5b56';
+  ctx.font = '11px monospace';
+  ctx.fillText('RPDI = 0.6D + 0.4L  ·  built by Arjun Pathi', W/2, 370);
+
+  canvas.style.display = 'block';
+  downloadBtn.style.display = 'inline-block';
+}
+
+function downloadScoreCard() {
+  const canvas = document.getElementById('scoreCardCanvas');
+  const title = (document.getElementById('filmTitle').value || 'film').replace(/[^a-zA-Z0-9]/g, '_');
+  try {
+    const url = canvas.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `rpdi-scorecard-${title}.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (e) {
+    document.getElementById('statusMsg').textContent = 'Download failed — right-click the image above and save it manually instead.';
+    setTimeout(() => document.getElementById('statusMsg').textContent = '', 2500);
+  }
 }
 
 function generateSummary() {
@@ -833,34 +1779,57 @@ function copySummary() {
 function generateWebsiteEntry() {
   const title = document.getElementById('filmTitle').value || 'Untitled';
   const { D, L, RPDI, Gap } = calcResults();
-  const target = parseInt(document.getElementById('targetCount').value) || 20;
-  const quota = calcQuota(target);
-  const counts = tierCounts();
-  const quotaMet = Object.keys(TIERS).every(t => counts[t] >= quota[t]);
-  const today = new Date().toISOString().split('T')[0];
 
   if (D === null || L === null) {
     return '// Not ready to publish — D and L both need real values first.\n// D needs claims scored; L needs S/P/F/E all filled in.';
   }
 
   const cls = classifyWithFloor(RPDI);
-  const obj = {
-    title: title,
-    dateScored: today,
-    claimCount: claims.length,
-    quotaMet: quotaMet,
-    D: round(D),
-    L: round(L),
-    RPDI: round(RPDI),
-    Gap: round(Gap),
-    RPDIClassification: cls.label,
-    spineFloorApplied: cls.overridden,
-    GapClassification: classifyGap(Gap),
-  };
+  const gapCls = classifyGap(Gap);
 
-  return '{\n' + Object.entries(obj).map(([k, v]) =>
-    `  ${k}: ${typeof v === 'string' ? `"${v}"` : v},`
-  ).join('\n') + '\n},';
+  const year = document.getElementById('metaYear').value || 0;
+  const director = document.getElementById('metaDirector').value || '';
+  const language = document.getElementById('metaLanguage').value || '';
+  const country = document.getElementById('metaCountry').value || '';
+  const runtime = document.getElementById('metaRuntime').value || 0;
+  const streaming = document.getElementById('metaStreaming').value || '';
+  const imdb = document.getElementById('metaImdb').value || 0;
+  const confidence = document.getElementById('metaConfidence').value || 3;
+  const castRaw = document.getElementById('metaCast').value || '';
+  const cast = castRaw.split(',').map(s => s.trim()).filter(Boolean);
+  const subject = document.getElementById('metaSubject').value || '';
+  const period = document.getElementById('metaPeriod').value || '';
+
+  const colorMap = { Minimal: '#00C853', Moderate: '#FFD600', High: '#FF6D00', Extreme: '#D50000' };
+  const color = colorMap[cls.label] || '#888';
+
+  const castStr = cast.length ? cast.map(c => `"${c}"`).join(', ') : '/* add cast */';
+
+  return `{
+  title: "${title}",
+  year: ${year || '/* year */'},
+  language: "${language}",
+  country: "${country}",
+  director: "${director}",
+  cast: [${castStr}],
+  subject: "${subject}",
+  period: "${period}",
+  runtime: ${runtime || '/* runtime */'},
+  streaming: "${streaming}",
+  d: ${round(D)},
+  l: ${round(L)},
+  rpdi: ${round(RPDI)},
+  gap: ${round(Gap)},
+  rpdiClass: "${cls.label} Distortion"${cls.overridden ? '  // Spine-Floor Rule applied' : ''},
+  gapClass: "${gapCls}",
+  confidence: ${confidence},
+  imdb: ${imdb || '/* imdb rating */'},
+  distortions: [
+    /* write your own top 2-3 findings here — this needs your judgment, not auto-generation */
+  ],
+  summary: "/* write your own analysis paragraph here */",
+  color: "${color}",
+},`;
 }
 
 function copyWebsiteEntry() {
@@ -874,10 +1843,39 @@ function copyWebsiteEntry() {
   setTimeout(() => document.getElementById('statusMsg').textContent = '', 1500);
 }
 
-function saveFilm() {
-  const title = document.getElementById('filmTitle').value.trim();
-  if (!title) { document.getElementById('statusMsg').textContent = 'Name the film before saving.'; return; }
-  const payload = {
+function collectMeta() {
+  return {
+    year: document.getElementById('metaYear').value,
+    director: document.getElementById('metaDirector').value,
+    language: document.getElementById('metaLanguage').value,
+    country: document.getElementById('metaCountry').value,
+    runtime: document.getElementById('metaRuntime').value,
+    streaming: document.getElementById('metaStreaming').value,
+    imdb: document.getElementById('metaImdb').value,
+    confidence: document.getElementById('metaConfidence').value,
+    cast: document.getElementById('metaCast').value,
+    subject: document.getElementById('metaSubject').value,
+    period: document.getElementById('metaPeriod').value,
+  };
+}
+
+function applyMeta(meta) {
+  if (!meta) return;
+  document.getElementById('metaYear').value = meta.year || '';
+  document.getElementById('metaDirector').value = meta.director || '';
+  document.getElementById('metaLanguage').value = meta.language || '';
+  document.getElementById('metaCountry').value = meta.country || '';
+  document.getElementById('metaRuntime').value = meta.runtime || '';
+  document.getElementById('metaStreaming').value = meta.streaming || '';
+  document.getElementById('metaImdb').value = meta.imdb || '';
+  document.getElementById('metaConfidence').value = meta.confidence || '';
+  document.getElementById('metaCast').value = meta.cast || '';
+  document.getElementById('metaSubject').value = meta.subject || '';
+  document.getElementById('metaPeriod').value = meta.period || '';
+}
+
+function buildFilmPayload(title) {
+  return {
     title, claims,
     target: document.getElementById('targetCount').value,
     feel: {
@@ -885,33 +1883,119 @@ function saveFilm() {
       F: document.getElementById('feelF').value, E: document.getElementById('feelE').value,
       wS: document.getElementById('weightS').value, wP: document.getElementById('weightP').value,
       wF: document.getElementById('weightF').value, wE: document.getElementById('weightE').value,
-      evidence: document.getElementById('feelEvidence').value,
-    }
+      evidenceByDim: { S: weightEvidence.S, P: weightEvidence.P, F: weightEvidence.F, E: weightEvidence.E },
+    },
+    meta: collectMeta(),
   };
-  try {
-    localStorage.setItem('rpdi_film_' + title, JSON.stringify(payload));
-    const list = JSON.parse(localStorage.getItem('rpdi_film_list') || '[]');
-    if (!list.includes(title)) { list.push(title); localStorage.setItem('rpdi_film_list', JSON.stringify(list)); }
-    document.getElementById('statusMsg').textContent = 'Saved.';
-  } catch (e) {
-    document.getElementById('statusMsg').textContent = 'Save failed — your browser may be blocking local storage.';
-  }
-  setTimeout(() => document.getElementById('statusMsg').textContent = '', 1500);
 }
 
-function showLoadList() {
-  let list = [];
-  try { list = JSON.parse(localStorage.getItem('rpdi_film_list') || '[]'); } catch (e) {}
+// Debounced — a db write is a real network call, not a free localStorage
+// write, so this waits for a pause in editing rather than firing on
+// every single keystroke that triggers a re-render.
+let autoSaveTimer = null;
+function autoSave() {
+  const title = document.getElementById('filmTitle').value.trim();
+  if (!title) return; // nothing to save against yet
+  if (claims.length === 0) return; // never let an empty in-memory state overwrite a real saved entry
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(() => {
+    persistFilm(title, buildFilmPayload(title));
+  }, 1000);
+}
+
+async function exportAllFilms() {
+  const list = await listSavedFilmTitles();
+  const area = document.getElementById('exportBackupArea');
+
+  if (list.length === 0) {
+    area.innerHTML = '<p style="font-size:13px; color:var(--text-faint);">Nothing saved yet — nothing to export. And to be clear: you don\'t need this for normal saving — every claim already saves automatically as you go.</p>';
+    return;
+  }
+
+  const payloads = await Promise.all(list.map(title => loadSavedFilm(title)));
+  const bundle = { exportedAt: new Date().toISOString(), films: {} };
+  list.forEach((title, i) => { if (payloads[i]) bundle.films[title] = payloads[i]; });
+  const json = JSON.stringify(bundle, null, 2);
+
+  await downloadsReady;
+  let downloadStatus = '';
+  if (downloadsInstance) {
+    try {
+      await downloadsInstance.save({
+        filename: `rpdi-films-backup-${new Date().toISOString().split('T')[0]}.json`,
+        data: json,
+      });
+      downloadStatus = 'Download saved.';
+    } catch (e) {
+      downloadStatus = e && e.code === 'declined'
+        ? 'Download declined.'
+        : 'Download unavailable here right now.';
+    }
+  } else {
+    downloadStatus = 'Download isn\'t available in this view.';
+  }
+
+  // Always also show the raw JSON as visible, copyable text regardless
+  // of how the download attempt went — a guaranteed fallback that
+  // doesn't depend on any one platform mechanism working.
+  area.innerHTML = `
+    <p style="font-size:12px; color:var(--text-dim);">
+      ${downloadStatus} Either way, here's the full backup as text — copy and save it somewhere safe if you want an extra copy.
+      This is entirely optional — your films are already saving automatically on their own.
+    </p>
+    <textarea readonly style="width:100%; height:120px; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:6px; padding:10px; font-family:monospace; font-size:11px;">${json}</textarea>
+    <button class="btn-ghost" style="margin-top:8px;" onclick="navigator.clipboard.writeText(document.querySelector('#exportBackupArea textarea').value).then(()=>{document.getElementById('statusMsg').textContent='Backup copied.'; setTimeout(()=>document.getElementById('statusMsg').textContent='',1500);})">Copy backup text</button>
+  `;
+}
+
+function importAllFilms(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try {
+      const bundle = JSON.parse(e.target.result);
+      if (!bundle.films) throw new Error('not a valid backup file');
+      let restored = 0;
+      for (const [title, payload] of Object.entries(bundle.films)) {
+        await persistFilm(title, payload);
+        restored++;
+      }
+      document.getElementById('statusMsg').textContent = `Restored ${restored} film${restored === 1 ? '' : 's'} from backup.`;
+      renderLibrary();
+    } catch (err) {
+      document.getElementById('statusMsg').textContent = 'Import failed — that doesn\'t look like a valid backup file.';
+    }
+    setTimeout(() => document.getElementById('statusMsg').textContent = '', 2500);
+  };
+  reader.readAsText(file);
+  event.target.value = ''; // allow re-selecting the same file later
+}
+
+async function saveFilm() {
+  const title = document.getElementById('filmTitle').value.trim();
+  if (!title) { document.getElementById('statusMsg').textContent = 'Name the film before saving.'; return; }
+  const payload = buildFilmPayload(title);
+  const dbOk = await persistFilm(title, payload);
+  document.getElementById('statusMsg').textContent = dbOk
+    ? 'Saved to durable storage.'
+    : 'Saved locally only — durable storage is unavailable right now, so this is only safe in this browser until it reconnects.';
+  setTimeout(() => document.getElementById('statusMsg').textContent = '', 2500);
+}
+
+async function showLoadList() {
+  const list = await listSavedFilmTitles();
   const box = document.getElementById('loadList');
   if (list.length === 0) { box.innerHTML = '<p style="font-size:13px; color:var(--text-faint);">No saved films yet.</p>'; return; }
   box.innerHTML = '<select id="loadSelect" onchange="loadFilm(this.value)"><option value="">Select a saved film…</option>' +
     list.map(t => `<option value="${t}">${t}</option>`).join('') + '</select>';
 }
 
-function loadFilm(title) {
+async function loadFilm(title) {
   if (!title) return;
   try {
-    const payload = JSON.parse(localStorage.getItem('rpdi_film_' + title));
+    const payload = await loadSavedFilm(title);
+    if (!payload) throw new Error('not found');
     document.getElementById('filmTitle').value = payload.title;
     document.getElementById('targetCount').value = payload.target || 20;
     claims = payload.claims || [];
@@ -924,8 +2008,31 @@ function loadFilm(title) {
       document.getElementById('weightP').value = payload.feel.wP || 1;
       document.getElementById('weightF').value = payload.feel.wF || 1;
       document.getElementById('weightE').value = payload.feel.wE || 1;
-      document.getElementById('feelEvidence').value = payload.feel.evidence || '';
+
+      if (payload.feel.evidenceByDim) {
+        weightEvidence = {
+          S: payload.feel.evidenceByDim.S || '', P: payload.feel.evidenceByDim.P || '',
+          F: payload.feel.evidenceByDim.F || '', E: payload.feel.evidenceByDim.E || '',
+        };
+      } else if (payload.feel.evidence) {
+        // Older films saved one shared evidence string for every raised
+        // weight — that string may only genuinely justify SOME of them.
+        // Don't silently assume it covers every raised dimension; migrate
+        // it into each currently-raised one, explicitly flagged, so it
+        // gets re-checked rather than trusted by default.
+        weightEvidence = { S: '', P: '', F: '', E: '' };
+        ['S','P','F','E'].forEach(d => {
+          const w = parseFloat(payload.feel['w' + d]) || 1;
+          if (w > 1) {
+            weightEvidence[d] = '[MIGRATED — VERIFY THIS ACTUALLY JUSTIFIES ' + d + ' SPECIFICALLY] ' + payload.feel.evidence;
+          }
+        });
+      } else {
+        weightEvidence = { S: '', P: '', F: '', E: '' };
+      }
+      renderWeightEvidence();
     }
+    applyMeta(payload.meta);
     document.getElementById('statusMsg').textContent = `Loaded ${title}.`;
     renderAll();
   } catch (e) {
@@ -937,12 +2044,79 @@ function loadFilm(title) {
 function renderAll() {
   renderQuota();
   renderClaims();
+  renderTimeline();
   renderResults();
+  renderRadar();
   document.getElementById('summaryOutput').textContent = generateSummary();
   document.getElementById('websiteOutput').textContent = generateWebsiteEntry();
+  autoSave();
 }
 
-['targetCount','feelS','feelP','feelF','feelE','weightS','weightP','weightF','weightE','feelEvidence','filmTitle']
+// Speech-to-text claim capture. This is a real browser API (no external
+// network call, no CDN dependency), but this environment has silently
+// blocked other browser APIs before (confirm(), window.open()) — so this
+// checks for actual support first and reports status plainly rather than
+// assuming it works.
+let speechRecognizer = null;
+let speechActive = false;
+
+function initSpeech() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const micBtn = document.getElementById('micBtn');
+  const micStatus = document.getElementById('micStatus');
+  if (!SpeechRecognition) {
+    micBtn.disabled = true;
+    micBtn.style.opacity = '0.4';
+    micBtn.title = 'Speech recognition is not available in this browser/environment.';
+    return;
+  }
+  speechRecognizer = new SpeechRecognition();
+  speechRecognizer.continuous = false;
+  speechRecognizer.interimResults = false;
+  speechRecognizer.lang = 'en-US';
+
+  speechRecognizer.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    const textArea = document.getElementById('claimText');
+    textArea.value = (textArea.value.trim() ? textArea.value.trim() + ' ' : '') + transcript;
+    textArea.dispatchEvent(new Event('input')); // trigger the existing suggestion/duplicate logic
+    micStatus.textContent = 'Captured. Review the text before adding — speech-to-text can mishear names.';
+  };
+  speechRecognizer.onerror = (event) => {
+    micStatus.textContent = `Speech recognition error: ${event.error}. Falling back to typing is always fine.`;
+    speechActive = false;
+    micBtn.textContent = '🎤 Speak claim';
+  };
+  speechRecognizer.onend = () => {
+    speechActive = false;
+    micBtn.textContent = '🎤 Speak claim';
+  };
+}
+
+function toggleSpeech() {
+  if (!speechRecognizer) {
+    document.getElementById('micStatus').textContent = 'Speech recognition isn\'t supported here — just type the claim instead.';
+    return;
+  }
+  if (speechActive) {
+    speechRecognizer.stop();
+    speechActive = false;
+    document.getElementById('micBtn').textContent = '🎤 Speak claim';
+  } else {
+    try {
+      speechRecognizer.start();
+      speechActive = true;
+      document.getElementById('micBtn').textContent = '⏹ Listening…';
+      document.getElementById('micStatus').textContent = 'Listening — speak the claim now.';
+    } catch (e) {
+      document.getElementById('micStatus').textContent = 'Could not start microphone — check browser permissions, or just type instead.';
+    }
+  }
+}
+initSpeech();
+
+['targetCount','feelS','feelP','feelF','feelE',
+ 'metaYear','metaDirector','metaLanguage','metaCountry','metaRuntime','metaStreaming','metaImdb','metaConfidence','metaCast','metaSubject','metaPeriod']
   .forEach(id => document.getElementById(id).addEventListener('input', renderAll));
 
 renderAll();
