@@ -1,0 +1,22 @@
+{
+  "title": "Dhurandhar 1",
+  "director": "Aditya Dhar",
+  "cast": "Ranveer Singh, R Madhavan, Akshaye Khanna",
+  "year": 2025,
+  "language": "Hindi",
+  "country": "India",
+  "runtime": 214,
+  "period": "1999-2009",
+  "streaming": "Netflix",
+  "imdb": 8.2,
+  "D": 0.4837,
+  "L": 0.6875,
+  "RPDI": 0.5652,
+  "Gap": 0.2038,
+  "classification": "High",
+  "gapClassification": "Partially Misleading",
+  "spineFloorFired": true,
+  "spineFloorReason": "Absolute Premise claim (Hamza Ali Mazari as spy sent by Ajit Doval) scored 0.0",
+  "claimCount": 20,
+  "pendingCount": 0
+}
