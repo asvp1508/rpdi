@@ -1,0 +1,22 @@
+{
+  "title": "Sardar Udham",
+  "director": "Shoojit Sircar",
+  "cast": "Vicky Kaushal",
+  "year": 2021,
+  "language": "Hindi",
+  "country": "India",
+  "runtime": 164,
+  "period": "1919-1930",
+  "streaming": "Amazon Prime Video",
+  "imdb": 8.4,
+  "D": 0.2788,
+  "L": 0.375,
+  "RPDI": 0.3173,
+  "Gap": 0.0962,
+  "classification": "Moderate",
+  "gapClassification": "Honest / Consistent",
+  "spineFloorFired": false,
+  "claimCount": 20,
+  "pendingCount": 0,
+  "notes": "No Spine-Floor trigger. Most Honest/Consistent Gap of any film scored so far."
+}
