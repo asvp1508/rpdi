@@ -113,19 +113,32 @@ One claim per film (Spine tier only) can be flagged as the single most central p
 
 ## 9. The Gap Metric
 
-Gap Metric — FINAL (Data-Calibrated)
+
+```
 Gap = D − L   (signed)
+```
 
-Direction is non-negotiable. Negative Gap is always the Gaslighting family (portrayal outpaces distortion — accurate facts wrapped in manipulative dramatization). Positive Gap is always the Sanitized Fabrication family (distortion outpaces portrayal — fabricated content presented with false calm). Statistical calibration is only ever used to set severity within a direction — it never overrides which direction a film is assigned to. An earlier draft using pure Z-scores against the dataset mean was tested and rejected specifically because it could relabel a negative-Gap film (still clearly Gaslighting-direction) as "Sanitized Fabrication" purely because it was less extreme than the skewed mean — a real bug, caught before publishing.
+**Direction is non-negotiable.** Negative Gap is always the Gaslighting family (portrayal outpaces distortion — accurate facts wrapped in manipulative dramatization). Positive Gap is always the Sanitized Fabrication family (distortion outpaces portrayal — fabricated content presented with false calm). Statistical calibration is only ever used to set severity *within* a direction — it never overrides which direction a film is assigned to. An earlier draft using pure Z-scores against the dataset mean was tested and rejected specifically because it could relabel a negative-Gap film (still clearly Gaslighting-direction) as "Sanitized Fabrication" purely because it was less extreme than the skewed mean — a real bug, caught before publishing.
 
-Final classification, calibrated against the first 15 scored films (Sept 2026):
+**Final classification, calibrated against the first 15 scored films (Sept 2026):**
 
-Gap = D − L	Classification	Basis
-≤ −0.203	Extreme Gaslighting	Real median of the 14 negative-Gap films scored so far
-−0.203 to −0.05	Gaslighting	Real median split
-−0.05 to +0.05	Honest / Consistent	Matches the accuracy scale's own finest granularity (0.05) — smaller than this is measurement noise, not signal
-+0.05 to +0.25	Sanitized Fabrication	Provisional fixed threshold — only 1 positive-Gap film exists (Saving Private Ryan), not enough to calibrate statistically
-≥ +0.25	Extreme Sanitized Fabrication	Same provisional basis
+| Gap = D − L | Classification | Basis |
+|---|---|---|
+| ≤ −0.203 | Extreme Gaslighting | Real median of the 14 negative-Gap films scored so far |
+| −0.203 to −0.05 | Gaslighting | Real median split |
+| −0.05 to +0.05 | Honest / Consistent | Matches the accuracy scale's own finest granularity (0.05) — smaller than this is measurement noise, not signal |
+| +0.05 to +0.25 | Sanitized Fabrication | Provisional fixed threshold — only 1 positive-Gap film exists (Saving Private Ryan), not enough to calibrate statistically |
+| ≥ +0.25 | Extreme Sanitized Fabrication | Same provisional basis |
+
+**The Gaslighting-side median (−0.203) should be re-derived whenever the dataset grows meaningfully.** The Sanitized Fabrication side needs several more positive-Gap films scored before a real statistical boundary can replace the current fixed threshold.
+
+**Genuine finding from this calibration:** under the corrected, precision-matched deadband, **zero of the 15 scored films land in "Honest/Consistent."** Every single one either dramatizes beyond what its facts support, or — in exactly one case (Saving Private Ryan) — fabricates more than its restrained presentation would suggest. This is a real result about commercial historical cinema as a genre, not a threshold artifact.
+
+---
+
+---
+
+
 ## 10. The 0.6/0.4 RPDI Weighting
 
 D counts for more because a film's first job is to tell you what happened; what it makes you feel comes second. Not purely arbitrary — supported by original survey data (n=23): 91% agreed inaccurate historical films can negatively affect public understanding of real history; 65% named historical accuracy as what matters most when watching. This justifies the *direction* (D > L), not the *exact* numbers — a design decision, stated honestly as such.
