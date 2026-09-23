@@ -104,39 +104,28 @@ All four dimensions default to weight 1. A weight may only be raised with specif
 
 ## 7. The Spine-Floor Rule
 
-If any Spine-tier claim scores ≤0.2, OR the tagged Absolute Premise claim scores ≤0.3, the final classification cannot register below "High" — regardless of the raw weighted average. Raw D still calculates and displays unchanged; only the label overrides.
+Fires only if the tagged Absolute Premise claim scores ≤0.3. An ordinary, untagged Spine claim scoring low no longer floors the classification on its own — it still carries full weight-5 influence on the raw D score, just without the automatic override.
 
-**Why it exists:** a film with one fully fabricated Spine claim and otherwise-excellent accuracy across 20 claims produced D=0.153 ("Minimal"). At 60 claims, D dropped further to 0.093 — dilution got *worse*, not better, as claim count grew.
-
-**Why it's an override and not a bigger weight:** raising Spine's weight to 6 still failed — the dilution just took longer (still landed "Minimal" even with 100+ extra accurate claims added). A bigger weight is still a vote that can be outvoted; the floor is a disqualifier.
-
-**Proven on real data:** fired correctly on Dhurandhar's fabricated spy character and RRR's fabricated central friendship, independent of whether the composite RPDI would've reached "High" on its own. Correctly stays silent on Amaran and Sardar Udham, where no Spine claim and no Absolute Premise claim drops that low.
-
+Rationale: an ordinary Spine claim taking real dramatic license shouldn't automatically disqualify a film from a lower classification. Only fabricating the single plot point the entire story structurally depends on should.
 ## 8. Absolute Premise Tag
 
 One claim per film (Spine tier only) can be flagged as the single most central plot point — triggers the same Spine-Floor override at a more lenient 0.3 threshold, since it's already identified as the most consequential claim.
 
 ## 9. The Gap Metric
 
-```
-Gap = |D − L|
-```
+Gap Metric — FINAL (Data-Calibrated)
+Gap = D − L   (signed)
 
-Measures the distance between factual accuracy and dramatization intensity — NOT a claim about intent. A film can produce a large Gap without anyone intending to deceive; Gap measures effect, not motive.
+Direction is non-negotiable. Negative Gap is always the Gaslighting family (portrayal outpaces distortion — accurate facts wrapped in manipulative dramatization). Positive Gap is always the Sanitized Fabrication family (distortion outpaces portrayal — fabricated content presented with false calm). Statistical calibration is only ever used to set severity within a direction — it never overrides which direction a film is assigned to. An earlier draft using pure Z-scores against the dataset mean was tested and rejected specifically because it could relabel a negative-Gap film (still clearly Gaslighting-direction) as "Sanitized Fabrication" purely because it was less extreme than the skewed mean — a real bug, caught before publishing.
 
-"Director Manipulation" and "Directional Accuracy" were considered and rejected as names — the former implies knowledge of intent the framework can't actually measure.
+Final classification, calibrated against the first 15 scored films (Sept 2026):
 
-**Classification** (same neutral 0/.25/.5/.75/1 scale as RPDI, explicitly provisional):
-
-| Score | Classification |
-|---|---|
-| 0.00–0.24 | Honest / Consistent |
-| 0.25–0.49 | Partially Misleading |
-| 0.50–0.74 | Gaslighting |
-| 0.75–1.00 | Extreme Gaslighting |
-
-Thresholds are provisional — to be revisited once a larger real dataset exists, checking whether real breakpoints (possibly ~0.26/0.41) are better supported than the current clean-quarter values.
-
+Gap = D − L	Classification	Basis
+≤ −0.203	Extreme Gaslighting	Real median of the 14 negative-Gap films scored so far
+−0.203 to −0.05	Gaslighting	Real median split
+−0.05 to +0.05	Honest / Consistent	Matches the accuracy scale's own finest granularity (0.05) — smaller than this is measurement noise, not signal
++0.05 to +0.25	Sanitized Fabrication	Provisional fixed threshold — only 1 positive-Gap film exists (Saving Private Ryan), not enough to calibrate statistically
+≥ +0.25	Extreme Sanitized Fabrication	Same provisional basis
 ## 10. The 0.6/0.4 RPDI Weighting
 
 D counts for more because a film's first job is to tell you what happened; what it makes you feel comes second. Not purely arbitrary — supported by original survey data (n=23): 91% agreed inaccurate historical films can negatively affect public understanding of real history; 65% named historical accuracy as what matters most when watching. This justifies the *direction* (D > L), not the *exact* numbers — a design decision, stated honestly as such.
