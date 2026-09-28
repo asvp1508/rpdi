@@ -20,9 +20,9 @@ Gap = |D − L|
 - tool/ — Python engine + stress tests
 
 ## Status
-One film (RRR) currently scored under the full current methodology.
-Framework designed to scale to more.
+16 films scored, project officially closed.
+LLM integration with framework in progress
 
-Live scoring tool: [your artifact link]
-Live results site: [your Vercel link]
-Essay series documenting development: [Medium/Substack link]
+Live scoring tool: yet to be deployed
+Live results site: rpdi-phi.vercel.app
+Essay series documenting development: medium.com@pathiarjun15
