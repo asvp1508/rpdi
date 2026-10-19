@@ -83,7 +83,7 @@
 
 <script>
 const FILMS = [
-  { stressTest:true, id:1, title:"RRR", year:2022, language:"Telugu", country:"India", director:"SS Rajamouli",
+  { stressTest:"plain", id:1, title:"RRR", year:2022, language:"Telugu", country:"India", director:"SS Rajamouli",
     cast:["JR NTR", "Ram Charan", "Alia Bhatt"], subject:"Two revolutionaries fight British colonial rule in 1920s India.", period:"1920s",
     runtime:187, streaming:"Zee 5/Netflix", d:0.716, l:0.9167, rpdi:0.7963, gap:-0.2006,
     rpdiClass:"Extreme Distortion", gapClass:"Gaslighting", confidence:5, imdb:7.8,
@@ -322,7 +322,10 @@ function glowBar(value, color, label) {
 function stressBadge(f, big) {
   if (!f.stressTest) return '';
   const sz = big ? 13 : 11;
-  return `<span title="AI stress test score: scored with AI assistance to test the method, not part of the hand-scored set" style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;padding:2px 7px;border-radius:999px;border:1px solid #B388FF55;background:#B388FF14;color:#B388FF;font-size:${big?11:10}px;letter-spacing:0.5px;vertical-align:middle;white-space:nowrap;" class="mono"><svg width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6L4.5 18.5A2 2 0 0 0 6.2 21.5h11.6a2 2 0 0 0 1.7-3L14 9V3"/><path d="M7 15h10"/></svg>AI stress test</span>`;
+  const ai = f.stressTest !== "plain";
+  const label = ai ? "AI stress test" : "Stress test";
+  const tip = ai ? "AI stress test score: scored with AI assistance to test the method, not part of the hand-scored set" : "Stress test score: scored to test the method, not part of the main set";
+  return `<span title="${tip}" style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;padding:2px 7px;border-radius:999px;border:1px solid #B388FF55;background:#B388FF14;color:#B388FF;font-size:${big?11:10}px;letter-spacing:0.5px;vertical-align:middle;white-space:nowrap;" class="mono"><svg width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6L4.5 18.5A2 2 0 0 0 6.2 21.5h11.6a2 2 0 0 0 1.7-3L14 9V3"/><path d="M7 15h10"/></svg>${label}</span>`;
 }
 
 function filmCardHTML(f) {
@@ -495,7 +498,7 @@ function render() {
           <option value="imdb" ${state.sortBy==="imdb"?"selected":""}>Sort: IMDb ↓</option>
         </select>
       </div>
-      <div style="font-size:12px;color:#333;margin-bottom:20px;" class="mono">Showing ${filtered.length} of ${FILMS.length} scored films${FILMS.some(f => f.stressTest) ? ` · <span style="color:#B388FF;">AI stress test</span> marks films scored with AI assistance to test the method` : ""}</div>
+      <div style="font-size:12px;color:#333;margin-bottom:20px;" class="mono">Showing ${filtered.length} of ${FILMS.length} scored films${FILMS.some(f => f.stressTest) ? ` · <span style="color:#B388FF;">Stress test</span> marks films scored to test the method (AI stress tests used AI assistance)` : ""}</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;">
         ${filtered.map(filmCardHTML).join("")}
       </div>
@@ -577,7 +580,7 @@ function render() {
         ${[[`${gaslightCount}/${FILMS.length}`,"Films Show Gaslighting","Gap of −0.05 or lower: the telling is more dramatic than the facts support","#FF6D00"],
            [imdbR,"IMDb Correlation","Between IMDb rating and RPDI across all scored films. Higher-rated films tend to distort a little less, but ratings alone can't tell you how a film distorts","#4ECDC4"],
            [`${flooredHigh}/${floored.length}`,"Spine-Floor Rule","Films whose central premise is fabricated are classed High Distortion or worse, whatever their average","#D50000"],
-           [minFilm.rpdi.toFixed(3),"Minimum RPDI",`${minFilm.title}, the lowest in the dataset${minFilm.stressTest ? " (an AI stress test score)" : ""}`,"#00C853"]].map(s => `
+           [minFilm.rpdi.toFixed(3),"Minimum RPDI",`${minFilm.title}, the lowest in the dataset${minFilm.stressTest ? (minFilm.stressTest === "plain" ? " (a stress test score)" : " (an AI stress test score)") : ""}`,"#00C853"]].map(s => `
           <div style="padding:24px;background:#0a0a0a;border:1px solid ${s[3]}22;border-radius:12px;">
             <div style="font-size:40px;font-weight:800;color:${s[3]};line-height:1;margin-bottom:12px;" class="mono">${s[0]}</div>
             <div style="font-size:13px;color:#aaa;font-weight:600;margin-bottom:8px;">${s[1]}</div>
