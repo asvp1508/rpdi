@@ -8,7 +8,7 @@ technique (L).
 D = 1 − (Σ weight × accuracy) / (Σ weight)
 L = (wS·S + wP·P + wF·F + wE·E) / (wS+wP+wF+wE)
 RPDI = 0.6(D) + 0.4(L)
-Gap = |D − L|
+Gap = D − L   (signed: negative = Gaslighting, positive = Sanitized Fabrication)
 
 ## Repo Structure
 - METHODOLOGY.md — full process, formulas, definitions

@@ -16,7 +16,7 @@ Combined into a composite **RPDI**, plus a third original metric, **Gap**, ident
 D    = 1 − (Σ weight × accuracy) / (Σ weight)
 L    = (wS·S + wP·P + wF·F + wE·E) / (wS + wP + wF + wE)
 RPDI = 0.6(D) + 0.4(L)
-Gap  = |D − L|
+Gap  = D − L          (signed, see §9)
 ```
 
 ## 2. The Five Weight Tiers
@@ -133,6 +133,8 @@ Gap = D − L   (signed)
 **The Gaslighting-side median (−0.203) should be re-derived whenever the dataset grows meaningfully.** The Sanitized Fabrication side needs several more positive-Gap films scored before a real statistical boundary can replace the current fixed threshold.
 
 **Genuine finding from this calibration:** under the corrected, precision-matched deadband, **zero of the 15 scored films land in "Honest/Consistent."** Every single one either dramatizes beyond what its facts support, or — in exactly one case (Saving Private Ryan) — fabricates more than its restrained presentation would suggest. This is a real result about commercial historical cinema as a genre, not a threshold artifact.
+
+**Update (Oct 2026, 16 films):** All the President's Men, scored as an AI stress test, is the first film to land in Honest / Consistent (Gap −0.048). RRR and Oppenheimer are also AI stress-test scores, and the site marks all three.
 
 ---
 
