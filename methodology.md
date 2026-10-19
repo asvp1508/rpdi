@@ -134,7 +134,7 @@ Gap = D − L   (signed)
 
 **Genuine finding from this calibration:** under the corrected, precision-matched deadband, **zero of the 15 scored films land in "Honest/Consistent."** Every single one either dramatizes beyond what its facts support, or — in exactly one case (Saving Private Ryan) — fabricates more than its restrained presentation would suggest. This is a real result about commercial historical cinema as a genre, not a threshold artifact.
 
-**Update (Oct 2026, 16 films):** All the President's Men, scored as an AI stress test, is the first film to land in Honest / Consistent (Gap −0.048). RRR and Oppenheimer are also AI stress-test scores, and the site marks all three.
+**Update (Oct 2026, 16 films):** All the President's Men, scored as an AI stress test, is the first film to land in Honest / Consistent (Gap −0.048). RRR and U-571 are also AI stress-test scores, and the site marks all three.
 
 ---
 
