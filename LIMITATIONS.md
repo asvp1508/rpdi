@@ -6,7 +6,7 @@ Honest, explicit documentation of known gaps in the framework and the tool — n
 
 **Ceilings are intuition-calibrated, not derived.** The accuracy ceilings by claim type (METHODOLOGY.md §5) come from judgment about how confident a claim type can reasonably be, not from a formula. They were revised once already as that judgment improved. Treat them as a considered starting point, not a constant.
 
-**Gap thresholds are provisional.** The four Gap bands (Honest / Partially Misleading / Gaslighting / Extreme Gaslighting) currently sit on clean quarter-boundaries (0.25/0.50/0.75) for simplicity, not because those are the empirically correct breakpoints. Should be revisited once a larger real dataset exists — possibly something like 0.26/0.41 instead.
+**Gap thresholds are provisional.** Gap is signed (D − L) and split into five bands (see methodology §9). The Gaslighting side uses the real median of the negative-Gap films (−0.203) and should be re-derived as the dataset grows. The Sanitized Fabrication side (+0.05 / +0.25) is a fixed placeholder, because too few positive-Gap films have been scored to calibrate it.
 
 **The 0.6/0.4 RPDI weighting is a design decision, not a derived constant.** Original survey data (n=23) supports the *direction* — that factual accuracy (D) should outweigh portrayal technique (L) — but not the specific 0.6/0.4 split. A different split within reason would be equally defensible from the same survey.
 

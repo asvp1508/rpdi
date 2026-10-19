@@ -431,7 +431,13 @@ function modalHTML(f) {
 function render() {
   const filtered = getFiltered();
   const avgRPDI = (FILMS.reduce((s,f) => s+f.rpdi, 0) / FILMS.length).toFixed(3);
-  const gaslightCount = FILMS.filter(f => f.gap >= 0.26).length;
+  const gaslightCount = FILMS.filter(f => f.gapClass.includes("Gaslighting")).length;
+  const minFilm = FILMS.reduce((m, f) => f.rpdi < m.rpdi ? f : m, FILMS[0]);
+  const floored = FILMS.filter(f => f.summary.includes("Spine-Floor"));
+  const flooredHigh = floored.filter(f => /High|Extreme/.test(f.rpdiClass)).length;
+  const imdbR = (() => { const n = FILMS.length, mx = FILMS.reduce((s,f)=>s+f.rpdi,0)/n, my = FILMS.reduce((s,f)=>s+f.imdb,0)/n;
+    let sxy = 0, sxx = 0, syy = 0; FILMS.forEach(f => { sxy += (f.rpdi-mx)*(f.imdb-my); sxx += (f.rpdi-mx)**2; syy += (f.imdb-my)**2; });
+    return (sxy / Math.sqrt(sxx*syy)).toFixed(2); })();
 
   document.getElementById("app").innerHTML = `
     <!-- HERO -->
@@ -444,7 +450,7 @@ function render() {
         </div>
         <h1 style="font-size:clamp(48px,10vw,96px);font-weight:900;letter-spacing:-2px;line-height:0.9;margin:0 0 24px;background:linear-gradient(135deg,#fff 0%,#666 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;" class="serif">RPDI Score</h1>
         <p style="font-size:clamp(15px,2.5vw,20px);color:#555;line-height:1.6;max-width:560px;margin:0 auto 16px;font-weight:300;">The first mathematical framework measuring historical accuracy in world cinema.</p>
-        <p style="font-size:13px;color:#333;margin-bottom:48px;" class="mono">D = 1 − (Σwᵢaᵢ / Σwᵢ) · RPDI = 0.6D + 0.4L · Gap = |D − L|</p>
+        <p style="font-size:13px;color:#333;margin-bottom:48px;" class="mono">D = 1 − (Σwᵢaᵢ / Σwᵢ) · RPDI = 0.6D + 0.4L · Gap = D − L</p>
         <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
           ${[[String(FILMS.length),"Films Scored"],["500","Dataset Target"],[avgRPDI,"Average RPDI"],[String(gaslightCount),"Gaslighting Films"]].map(s => `
             <div style="text-align:center;"><div style="font-size:32px;font-weight:800;color:#fff;line-height:1;" class="mono">${s[0]}</div><div style="font-size:11px;color:#444;text-transform:uppercase;letter-spacing:1.5px;margin-top:6px;">${s[1]}</div></div>`).join("")}
@@ -552,9 +558,9 @@ function render() {
         </div>
         <div style="padding:24px;background:#0a0a0a;border:1px solid #111;border-radius:12px;">
           <div style="font-size:11px;color:#D50000;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;" class="mono">The Gap — Original Contribution</div>
-          <div style="font-size:24px;color:#fff;margin-bottom:16px;font-weight:600;" class="mono">|D − L|</div>
+          <div style="font-size:24px;color:#fff;margin-bottom:16px;font-weight:600;" class="mono">D − L</div>
           <p style="font-size:13px;color:#555;line-height:1.7;margin:0 0 20px;">The most important metric. Reveals when films use factual accuracy as cover for emotional manipulation — a pattern we call cinematic gaslighting.</p>
-          ${[["0.00–0.14","Honest","Facts and feeling align","#00C853"],["0.15–0.25","Partially Misleading","Some inconsistency","#FFD600"],["0.26–0.40","Gaslighting","True facts, false feeling","#FF6D00"],["0.41+","Extreme Gaslighting","Maximum disconnect","#D50000"]].map(g => `
+          ${[["≤ −0.203","Extreme Gaslighting","Feeling far outruns the facts","#D50000"],["−0.203 to −0.05","Gaslighting","True facts, false feeling","#FF6D00"],["−0.05 to +0.05","Honest / Consistent","Facts and feeling align","#00C853"],["+0.05 to +0.25","Sanitized Fabrication","Invented facts, calm telling","#FFD600"],["≥ +0.25","Extreme Sanitized Fabrication","Heavy invention, played straight","#B388FF"]].map(g => `
             <div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #111;">
               <div style="width:6px;height:6px;border-radius:50%;background:${g[3]};box-shadow:0 0 6px ${g[3]};flex-shrink:0;margin-left:9px;"></div>
               <div><div style="font-size:12px;color:${g[3]};" class="mono">${g[0]}</div><div style="font-size:11px;color:#aaa;">${g[1]} — ${g[2]}</div></div>
@@ -568,10 +574,10 @@ function render() {
       <div style="font-size:11px;color:#333;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;" class="mono">— Research Findings</div>
       <h2 style="font-size:36px;font-weight:700;margin:0 0 48px;" class="serif">What The Data Shows</h2>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;">
-        ${[[`${gaslightCount}/${FILMS.length}`,"Films Show Gaslighting","Gap ≥ 0.26 — using factual accuracy to hide narrative manipulation","#FF6D00"],
-           ["0.000","IMDb Correlation","Audience ratings show zero correlation with RPDI — traditional reviews miss historical distortion entirely","#4ECDC4"],
-           ["100%","Spine Fabrication Rule","Every film with a fabricated Weight 5 claim scores Gaslighting or worse. Zero exceptions.","#D50000"],
-           ["0.185","Minimum RPDI","Rocketry — the only film achieving Minimal Distortion, using Supreme Court records as primary source","#00C853"]].map(s => `
+        ${[[`${gaslightCount}/${FILMS.length}`,"Films Show Gaslighting","Gap of −0.05 or lower: the telling is more dramatic than the facts support","#FF6D00"],
+           [imdbR,"IMDb Correlation","Between IMDb rating and RPDI across all scored films. Higher-rated films tend to distort a little less, but ratings alone can't tell you how a film distorts","#4ECDC4"],
+           [`${flooredHigh}/${floored.length}`,"Spine-Floor Rule","Films whose central premise is fabricated are classed High Distortion or worse, whatever their average","#D50000"],
+           [minFilm.rpdi.toFixed(3),"Minimum RPDI",`${minFilm.title}, the lowest in the dataset${minFilm.stressTest ? " (an AI stress test score)" : ""}`,"#00C853"]].map(s => `
           <div style="padding:24px;background:#0a0a0a;border:1px solid ${s[3]}22;border-radius:12px;">
             <div style="font-size:40px;font-weight:800;color:${s[3]};line-height:1;margin-bottom:12px;" class="mono">${s[0]}</div>
             <div style="font-size:13px;color:#aaa;font-weight:600;margin-bottom:8px;">${s[1]}</div>
