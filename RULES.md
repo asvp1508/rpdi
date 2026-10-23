@@ -34,7 +34,7 @@ Claim type determines a soft ceiling on accuracy (see METHODOLOGY.md §5). The a
 
 ## 6. Spine-Floor Override
 
-If any Spine-tier claim scores ≤0.2, or the tagged Absolute Premise claim scores ≤0.3, the film's classification label cannot register below "High," regardless of the raw weighted RPDI. Raw D/L/RPDI still display unchanged — only the label is overridden. See METHODOLOGY.md §7 for the reasoning and evidence this is based on.
+If the tagged Absolute Premise claim scores ≤0.3, the film's classification label cannot register below "High," regardless of the raw weighted RPDI. (The first version, described in Part 6 of the series, fired on any Spine claim at ≤0.2; an ordinary Spine claim scoring low now carries its full weight in D but no longer overrides the label on its own.) Raw D/L/RPDI still display unchanged — only the label is overridden. See METHODOLOGY.md §7 for the reasoning and evidence this is based on.
 
 ## 7. Duplicate / Near-Duplicate Claim Caution
 
