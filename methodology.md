@@ -1,6 +1,6 @@
 # RPDI Methodology
 
-**Reality-Portrayal Distortion Index** — an original composite-index framework measuring historical distortion in cinema. Author: Arjun Pathi.
+**Reality-Perception Distortion Index** — an original composite-index framework measuring historical distortion in cinema. Author: Arjun Pathi.
 
 RPDI separates two independent things:
 - **D (Distortion Score)** — how factually accurate a film's claims are
@@ -127,14 +127,14 @@ Gap = D − L   (signed)
 | ≤ −0.203 | Extreme Gaslighting | Real median of the 14 negative-Gap films scored so far |
 | −0.203 to −0.05 | Gaslighting | Real median split |
 | −0.05 to +0.05 | Honest / Consistent | Matches the accuracy scale's own finest granularity (0.05) — smaller than this is measurement noise, not signal |
-| +0.05 to +0.25 | Sanitized Fabrication | Provisional fixed threshold — only 1 positive-Gap film exists (Saving Private Ryan), not enough to calibrate statistically |
+| +0.05 to +0.25 | Sanitized Fabrication | Provisional fixed threshold — set when only 1 positive-Gap film existed (Saving Private Ryan); U-571, an AI-scored stress test, is now the second, with identical scores. Still not enough to calibrate statistically |
 | ≥ +0.25 | Extreme Sanitized Fabrication | Same provisional basis |
 
 **The Gaslighting-side median (−0.203) should be re-derived whenever the dataset grows meaningfully.** The Sanitized Fabrication side needs several more positive-Gap films scored before a real statistical boundary can replace the current fixed threshold.
 
 **Genuine finding from this calibration:** under the corrected, precision-matched deadband, **zero of the 15 scored films land in "Honest/Consistent."** Every single one either dramatizes beyond what its facts support, or — in exactly one case (Saving Private Ryan) — fabricates more than its restrained presentation would suggest. This is a real result about commercial historical cinema as a genre, not a threshold artifact.
 
-**Update (Oct 2026, 16 films):** All the President's Men, scored as an AI stress test, is the first film to land in Honest / Consistent (Gap −0.048). U-571 is also an AI stress-test score, and RRR is a stress-test score; the site marks all three.
+**Update (Oct 2026, 16 films):** All the President's Men, scored as an AI stress test, is the first film to land in Honest / Consistent (Gap −0.048). U-571 is also an AI stress-test score, and RRR is a stress-test score; the site marks all three. Across the 16 films, 13 (81%) fall in Gaslighting or Extreme Gaslighting, 2 in Sanitized Fabrication and 1 in Honest / Consistent.
 
 ---
 
