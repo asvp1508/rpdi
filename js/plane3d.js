@@ -1,7 +1,7 @@
 // The 16 scored films in 3D: D across, L going back, RPDI up.
 // RPDI = 0.6D + 0.4L, so every film sits on one tilted plane. The floor diagonal is D = L (Gap = 0).
 import { fig, fontsReady, THREE } from '../vendor/fig3d.js';
-const INK = 0x1c2541, TEAL = 0x3a7d7b, GREY = 0x8a90a3, PALE = 0x9cc3be;
+const INK = 0xece5d6, TEAL = 0x5fb3ac, GREY = 0x6f7890, PALE = 0x2f6f6a;
 await fontsReady();
 
 const cv = document.querySelector('#plane-gl');
@@ -28,7 +28,7 @@ if (F) {
   tag('L  portrayal →', [X(1) + 1.3, -0.4, Z(0.5)], { size: 30 });
   tag('RPDI', [X(0), Y(1) + 0.45, Z(1)], { size: 30, weight: 600 });
   for (const v of [0.5, 1]) tag(v.toFixed(1), [X(0) - 0.45, Y(v), Z(1)], { size: 28 });
-  tag('D = L  (no gap)', [X(0.93), 0.3, Z(0.93)], { size: 26, color: '#3a7d7b' });
+  tag('D = L  (no gap)', [X(0.93), 0.3, Z(0.93)], { size: 26, color: '#5fb3ac' });
   const named = { RRR: [0, .5], "All the President's Men": [0, -.45], 'The Kashmir Files': [0, .45], 'Mohenjo Daro': [-.2, .45], 'Saving Private Ryan': [0, -.5], 'Gandhi': [0, .42] };
   films.forEach(f => { if (named[f[0]]) { const [dx, dy] = named[f[0]]; tag(f[0] === 'Saving Private Ryan' ? 'Saving Private Ryan · U-571' : f[0], [X(f[1]) + dx, Y(f[3]) + dy, Z(f[2])], { size: 26, serif: true, italic: true, weight: 500, scale: 0.34, depthTest: false }); } });
   F.st.onFrame = t => {
