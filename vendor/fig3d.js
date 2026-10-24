@@ -1,11 +1,11 @@
-// Shared helpers for the 3D figures on the site (dark-theme copy of the portfolio's fig3d.js).
+// Shared helpers for the 3D figures (copy of the portfolio's fig3d.js, inks set to this site's duotone).
 // All figures share ONE WebGL renderer (phones cap how many contexts a page can
 // hold); each figure renders into it and copies the pixels to its own 2D canvas.
 // A figure only renders while it is on screen, honours reduced motion, and can be
 // turned by dragging sideways (vertical drags still scroll the page).
 import * as THREE from './three.module.min.js';
 export { THREE };
-export const INK = 0xe9e3d6, ACC = 0xff5a3c, MID = 0xf0a64a;
+export const INK = 0x1c2541, ACC = 0x3a7d7b, MID = 0x8a90a3;
 export const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 let R = null, BW = 0, BH = 0, failed = false;
@@ -63,7 +63,7 @@ export function fig(canvas, o = {}) {
   const opt = Object.assign({ fov: 28, dist: 22, distSmall: null, target: [0, 0, 0], yaw: -0.5, pitch: 0.35, sway: 0.3, minPitch: 0.02, maxPitch: 1.15, spin: 0 }, o);
   const scene = new THREE.Scene();
   const cam = new THREE.PerspectiveCamera(opt.fov, 1.4, 0.1, 300);
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x2a1d17, 1.7));
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xd8cfbf, 1.6));
   const dl = new THREE.DirectionalLight(0xffffff, 1.4); dl.position.set(6, 10, 8); scene.add(dl);
   const plot = new THREE.Group(); scene.add(plot);
   const st = { yaw: opt.yaw, pitch: opt.pitch, drag: null, onFrame: null };
@@ -99,7 +99,7 @@ export function fig(canvas, o = {}) {
     const c = document.createElement('canvas'); c.width = w; c.height = 64;
     const g = c.getContext('2d');
     g.font = `${o2.italic ? 'italic ' : ''}${o2.weight || 500} ${size}px ${o2.serif ? 'Newsreader, Georgia, serif' : '"Instrument Sans", system-ui, sans-serif'}`;
-    g.fillStyle = o2.color || '#e9e3d6'; g.textBaseline = 'middle';
+    g.fillStyle = o2.color || '#1c2541'; g.textBaseline = 'middle';
     g.textAlign = o2.align || 'center';
     g.fillText(text, o2.align === 'left' ? 4 : o2.align === 'right' ? w - 4 : w / 2, 32);
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
