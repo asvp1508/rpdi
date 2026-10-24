@@ -5,7 +5,7 @@
 // turned by dragging sideways (vertical drags still scroll the page).
 import * as THREE from './three.module.min.js';
 export { THREE };
-export const INK = 0x1c2541, ACC = 0x3a7d7b, MID = 0x8a90a3;
+export const INK = 0xece5d6, ACC = 0x5fb3ac, MID = 0x6f7890;
 export const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 let R = null, BW = 0, BH = 0, failed = false;
@@ -63,7 +63,7 @@ export function fig(canvas, o = {}) {
   const opt = Object.assign({ fov: 28, dist: 22, distSmall: null, target: [0, 0, 0], yaw: -0.5, pitch: 0.35, sway: 0.3, minPitch: 0.02, maxPitch: 1.15, spin: 0 }, o);
   const scene = new THREE.Scene();
   const cam = new THREE.PerspectiveCamera(opt.fov, 1.4, 0.1, 300);
-  scene.add(new THREE.HemisphereLight(0xffffff, 0xd8cfbf, 1.6));
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x1a2236, 1.7));
   const dl = new THREE.DirectionalLight(0xffffff, 1.4); dl.position.set(6, 10, 8); scene.add(dl);
   const plot = new THREE.Group(); scene.add(plot);
   const st = { yaw: opt.yaw, pitch: opt.pitch, drag: null, onFrame: null };
@@ -99,7 +99,7 @@ export function fig(canvas, o = {}) {
     const c = document.createElement('canvas'); c.width = w; c.height = 64;
     const g = c.getContext('2d');
     g.font = `${o2.italic ? 'italic ' : ''}${o2.weight || 500} ${size}px ${o2.serif ? 'Newsreader, Georgia, serif' : '"Instrument Sans", system-ui, sans-serif'}`;
-    g.fillStyle = o2.color || '#1c2541'; g.textBaseline = 'middle';
+    g.fillStyle = o2.color || '#ece5d6'; g.textBaseline = 'middle';
     g.textAlign = o2.align || 'center';
     g.fillText(text, o2.align === 'left' ? 4 : o2.align === 'right' ? w - 4 : w / 2, 32);
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
