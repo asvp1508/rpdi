@@ -2,84 +2,423 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>RPDI Score</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>RPDI · How far does a film bend history?</title>
+<meta name="description" content="The Reality-Perception Distortion Index scores historical films claim by claim: what they get wrong (D), how they make it feel (L), and the Gap between. 16 films, by Arjun Pathi." />
+<meta property="og:title" content="RPDI · How far does a film bend history?" />
+<meta property="og:description" content="16 historical films scored claim by claim: facts (D), feel (L) and the Gap between. By Arjun Pathi." />
+<meta name="theme-color" content="#000000" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect x=%226%22 y=%2214%22 width=%2252%22 height=%2236%22 rx=%226%22 fill=%22%23ff5a3c%22/><g fill=%22%23000%22><rect x=%2210%22 y=%2218%22 width=%225%22 height=%225%22/><rect x=%2210%22 y=%2241%22 width=%225%22 height=%225%22/><rect x=%2249%22 y=%2218%22 width=%225%22 height=%225%22/><rect x=%2249%22 y=%2241%22 width=%225%22 height=%225%22/></g></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; }
-  html, body {
-    margin: 0; padding: 0; background: #030303; color: #fff;
-    font-family: 'DM Sans', sans-serif;
-  }
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: #0a0a0a; }
-  ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
-  ::selection { background: #ffffff22; }
-  input::placeholder { color: #333 !important; }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-  @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(6px); } }
-  button, input, select { font-family: inherit; }
-  .mono { font-family: 'DM Mono', monospace; }
-  .serif { font-family: 'Playfair Display', serif; }
+:root{--bg:#000;--fg:#f7f4ef;--mut:#8b8682;--dim:#5c5753;--line:rgba(255,255,255,.09);--red:#ff5a3c;--red2:#d0201b;--amber:#ffb067;--panel:rgba(14,10,9,.82)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.mono{font-family:'DM Mono',ui-monospace,monospace}
+.serif{font-family:'Playfair Display',Georgia,serif}
+::selection{background:#ff5a3c55}
+button,input,select{font-family:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.eyebrow{font:500 11px/1 'DM Mono',monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--red)}
+.h2{font:700 clamp(32px,4.4vw,52px)/1.04 'Playfair Display',Georgia,serif;letter-spacing:-.02em;margin:14px 0 0;text-wrap:balance}
+.lede{color:var(--mut);font-size:16px;line-height:1.7;max-width:620px;margin:18px 0 0}
+section{scroll-margin-top:80px}
 
-  .film-card {
-    background: rgba(10,10,10,0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 20px;
-    padding: 20px; cursor: pointer;
-    transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
-    position: relative; overflow: hidden;
-  }
-  .film-card:hover {
-    background: rgba(20,20,20,0.75);
-    border-color: rgba(255,255,255,0.18);
-    transform: translateY(-6px) scale(1.015);
-    box-shadow: 0 24px 48px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06) inset;
-  }
-  .film-card::before {
-    content: "";
-    position: absolute; inset: 0; border-radius: 20px;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent 40%);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-    opacity: 0; transition: opacity 0.35s;
-  }
-  .film-card:hover::before { opacity: 1; }
-  .filter-pill {
-    padding: 8px 14px; border-radius: 6px; font-size: 12px; cursor: pointer;
-    background: #0d0d0d; color: #555; border: 1px solid #1a1a1a;
-  }
-  .filter-pill.active { background: #fff; color: #000; border-color: #fff; }
-  .glow-bar-bg { height: 4px; background: #1a1a1a; border-radius: 2px; overflow: hidden; }
-  .glow-bar-fill { height: 100%; border-radius: 2px; transition: width 0.8s cubic-bezier(0.16,1,0.3,1); }
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:calc(14px + env(safe-area-inset-top,0px)) clamp(16px,3vw,40px) 14px;transition:background .4s}
+.nav.solid{background:rgba(0,0,0,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;letter-spacing:.02em}
+.logo svg{width:26px;height:26px}
+.menu{display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.menu a{padding:8px 14px;border-radius:999px;font-size:13px;color:#cfc9c2;text-decoration:none;transition:background .3s,color .3s}
+.menu a:hover,.menu a.on{background:rgba(255,255,255,.08);color:#fff}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;font-size:14px;font-weight:600;text-decoration:none;border:0;cursor:pointer;transition:box-shadow .35s,filter .35s,transform .35s}
+.pill.hot{background:linear-gradient(180deg,#ff6a3d,#d0201b);color:#fff;box-shadow:0 0 0 1px rgba(255,140,100,.35) inset,0 8px 30px -8px rgba(255,70,40,.55)}
+.pill.hot:hover{filter:brightness(1.12);box-shadow:0 0 0 1px rgba(255,170,130,.5) inset,0 10px 44px -6px rgba(255,80,40,.8)}
+.pill.dark{background:rgba(255,255,255,.06);color:#eee;border:1px solid rgba(255,255,255,.12)}
+.pill.dark:hover{background:rgba(255,255,255,.1);box-shadow:0 0 30px -8px rgba(255,90,60,.5)}
+.nav .pill{padding:9px 16px;font-size:13px}
+.burger{display:none;background:none;border:1px solid var(--line);color:#fff;border-radius:10px;width:40px;height:40px;font-size:18px}
 
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.92);
-    display: none; align-items: center; justify-content: center;
-    z-index: 1000; padding: 20px; backdrop-filter: blur(8px);
-  }
-  .modal-overlay.open { display: flex; }
-  .modal-box {
-    background: rgba(10,10,10,0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 24px; padding: 32px;
-    max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.7);
-  }
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:max(100svh,760px);overflow:hidden;isolation:isolate}
+#hero-sky{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
+.hero-in{position:relative;padding:calc(31vh + 10px) 24px 0;text-align:center}
+.hero h1{margin:0 auto;max-width:1000px;font:900 clamp(44px,6.6vw,94px)/1 'Playfair Display',Georgia,serif;letter-spacing:-.025em;text-wrap:balance}
+.hero h1 .grad{background:linear-gradient(100deg,#ffd0a8 0%,#ff7a4a 40%,#e0261c 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic}
+.hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
+.hero h1 .ln>span{display:inline-block}
+.hero .sub{margin:22px auto 0;max-width:640px;font-size:clamp(15px,1.4vw,17px);line-height:1.6;color:#b9b2ab}
+.hero .cta{margin-top:30px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ---------- dashboard ---------- */
+.dash-wrap{position:relative;margin:clamp(48px,7vh,80px) auto 0;width:min(1204px,calc(100% - 32px))}
+.dash-glow{position:absolute;left:8%;right:8%;top:-1px;height:2px;background:linear-gradient(90deg,transparent,#ff8a5c 20%,#fff1e4 50%,#ff8a5c 80%,transparent);box-shadow:0 0 18px 2px rgba(255,90,50,.7),0 0 70px 10px rgba(255,60,30,.35);z-index:2;border-radius:2px}
+.dash{position:relative;display:grid;grid-template-columns:210px 1fr;border-radius:14px 14px 0 0;background:var(--panel);border:1px solid rgba(255,110,80,.28);border-bottom:0;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);overflow:hidden;text-align:left;min-height:420px}
+.side{padding:18px 14px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.side .brand{display:flex;align-items:center;justify-content:space-between;font-weight:700;margin:2px 6px 14px}
+.side a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;font-size:13px;color:#a8a29b;text-decoration:none}
+.side a:hover{background:rgba(255,255,255,.05);color:#fff}
+.side a.on{background:rgba(255,255,255,.08);color:#fff}
+.side a svg{width:15px;height:15px;opacity:.85}
+.side hr{border:0;border-top:1px solid var(--line);margin:8px 4px}
+.promo{margin-top:auto;padding:14px;border-radius:12px;background:linear-gradient(160deg,rgba(255,90,60,.22),rgba(255,90,60,.04));border:1px solid rgba(255,110,80,.3)}
+.promo b{display:block;font-size:13px}.promo p{margin:6px 0 10px;font-size:12px;color:#c9bfb6;line-height:1.45}
+.promo a{display:inline-flex;padding:6px 12px;border-radius:999px;background:#fff;color:#000;font-size:12px;font-weight:600;text-decoration:none}
+.main{padding:16px 18px 0;min-width:0}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#8f8882;font-size:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.topbar .who{display:flex;align-items:center;gap:10px;color:#ddd}
+.topbar .who i{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#ff8a5c,#7a1410);display:inline-block}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1.05fr;gap:14px;padding:14px 0}
+.card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
+.card .k{font-size:11px;color:#8f8882}
+.card .v{font:600 30px/1.1 Inter,sans-serif;margin-top:8px;letter-spacing:-.02em}
+.card .v small{font:500 12px 'DM Mono',monospace;margin-left:8px;color:var(--red)}
+.chart{grid-column:1 / span 2}
+.chart .hd{display:flex;justify-content:space-between;font-size:13px;color:#ddd}
+.chart svg{display:block;width:100%;height:auto;margin-top:8px}
+.classes .row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--line);font-size:12.5px;color:#cfc8c0}
+.classes .row:last-child{border:0}
+.classes .row b{font:500 13px 'DM Mono',monospace;color:#fff}
+.classes .bar{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.06);margin:0 6px;overflow:hidden}
+.classes .bar i{display:block;height:100%;border-radius:2px}
+.ext{font-size:12px;color:#8f8882;margin-top:6px;line-height:1.5}
+.ext b{color:#eee;font-weight:600}
+
+/* entrance */
+.rise{opacity:0;transform:translateY(24px)}
+.go .rise{animation:rise .9s cubic-bezier(.16,1,.3,1) forwards}
+.go .ln>span{animation:wipe 1s cubic-bezier(.16,1,.3,1) both}
+.ln>span{transform:translateY(105%)}
+@keyframes rise{to{opacity:1;transform:none}}
+@keyframes wipe{to{transform:none}}
+.navin{opacity:0;transform:translateY(-12px)}.go .navin{animation:rise .8s .05s cubic-bezier(.16,1,.3,1) forwards}
+
+/* ---------- legend + database ---------- */
+.band{border-top:1px solid var(--line)}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;padding:40px 0}
+.film-card{background:rgba(12,9,8,.7);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:20px;cursor:pointer;transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .35s,box-shadow .35s;position:relative;overflow:hidden}
+.film-card:hover{border-color:rgba(255,110,80,.35);transform:translateY(-6px);box-shadow:0 24px 48px rgba(0,0,0,.55),0 0 40px -20px rgba(255,80,40,.6)}
+.filter-pill{padding:8px 14px;border-radius:999px;font-size:12px;cursor:pointer;background:#0d0a09;color:#8a8580;border:1px solid #1d1816}
+.filter-pill.active{background:#fff;color:#000;border-color:#fff}
+.glow-bar-bg{height:4px;background:#1a1513;border-radius:2px;overflow:hidden}
+.glow-bar-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px;backdrop-filter:blur(8px)}
+.modal-overlay.open{display:flex}
+.modal-box{background:rgba(12,9,8,.92);border-radius:22px;padding:30px;max-width:680px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 40px 80px rgba(0,0,0,.7)}
+
+/* ---------- rules (shared with the portfolio, recoloured for the dark site) ---------- */
+
+.fx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,19rem),1fr));border-top:1px solid rgba(236,230,218,0.72);border-left:1px solid rgba(236,230,218,0.72)}
+.fx-card{display:flex;flex-direction:column;min-width:0;border-right:1px solid rgba(236,230,218,0.72);border-bottom:1px solid rgba(236,230,218,0.72)}
+.fx-art{aspect-ratio:240/110;background:#120d0b;border-bottom:1px solid rgba(236,230,218,0.54)}
+.fx-art svg{display:block}.fx-art svg *{transform-box:fill-box}
+.fx-body{padding:1.4rem 1.4rem 1.6rem}
+.fx-num{font-size:.7rem;letter-spacing:.12em;color:#ff5a3c}
+.fx-name{margin-top:.35rem;font-family:Newsreader,Georgia,serif;font-size:1.45rem;font-weight:600;line-height:1.15;letter-spacing:-.02em}
+.fx-one{margin-top:.8rem;font-size:.95rem;line-height:1.6;color:rgba(236,230,218,0.68)}
+.fx-more{margin-top:1rem;font-size:.88rem;color:rgba(236,230,218,0.65)}
+.fx-more summary{cursor:pointer;font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#ff5a3c}
+.fx-more summary::after{content:" +"}.fx-more[open] summary::after{content:" −"}
+.fx-more ul{margin-top:.8rem;display:grid;gap:.45rem}
+.fx-more li{padding-left:1rem;position:relative;line-height:1.55}
+.fx-more li::before{content:"";position:absolute;left:0;top:.62em;width:.4rem;height:1px;background:#ff5a3c}
+.fx-row{transform-origin:left center;transform:scaleX(0);animation:fxRow 6s infinite}
+.fx-n1{animation-delay:.25s}.fx-n2{animation-delay:.5s}.fx-n3{animation-delay:.75s}.fx-n4{animation-delay:1s}.fx-n5{animation-delay:1.25s}.fx-n6{animation-delay:1.5s}
+@keyframes fxRow{0%{transform:scaleX(0)}12%,80%{transform:scaleX(1)}92%,100%{transform:scaleX(0)}}
+.fx-rise{transform-origin:center bottom;transform:scaleY(0);animation:fxRise 6s infinite}
+.fx-r1{animation-delay:.35s}.fx-r2{animation-delay:.7s}.fx-r3{animation-delay:1.05s}.fx-r4{animation-delay:1.4s}
+@keyframes fxRise{0%{transform:scaleY(0)}12%,78%{transform:scaleY(1)}90%,100%{transform:scaleY(0)}}
+.fx-seg{opacity:0;animation:fxSeg 6s infinite}.fx-s1{animation-delay:.5s}.fx-s2{animation-delay:1s}.fx-s3{animation-delay:1.5s}.fx-s4{animation-delay:2s}
+@keyframes fxSeg{0%{opacity:0}8%,82%{opacity:1}94%,100%{opacity:0}}
+.fx-step5{animation:fxStep 6s steps(5,jump-none) infinite}
+@keyframes fxStep{from{transform:translateX(0)}to{transform:translateX(180px)}}
+.fx-cap{transform-origin:center bottom;transform:scaleY(0);animation:fxRise 6s infinite}
+.fx-c1{animation-delay:.4s}.fx-c2{animation-delay:.8s}.fx-c3{animation-delay:1.2s}
+.fx-flip{opacity:0;animation:fxFlip 5s infinite}
+@keyframes fxFlip{0%,38%{opacity:0}46%,88%{opacity:1}96%,100%{opacity:0}}
+.fx-flag{opacity:0;animation:fxFlag 5s infinite}
+@keyframes fxFlag{0%,18%{opacity:0}26%,88%{opacity:1}96%,100%{opacity:0}}
+.fx-stump{transform-origin:center bottom;animation:fxStump 5s infinite}
+@keyframes fxStump{0%,28%{transform:rotate(0)}40%,88%{transform:rotate(38deg)}96%,100%{transform:rotate(0)}}
+.fx-ring{animation:fxRing 5s infinite}.fx-ring.fx-c1{animation-delay:.5s}.fx-ring.fx-c2{animation-delay:1s}.fx-ring.fx-c3{animation-delay:1.5s}
+@keyframes fxRing{0%{stroke-dashoffset:107}30%,80%{stroke-dashoffset:38}95%,100%{stroke-dashoffset:107}}
+.fx-grow{transform-origin:left center;transform:scaleX(0);animation:fxRow 5s infinite}
+.fx-dot{opacity:0;animation:fxSeg 6s infinite}
+.fx-d1{animation-delay:.3s}.fx-d2{animation-delay:.6s}.fx-d3{animation-delay:.9s}.fx-d4{animation-delay:1.2s}.fx-d5{animation-delay:1.5s}.fx-d6{animation-delay:2.4s}
+.fx-shrink{transform-origin:left center;animation:fxShrink 5s infinite}
+@keyframes fxShrink{0%,22%{transform:scaleX(1)}42%,88%{transform:scaleX(.844)}96%,100%{transform:scaleX(1)}}
+.fx-slide{animation:fxSlide 5s cubic-bezier(.5,0,.5,1) infinite}
+@keyframes fxSlide{0%{transform:translateX(0)}60%,88%{transform:translateX(180px)}100%{transform:translateX(0)}}
+.fx-slideSlow{animation:fxSlide 6s linear infinite}
+.fx-arc{stroke-dasharray:100;stroke-dashoffset:100;animation:fxArc 5s infinite}
+@keyframes fxArc{0%{stroke-dashoffset:100}55%,88%{stroke-dashoffset:0}100%{stroke-dashoffset:100}}
+.fx-eq{transform-origin:center bottom;animation:fxEq 4s ease-in-out infinite alternate}
+@keyframes fxEq{0%{transform:scaleY(.6)}100%{transform:scaleY(1)}}
+.fx-hit{transform-origin:center bottom;transform:scaleY(0);animation:fxRise 6s infinite}
+.fx-same{opacity:0;animation:fxFlip 5s infinite}
+.fx-jump{transform-origin:left center;transform:scaleX(.6);opacity:0;animation:fxJump 5s infinite}
+@keyframes fxJump{0%,38%{opacity:0;transform:scaleX(.6)}48%,88%{opacity:1;transform:scaleX(1)}96%,100%{opacity:0;transform:scaleX(.6)}}
+@media (prefers-reduced-motion:reduce){.fx-art *{animation:none!important}
+.fx-row,.fx-rise,.fx-cap,.fx-grow,.fx-hit,.fx-eq,.fx-shrink,.fx-slide,.fx-slideSlow,.fx-jump{transform:none}
+.fx-seg,.fx-dot,.fx-flip,.fx-flag,.fx-same,.fx-jump{opacity:1}
+.fx-arc{stroke-dashoffset:0}.fx-ring{stroke-dashoffset:38}}
+
+.fx-grid{margin-top:44px;border-color:rgba(255,255,255,.14)!important}
+.fx-card{background:#090706;border-color:rgba(255,255,255,.14)!important}
+.fx-art{border-color:rgba(255,255,255,.12)!important}
+.fx-name{font-family:'Playfair Display',Georgia,serif!important;color:#fff}
+.fx-num{font-family:'DM Mono',monospace}
+
+/* ---------- 3D ---------- */
+.f3d{margin:40px 0 0;border:1px solid rgba(255,110,80,.25);border-radius:16px;overflow:hidden;background:radial-gradient(120% 90% at 50% 0%,#1a0d09 0%,#050303 70%)}
+.f3d canvas{display:block;width:100%;aspect-ratio:16/9;cursor:grab;touch-action:pan-y}
+.f3d figcaption{border-top:1px solid var(--line);padding:12px 16px;font-size:13px;color:#a69d95;line-height:1.55}
+.key{display:flex;flex-wrap:wrap;gap:6px 18px;padding:12px 16px 0;font-size:12px;color:#b9b2ab}
+.key i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+
+/* ---------- write-up + footer ---------- */
+.posts{margin-top:36px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:12px}
+.post{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.02);text-decoration:none;transition:border-color .3s,background .3s}
+.post:hover{border-color:rgba(255,110,80,.4);background:rgba(255,90,60,.05)}
+.post .n{font:500 12px 'DM Mono',monospace;color:var(--red);min-width:22px;padding-top:2px}
+.post .t{font-size:14.5px;line-height:1.45;color:#eee}
+.foot{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;padding-top:60px;padding-bottom:calc(48px + env(safe-area-inset-bottom,0px))}
+.links{display:flex;flex-wrap:wrap;gap:10px}
+.mail{display:flex;align-items:center;gap:10px;margin-top:16px;flex-wrap:wrap}
+.mail code{font:500 14px 'DM Mono',monospace;color:#fff;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:10px 14px;user-select:all}
+
+/* ---------- phones ---------- */
+@media (max-width:900px){
+  .menu,.nav .pill.hot{display:none}
+  .burger{display:inline-flex;align-items:center;justify-content:center}
+  .menu.open{display:flex;position:absolute;top:calc(64px + env(safe-area-inset-top,0px));left:16px;right:16px;flex-direction:column;border-radius:16px;background:rgba(10,8,7,.96);padding:8px}
+  .hero-in{padding-top:calc(24vh + 10px)}
+  .dash{grid-template-columns:1fr}
+  .side{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:12px;gap:6px}
+  .side .brand,.side hr,.promo{display:none}
+  .side a{white-space:nowrap;border:1px solid var(--line)}
+  .grid3{grid-template-columns:1fr}
+  .chart{grid-column:auto}
+  .foot{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.rise,.navin{opacity:1;transform:none}.ln>span{transform:none}.go .rise,.go .ln>span,.go .navin{animation:none}}
 </style>
 </head>
 <body>
 
+<!-- NAV -->
+<header class="nav navin" id="nav">
+  <a class="logo" href="#top" aria-label="RPDI home">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="14" width="52" height="36" rx="6" fill="#ff5a3c"/><g fill="#000"><rect x="10" y="18" width="5" height="5"/><rect x="10" y="41" width="5" height="5"/><rect x="49" y="18" width="5" height="5"/><rect x="49" y="41" width="5" height="5"/></g><path d="M22 40 L30 26 L36 34 L42 28" stroke="#000" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    RPDI
+  </a>
+  <nav class="menu" id="menu">
+    <a href="#top" class="on">Home</a><a href="#database">Films</a><a href="#method">Method</a><a href="#plane">3D</a><a href="#findings">Findings</a><a href="#writeup">Write-up</a>
+  </nav>
+  <div style="display:flex;gap:10px;align-items:center">
+    <a class="pill hot" href="https://arjun-pathi-portfolio.vercel.app/rpdi-tool/" target="_blank" rel="noopener">Scoring tool</a>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <canvas id="hero-sky" aria-hidden="true"></canvas>
+  <div class="hero-in">
+    <h1><span class="ln"><span><span class="grad">RPDI</span> How far does</span></span><span class="ln"><span>a film bend history?</span></span></h1>
+    <p class="sub rise" style="animation-delay:.55s">The Reality-Perception Distortion Index scores a historical film claim by claim: what it gets wrong (D), how it makes it feel (L), and the Gap between the two. 16 films, scored by hand and in the open.</p>
+    <div class="cta rise" style="animation-delay:.7s">
+      <a class="pill hot" href="#database">Explore the 16 films</a>
+      <a class="pill dark" href="#method">How a film is scored</a>
+    </div>
+    <div class="dash-wrap rise" style="animation-delay:.85s">
+      <div class="dash-glow"></div>
+      <div class="dash">
+        <aside class="side">
+          <div class="brand">RPDI <span class="mono" style="font-size:11px;color:#8f8882">v4</span></div>
+          <a href="#database" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14"/></svg>Films</a>
+          <a href="#method"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h7"/></svg>Rules</a>
+          <a href="#plane"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 16l9 5 9-5"/></svg>3D plane</a>
+          <a href="#findings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Findings</a>
+          <hr>
+          <a href="#writeup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h12l4 4v12H4z"/><path d="M8 12h8M8 16h5"/></svg>Write-up</a>
+          <a href="https://github.com/asvp1508/rpdi" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>GitHub</a>
+          <div class="promo"><b>Score a film yourself</b><p>The same tool used for all 16 films, with every rule built in.</p><a href="https://arjun-pathi-portfolio.vercel.app/rpdi-tool/" target="_blank" rel="noopener">Open the tool</a></div>
+        </aside>
+        <div class="main">
+          <div class="topbar"><span class="mono">Dataset closed · 16 films · Oct 2026</span><span class="who"><i></i>Arjun Pathi</span></div>
+          <div class="grid3" id="dash-cards"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEGEND + DATABASE (re-rendered by the filters) -->
 <div id="app"></div>
+
+<!-- METHOD -->
+<section id="method" class="band"><div class="wrap" style="padding-top:90px;padding-bottom:20px">
+  <p class="eyebrow">The method · locked</p>
+  <h2 class="h2">How a film gets scored</h2>
+  <p class="lede">Every rule exists to stop one researcher from quietly bending his own data: fixed tier weights, a fixed claim quota, hard ceilings on what can ever count as fully verified, and a floor rule that stops an invented premise hiding behind accurate scenery.</p>
+  <div class="fx-grid">
+      <article class="fx-card">
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="40" y="16" width="160" height="8" fill="#5d5148"/><rect class="fx-row fx-n0" x="40" y="16" width="150" height="8" fill="#ff5a3c" fill-opacity=".8"/><rect x="40" y="28" width="160" height="8" fill="#5d5148"/><rect class="fx-row fx-n1" x="40" y="28" width="141" height="8" fill="#ff5a3c" fill-opacity=".8"/><rect x="40" y="40" width="160" height="8" fill="#5d5148"/><rect class="fx-row fx-n2" x="40" y="40" width="132" height="8" fill="#ff5a3c" fill-opacity=".8"/><rect x="40" y="52" width="160" height="8" fill="#5d5148"/><rect class="fx-row fx-n3" x="40" y="52" width="123" height="8" fill="#ff5a3c" fill-opacity=".8"/><rect x="40" y="64" width="160" height="8" fill="#5d5148"/><rect class="fx-row fx-n4" x="40" y="64" width="114" height="8" fill="#ff5a3c" fill-opacity=".8"/><rect x="40" y="76" width="160" height="8" fill="#5d5148"/><rect class="fx-row fx-n5" x="40" y="76" width="105" height="8" fill="#ff5a3c" fill-opacity=".8"/><rect x="40" y="88" width="160" height="8" fill="#5d5148"/><rect class="fx-row fx-n6" x="40" y="88" width="96" height="8" fill="#ff5a3c" fill-opacity=".8"/><text x="120" y="106" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">claims logged in the order they appear</text></svg></div>
+        <div class="fx-body">
+          <p class="fx-num">01</p>
+          <h4 class="fx-name">Extracting the claims</h4>
+          <p class="fx-one">Watch the film and log every checkable claim it makes, in the order it makes them. Minimum 20, capped at 50.</p>
+          <details class="fx-more"><summary>Details</summary><ul><li>Claims are logged as they are encountered, never chosen for how they might score</li><li>A logged claim can only be removed for a structural defect, never because a different one scores better</li><li>The test in the moment: is this specific, and does it matter to the plot?</li><li>A claim about one person’s action is never reworded into a claim about their whole nationality or group</li></ul></details>
+        </div>
+      </article>
+      <article class="fx-card">
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="22" y="24" width="30" height="56" fill="#5d5148"/><rect class="fx-rise fx-r0" x="22" y="24" width="30" height="56" fill="#ff5a3c"/><text x="37" y="18" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#ece6da">5</text><text x="37" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">SPINE</text><rect x="64" y="34" width="30" height="46" fill="#5d5148"/><rect class="fx-rise fx-r1" x="64" y="34" width="30" height="46" fill="#ff5a3c"/><text x="79" y="28" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#ece6da">4</text><text x="79" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">SOUL</text><rect x="106" y="45" width="30" height="35" fill="#5d5148"/><rect class="fx-rise fx-r2" x="106" y="45" width="30" height="35" fill="#ff5a3c"/><text x="121" y="39" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#ece6da">3</text><text x="121" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">SKELETON</text><rect x="148" y="56" width="30" height="24" fill="#5d5148"/><rect class="fx-rise fx-r3" x="148" y="56" width="30" height="24" fill="#ff5a3c"/><text x="163" y="50" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#ece6da">2</text><text x="163" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">FLESH</text><rect x="190" y="67" width="30" height="13" fill="#5d5148"/><rect class="fx-rise fx-r4" x="190" y="67" width="30" height="13" fill="#ff5a3c"/><text x="205" y="61" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#ece6da">1</text><text x="205" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">SKIN</text></svg></div>
+        <div class="fx-body">
+          <p class="fx-num">02</p>
+          <h4 class="fx-name">The five weight tiers</h4>
+          <p class="fx-one">Not every claim carries the same stakes, so each one gets a weight from 5 down to 1.</p>
+          <details class="fx-more"><summary>Details</summary><ul><li>Spine, weight 5: the central premise, the story collapses without it</li><li>Soul, weight 4: why a character acted</li><li>Skeleton, weight 3: documented historical events</li><li>Flesh, weight 2: personal, biographical or relationship detail</li><li>Skin, weight 1: visual accuracy, sets, props and costume</li><li>A claim that is both event and motive gets split into two claims and scored separately</li></ul></details>
+        </div>
+      </article>
+      <article class="fx-card">
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect class="fx-seg fx-s0" x="25" y="40" width="17.0" height="26" fill="#ff5a3c" fill-opacity=".85"/><text x="34.5" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">10%</text><rect class="fx-seg fx-s1" x="44.0" y="40" width="26.5" height="26" fill="#ff5a3c" fill-opacity=".85"/><text x="58.25" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">15%</text><rect class="fx-seg fx-s2" x="72.5" y="40" width="45.5" height="26" fill="#a69c90" fill-opacity=".85"/><text x="96.25" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">25%</text><rect class="fx-seg fx-s3" x="120.0" y="40" width="45.5" height="26" fill="#a69c90" fill-opacity=".85"/><text x="143.75" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">25%</text><rect class="fx-seg fx-s4" x="167.5" y="40" width="45.5" height="26" fill="#ece6da" fill-opacity=".85"/><text x="191.25" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">25%</text><text x="120" y="24" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#ece6da">every film, same shape</text><text x="214" y="96" text-anchor="end" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">skin absorbs rounding</text></svg></div>
+        <div class="fx-body">
+          <p class="fx-num">03</p>
+          <h4 class="fx-name">The claim quota</h4>
+          <p class="fx-one">A fixed share of claims per tier, so the mix cannot be tilted toward whichever tier helps the score.</p>
+          <details class="fx-more"><summary>Details</summary><ul><li>Spine 10%, capped at 3 claims, always rounded down</li><li>Soul 15%</li><li>Skeleton, Flesh and Skin 25% each</li><li>Skin absorbs any rounding remainder</li><li>At 20 claims this gives the 2 / 3 / 5 / 5 / 5 split used from the start</li></ul></details>
+        </div>
+      </article>
+      <article class="fx-card">
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><line x1="30" y1="54" x2="210" y2="54" stroke="#5d5148" stroke-width="2"/><line x1="30" y1="48" x2="30" y2="60" stroke="#5d5148" stroke-width="2"/><text x="30" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#a69c90">0</text><line x1="75" y1="48" x2="75" y2="60" stroke="#5d5148" stroke-width="2"/><text x="75" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#a69c90">.25</text><line x1="120" y1="48" x2="120" y2="60" stroke="#5d5148" stroke-width="2"/><text x="120" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#a69c90">.50</text><line x1="165" y1="48" x2="165" y2="60" stroke="#5d5148" stroke-width="2"/><text x="165" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#a69c90">.75</text><line x1="210" y1="48" x2="210" y2="60" stroke="#5d5148" stroke-width="2"/><text x="210" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#a69c90">1</text><circle class="fx-step5" cx="30" cy="54" r="7" fill="#ff5a3c"/><text x="30" y="30" text-anchor="start" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">fabricated</text><text x="210" y="30" text-anchor="end" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">fully verified</text><text x="120" y="98" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">finer 0.1 steps only for real nuance</text></svg></div>
+        <div class="fx-body">
+          <p class="fx-num">04</p>
+          <h4 class="fx-name">The accuracy scale</h4>
+          <p class="fx-one">Every claim gets an accuracy score from 0 to 1, checked against historical sources.</p>
+          <details class="fx-more"><summary>Details</summary><ul><li>0.0 completely fabricated</li><li>0.5 equally fictional and factual</li><li>0.7 mostly accurate</li><li>0.9 strong primary verification</li><li>1.0 fully verified, and only with two or more independent sources</li><li>The default scale is 0, 0.25, 0.5, 0.75, 1. The finer 0.1 steps are reserved for genuine nuance</li></ul></details>
+        </div>
+      </article>
+      <article class="fx-card">
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="26" y="26" width="34" height="54" fill="none" stroke="#5d5148"/><rect class="fx-cap fx-c0" x="26" y="31.4" width="34" height="48.6" fill="#ff5a3c" fill-opacity=".75"/><line x1="23" y1="31.4" x2="63" y2="31.4" stroke="#ece6da" stroke-width="1.5"/><text x="43" y="20" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ece6da">0.9</text><text x="43" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">dialogue</text><rect x="78" y="26" width="34" height="54" fill="none" stroke="#5d5148"/><rect class="fx-cap fx-c1" x="78" y="39.5" width="34" height="40.5" fill="#ff5a3c" fill-opacity=".75"/><line x1="75" y1="39.5" x2="115" y2="39.5" stroke="#ece6da" stroke-width="1.5"/><text x="95" y="20" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ece6da">0.75</text><text x="95" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">motivation</text><rect x="130" y="26" width="34" height="54" fill="none" stroke="#5d5148"/><rect class="fx-cap fx-c2" x="130" y="47.6" width="34" height="32.4" fill="#ff5a3c" fill-opacity=".75"/><line x1="127" y1="47.6" x2="167" y2="47.6" stroke="#ece6da" stroke-width="1.5"/><text x="147" y="20" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ece6da">0.6</text><text x="147" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">covert op</text><rect x="182" y="26" width="34" height="54" fill="none" stroke="#5d5148"/><rect class="fx-cap fx-c3" x="182" y="63.8" width="34" height="16.2" fill="#ff5a3c" fill-opacity=".75"/><line x1="179" y1="63.8" x2="219" y2="63.8" stroke="#ece6da" stroke-width="1.5"/><text x="199" y="20" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ece6da">0.3</text><text x="199" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">mythology</text></svg></div>
+        <div class="fx-body">
+          <p class="fx-num">05</p>
+          <h4 class="fx-name">Ceilings by claim type</h4>
+          <p class="fx-one">Some kinds of claim can never be fully verified, so they have a hard maximum no matter how convincing they look.</p>
+          <details class="fx-more"><summary>Details</summary><ul><li>Dialogue or exact quote: 0.9</li><li>Character motivation or intent: 0.75</li><li>Costume or visual with no photo evidence: 0.75</li><li>Military biopic personal life: 0.8</li><li>Romantic or personal relationship: 0.6</li><li>Classified or covert operation: 0.6</li><li>Mythology-only source: 0.3</li><li>Two documents that contradict each other: fixed at 0.5</li><li>These are judgment calls set by eye, not numbers derived from anything</li></ul></details>
+        </div>
+      </article>
+      <article class="fx-card">
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><text x="120" y="34" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#ece6da">D = 1 − (Σ wᵢaᵢ) / (Σ wᵢ)</text><rect x="44" y="50" width="20" height="40" fill="#5d5148"/><rect class="fx-rise fx-r0" x="44" y="82.0" width="20" height="8.0" fill="#ff5a3c"/><rect x="76" y="58" width="20" height="32" fill="#5d5148"/><rect class="fx-rise fx-r1" x="76" y="64.4" width="20" height="25.6" fill="#ff5a3c"/><rect x="108" y="66" width="20" height="24" fill="#5d5148"/><rect class="fx-rise fx-r2" x="108" y="66" width="20" height="24" fill="#ff5a3c"/><rect x="140" y="74" width="20" height="16" fill="#5d5148"/><rect class="fx-rise fx-r3" x="140" y="82.0" width="20" height="8.0" fill="#ff5a3c"/><rect x="172" y="82" width="20" height="8" fill="#5d5148"/><rect class="fx-rise fx-r4" x="172" y="82" width="20" height="8" fill="#ff5a3c"/><text x="120" y="104" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">weight × accuracy, tier by tier</text></svg></div>
+        <div class="fx-body">
+          <p class="fx-num">06</p>
+          <h4 class="fx-name">The D score</h4>
+          <p class="fx-one">The fact score: how far the film drifts from the record, weighted so the claims that matter count for more.</p>
+          <details class="fx-more"><summary>Details</summary><ul><li>D = 1 − (Σ wᵢaᵢ) / (Σ wᵢ)</li><li>wᵢ is the claim’s tier weight, aᵢ is its accuracy</li><li>A wrong Spine claim moves the score five times as much as a wrong Skin claim</li></ul></details>
+        </div>
+      </article>
+      <article class="fx-card">
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="30" y="64" width="80" height="22" fill="#5d5148"/><text x="70" y="79" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#a69c90">MODERATE</text><text x="124" y="80" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="13" fill="#ff5a3c">→</text><g class="fx-flip"><rect x="140" y="64" width="80" height="22" fill="#ff5a3c"/><text x="180" y="79" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="700" fill="#2b211c">HIGH</text></g><g class="fx-flag"><text x="120" y="26" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ece6da">spine claim scores 0.2 or less</text></g><g transform="translate(106,34)"><rect x="0" y="0" width="3" height="22" fill="#ece6da"/><rect x="7" y="0" width="3" height="22" fill="#ece6da"/><rect class="fx-stump" x="14" y="0" width="3" height="22" fill="#ece6da"/></g></svg></div>
+        <div class="fx-body">
+          <p class="fx-num">07</p>
+          <h4 class="fx-name">The Spine-Floor Rule</h4>
+          <p class="fx-one">A film cannot bury a fabricated premise under accurate scenery. If the one claim the story rests on is invented, the verdict is floored.</p>
+          <details class="fx-more"><summary>Details</summary><ul><li>The one Spine claim tagged Absolute Premise floors the classification at High when it scores 0.3 or below</li><li>An ordinary Spine claim that scores low still counts in full toward D, but no longer overrides the label on its own (the first version of the rule did)</li><li>The raw D score is still calculated and shown; only the label is overridden</li><li>It came from a real failure: Dhurandhar ran on a spy who never existed and still scored Minimal</li></ul></details>
+        </div>
+      </article>
+      <article class="fx-card">
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><circle cx="32" cy="46" r="17" fill="none" stroke="#5d5148" stroke-width="1.5"/><circle class="fx-ring fx-c0" cx="32" cy="46" r="17" fill="none" stroke="#ff5a3c" stroke-width="2.5" stroke-dasharray="107" stroke-dashoffset="107" transform="rotate(-90 32 46)"/><text x="32" y="51" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#ece6da">S</text><text x="32" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">simplification</text><circle cx="84" cy="46" r="17" fill="none" stroke="#5d5148" stroke-width="1.5"/><circle class="fx-ring fx-c1" cx="84" cy="46" r="17" fill="none" stroke="#ff5a3c" stroke-width="2.5" stroke-dasharray="107" stroke-dashoffset="107" transform="rotate(-90 84 46)"/><text x="84" y="51" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#ece6da">P</text><text x="84" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">portrayal</text><circle cx="136" cy="46" r="17" fill="none" stroke="#5d5148" stroke-width="1.5"/><circle class="fx-ring fx-c2" cx="136" cy="46" r="17" fill="none" stroke="#ff5a3c" stroke-width="2.5" stroke-dasharray="107" stroke-dashoffset="107" transform="rotate(-90 136 46)"/><text x="136" y="51" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#ece6da">F</text><text x="136" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">framing</text><circle cx="188" cy="46" r="17" fill="none" stroke="#5d5148" stroke-width="1.5"/><circle class="fx-ring fx-c3" cx="188" cy="46" r="17" fill="none" stroke="#ff5a3c" stroke-width="2.5" stroke-dasharray="107" stroke-dashoffset="107" transform="rotate(-90 188 46)"/><text x="188" y="51" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#ece6da">E</text><text x="188" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">exaggeration</text><text x="120" y="100" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">how it was shown, not whether it was true</text></svg></div>
+        <div class="fx-body">
+          <p class="fx-num">08</p>
+          <h4 class="fx-name">The four feel dimensions</h4>
+          <p class="fx-one">The L score reads how the film shows things, separately from whether they are true.</p>
+          <details class="fx-more"><summary>Details</summary><ul><li>S — simplification of reality: events condensed, merged or restructured</li><li>P — character portrayal: real people flattened into heroes or villains</li><li>F — narrative framing: how one-sided the telling is</li><li>E — cinematic exaggeration: how far scenes go past physical or situational limits</li><li>Each is scored 0 to 1 on the same five-step scale</li></ul></details>
+        </div>
+      </article>
+      <article class="fx-card">
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="30" y="40" width="80" height="26" fill="none" stroke="#5d5148"/><text x="70" y="57" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#a69c90">weight 1</text><text x="124" y="58" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="13" fill="#ff5a3c">→</text><g class="fx-flip"><rect x="140" y="40" width="80" height="26" fill="none" stroke="#ff5a3c"/><text x="180" y="57" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#ff5a3c">weight 2</text></g><g class="fx-flag"><text x="120" y="92" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ece6da">only with citable evidence from the film</text></g><text x="120" y="24" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">never on genre assumption</text></svg></div>
+        <div class="fx-body">
+          <p class="fx-num">09</p>
+          <h4 class="fx-name">Evidence-gated weights</h4>
+          <p class="fx-one">All four dimensions start at weight 1. One can only be raised with evidence, never because of genre.</p>
+          <details class="fx-more"><summary>Details</summary><ul><li>A weight goes up only with specific, citable evidence from the film itself</li><li>A director saying combat was deliberately exaggerated counts; &quot;it is a war film&quot; does not</li><li>The tool refuses a raised weight when the evidence box is left empty</li></ul></details>
+        </div>
+      </article>
+      <article class="fx-card">
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><text x="120" y="30" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="11" font-weight="600" fill="#ece6da">L = (wS·S + wP·P + wF·F + wE·E)</text><text x="120" y="46" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="11" font-weight="600" fill="#ece6da">/ (wS + wP + wF + wE)</text><rect x="40" y="64" width="160" height="12" fill="#5d5148"/><rect class="fx-grow" x="40" y="64" width="112" height="12" fill="#ff5a3c"/><text x="120" y="98" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">one feel score out of four readings</text></svg></div>
+        <div class="fx-body">
+          <p class="fx-num">10</p>
+          <h4 class="fx-name">The L score</h4>
+          <p class="fx-one">The four dimensions become one feel score, weighted by whatever evidence justified.</p>
+          <details class="fx-more"><summary>Details</summary><ul><li>L = (wS·S + wP·P + wF·F + wE·E) / (wS + wP + wF + wE)</li><li>With no evidence raised, it is a plain average of the four</li></ul></details>
+        </div>
+      </article>
+      <article class="fx-card">
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="30" y="40" width="108" height="26" fill="#ff5a3c"/><text x="84" y="58" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="10" font-weight="700" fill="#2b211c">D  ×  0.6</text><rect x="142" y="40" width="72" height="26" fill="#ece6da" fill-opacity=".85"/><text x="178" y="58" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="10" font-weight="700" fill="#2b211c">L × 0.4</text><text x="120" y="26" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="10" font-weight="600" fill="#ece6da">RPDI = 0.6(D) + 0.4(L)</text><g class="fx-flag"><text x="120" y="92" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">facts come first, feeling second</text></g></svg></div>
+        <div class="fx-body">
+          <p class="fx-num">11</p>
+          <h4 class="fx-name">RPDI</h4>
+          <p class="fx-one">The two scores combine into one number, with the facts carrying more weight than the feeling.</p>
+          <details class="fx-more"><summary>Details</summary><ul><li>RPDI = 0.6(D) + 0.4(L)</li><li>A historical film’s first job is to say what happened; what it makes you feel comes second</li><li>0.00–0.24 minimal · 0.25–0.49 moderate · 0.50–0.74 high · 0.75–1.00 extreme</li><li>The 0.6 / 0.4 split is a judgment call, stated as one</li></ul></details>
+        </div>
+      </article>
+      <article class="fx-card">
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><line x1="20" y1="58" x2="220" y2="58" stroke="#5d5148" stroke-width="1.5"/><line x1="120" y1="30" x2="120" y2="86" stroke="#ece6da" stroke-opacity=".5" stroke-dasharray="3 3"/><text x="120" y="24" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="10" font-weight="600" fill="#ece6da">Gap = D − L</text><text x="56" y="100" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ff5a3c">gaslighting</text><text x="186" y="100" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ff5a3c">sanitized fabrication</text><circle class="fx-dot fx-d0" cx="44" cy="58" r="4" fill="#ff5a3c"/><circle class="fx-dot fx-d1" cx="62" cy="58" r="4" fill="#ff5a3c"/><circle class="fx-dot fx-d2" cx="74" cy="58" r="4" fill="#ff5a3c"/><circle class="fx-dot fx-d3" cx="88" cy="58" r="4" fill="#ff5a3c"/><circle class="fx-dot fx-d4" cx="100" cy="58" r="4" fill="#ff5a3c"/><circle class="fx-dot fx-d5" cx="112" cy="58" r="4" fill="#ff5a3c"/><circle class="fx-dot fx-d6" cx="170" cy="58" r="4" fill="#ece6da"/></svg></div>
+        <div class="fx-body">
+          <p class="fx-num">12</p>
+          <h4 class="fx-name">The Gap</h4>
+          <p class="fx-one">The part found by accident: the distance between how wrong a film is and how dramatic it looks.</p>
+          <details class="fx-more"><summary>Details</summary><ul><li>Gap = D − L, and the sign decides which direction the film drifts</li><li>Negative: the film dramatises past what its facts support</li><li>Positive: the film undersells its own fabrication</li><li>≤ −0.203 extreme gaslighting · −0.203 to −0.05 gaslighting · −0.05 to +0.05 honest · +0.05 to +0.25 sanitized fabrication</li><li>The negative split comes from the real median of the 14 negative-Gap films; the positive side is still provisional, with two films in it (one AI-scored)</li></ul></details>
+        </div>
+      </article>
+      </div>
+    
+</div></section>
+
+<!-- 3D -->
+<section id="plane" class="band" style="margin-top:70px"><div class="wrap" style="padding-top:90px">
+  <p class="eyebrow">Fig. 1 · the 16 films in 3D</p>
+  <h2 class="h2">Every film sits on one tilted plane.</h2>
+  <p class="lede">RPDI is 0.6&thinsp;D + 0.4&thinsp;L, so every score lies on a flat plane above the D–L floor. What separates the films is where they stand on that floor. The red line is D = L. Almost every film falls on the side where the portrayal runs ahead of the facts: the negative Gap.</p>
+  <figure class="f3d">
+    <div class="key"><span><i style="background:#ff5a3c"></i>Extreme gaslighting</span><span><i style="background:#e9e3d6"></i>Gaslighting</span><span><i style="background:#f0a64a"></i>Sanitized fabrication</span><span><i style="background:#5fd38a"></i>Honest / consistent</span></div>
+    <canvas id="plane-gl" aria-label="3D scatter of the 16 films: D across, L going back, RPDI up"></canvas>
+    <figcaption><b style="color:#fff">Fig. 1</b> — D across, L going back, RPDI up. Saving Private Ryan and U-571 score the same, so they share a point. Drag sideways to turn it.</figcaption>
+  </figure>
+</div></section>
+
+<!-- FINDINGS -->
+<section id="findings" class="band" style="margin-top:90px"><div class="wrap" style="padding-top:90px" id="findings-in"></div></section>
+
+<!-- WRITE-UP -->
+<section id="writeup" class="band" style="margin-top:90px"><div class="wrap" style="padding-top:90px">
+  <p class="eyebrow">The write-up · 11 parts on Medium</p>
+  <h2 class="h2">How it was built, mistakes included.</h2>
+  <div class="posts"><a class="post" href="https://pathiarjun15.medium.com/part-1-the-movie-rating-that-had-to-exist-9460731cd9d5" target="_blank" rel="noopener"><span class="n">01</span><span class="t">There's No Rating for How Much a Movie Bends History. So I Started Building One.</span></a><a class="post" href="https://pathiarjun15.medium.com/part-2-not-every-mistake-in-a-movie-deserves-the-same-punishment-f55eb8812bd4" target="_blank" rel="noopener"><span class="n">02</span><span class="t">Not Every Historical Mistake in a Movie Deserves the Same Punishment</span></a><a class="post" href="https://pathiarjun15.medium.com/part-3-why-cinematic-portrayal-mattered-more-than-youd-expect-2d1d3fefb01f" target="_blank" rel="noopener"><span class="n">03</span><span class="t">A Film Can Get the Facts Right and Still Show Them Wrong</span></a><a class="post" href="https://pathiarjun15.medium.com/part-4-how-i-accidently-discovered-the-distance-between-truth-and-portrayal-b929852fd073" target="_blank" rel="noopener"><span class="n">04</span><span class="t">A Spreadsheet Mistake Showed Me the Gap Between History and How Films Show It</span></a><a class="post" href="https://pathiarjun15.medium.com/part-5-the-rule-that-kept-breaking-itself-390edbc52db8" target="_blank" rel="noopener"><span class="n">05</span><span class="t">Why My Film-Scoring Rule Kept Breaking Itself</span></a><a class="post" href="https://pathiarjun15.medium.com/part-6-how-the-new-tool-introduced-a-new-rule-c516c3ee4b9c" target="_blank" rel="noopener"><span class="n">06</span><span class="t">Building a Scoring Tool Exposed a Loophole in My Own Rules</span></a><a class="post" href="https://pathiarjun15.medium.com/part-7-scoring-dhurandhar-1-the-first-real-test-16bb30ad817f" target="_blank" rel="noopener"><span class="n">07</span><span class="t">How Historically Accurate Is Dhurandhar? Scoring It Claim by Claim</span></a><a class="post" href="https://pathiarjun15.medium.com/part-8-four-films-down-so-is-the-tool-d19964a8f2cc" target="_blank" rel="noopener"><span class="n">08</span><span class="t">Two Scored Films Lost to a Bug, and the Tool I Rebuilt After</span></a><a class="post" href="https://pathiarjun15.medium.com/part-9-the-hollywood-scores-and-the-gap-revamp-b09832f7cb60" target="_blank" rel="noopener"><span class="n">09</span><span class="t">What Happens When You Score a Film That Was Built to Be Accurate</span></a><a class="post" href="https://pathiarjun15.medium.com/part-10-the-ai-automation-stress-test-03123c512058" target="_blank" rel="noopener"><span class="n">10</span><span class="t">Can AI Score a Film's Historical Accuracy? I Let Gemini Try</span></a><a class="post" href="https://pathiarjun15.medium.com/part-11-everything-rpdi-is-all-at-once-48f0fdc6560c" target="_blank" rel="noopener"><span class="n">11</span><span class="t">16 Films, One Index: What I Learned Measuring How Movies Bend History</span></a></div>
+</div></section>
+
+<!-- FOOTER -->
+<footer class="band" style="margin-top:90px"><div class="wrap foot">
+  <div>
+    <div class="serif" style="font-size:28px;font-weight:700">RPDI</div>
+    <p style="color:var(--mut);font-size:14px;line-height:1.7;max-width:460px;margin:10px 0 0">Reality-Perception Distortion Index. Built and scored by Arjun Pathi, 2026. The data, rules and tool are all open.</p>
+    <div class="mail"><code id="mail">pathiarjun15@gmail.com</code><button class="pill dark" id="copy" type="button">Copy email</button></div>
+  </div>
+  <div>
+    <p class="eyebrow" style="margin-bottom:14px">Links</p>
+    <div class="links">
+      <a class="pill dark" href="https://github.com/asvp1508/rpdi" target="_blank" rel="noopener">GitHub</a>
+      <a class="pill dark" href="https://pathiarjun15.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a class="pill dark" href="https://arjun-pathi-portfolio.vercel.app/rpdi-tool/" target="_blank" rel="noopener">Scoring tool</a>
+      <a class="pill dark" href="https://arjun-pathi-portfolio.vercel.app/" target="_blank" rel="noopener">Portfolio</a>
+    </div>
+  </div>
+</div></footer>
 
 <script>
 const FILMS = [
@@ -259,26 +598,7 @@ const FILMS = [
     poster:"data:image/jpeg;base64,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",
     color:"#00C853" }
 ];
-
-const PENDING_FILMS = [
-  { title:"Kesari", year:2019, language:"Hindi", country:"India" },
-  { title:"Chhava", year:2025, language:"Hindi", country:"India" },
-  { title:"Border", year:1997, language:"Hindi", country:"India" },
-  { title:"Raazi", year:2018, language:"Hindi", country:"India" },
-  { title:"Parmanu", year:2018, language:"Hindi", country:"India" },
-  { title:"Padmaavat", year:2018, language:"Hindi", country:"India" },
-  { title:"Sam Bahadur", year:2023, language:"Hindi", country:"India" },
-  { title:"The Legend of Bhagat Singh", year:2002, language:"English", country:"India" },
-  { title:"Schindler's List", year:1993, language:"English", country:"USA" },
-  { title:"Lincoln", year:2012, language:"English", country:"USA" },
-  { title:"Downfall", year:2004, language:"German", country:"Germany" },
-  { title:"12 Years a Slave", year:2013, language:"English", country:"USA" },
-  { title:"Braveheart", year:1995, language:"English", country:"USA" },
-];
-const PENDING_COUNT = 487;
-
-let state = { filter: "all", search: "", sortBy: "rpdi", showPending: false, selectedFilm: null, requested: false };
-
+window.RPDI_FILMS = FILMS;
 function getRPDIColor(rpdi) {
   if (rpdi < 0.25) return "#00C853";
   if (rpdi < 0.50) return "#FFD600";
@@ -287,35 +607,12 @@ function getRPDIColor(rpdi) {
 }
 function stars(n) { return "⭐".repeat(n) + "☆".repeat(5 - n); }
 
-function getFiltered() {
-  let list = FILMS.filter(f => {
-    if (state.search) {
-      const s = state.search.toLowerCase();
-      return f.title.toLowerCase().includes(s) || f.director.toLowerCase().includes(s) || f.language.toLowerCase().includes(s);
-    }
-    if (state.filter === "minimal") return f.rpdi < 0.25;
-    if (state.filter === "moderate") return f.rpdi >= 0.25 && f.rpdi < 0.50;
-    if (state.filter === "high") return f.rpdi >= 0.50 && f.rpdi < 0.75;
-    if (state.filter === "extreme") return f.rpdi >= 0.75;
-    return true;
-  });
-  list.sort((a, b) => {
-    if (state.sortBy === "rpdi") return a.rpdi - b.rpdi;
-    if (state.sortBy === "rpdi-desc") return b.rpdi - a.rpdi;
-    if (state.sortBy === "gap") return b.gap - a.gap;
-    if (state.sortBy === "year") return b.year - a.year;
-    if (state.sortBy === "imdb") return b.imdb - a.imdb;
-    return 0;
-  });
-  return list;
-}
-
 function glowBar(value, color, label) {
   return `<div style="margin-bottom:8px;">
     <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px;color:#888;" class="mono">
       <span>${label}</span><span style="color:${color}">${value.toFixed(3)}</span>
     </div>
-    <div class="glow-bar-bg"><div class="glow-bar-fill" style="width:${value*100}%;background:${color};box-shadow:0 0 8px ${color};"></div></div>
+    <div class="glow-bar-bg"><div class="glow-bar-fill" style="width:${Math.min(100,Math.abs(value)*100)}%;background:${color};box-shadow:0 0 8px ${color};"></div></div>
   </div>`;
 }
 
@@ -354,21 +651,6 @@ function filmCardHTML(f) {
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid #1a1a1a;">
       <div style="font-size:10px;color:${color};background:${color}15;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;" class="mono">${f.rpdiClass}</div>
       <div style="font-size:11px;color:#555;" class="mono">IMDb ${f.imdb} · ${stars(f.confidence)}</div>
-    </div>
-  </div>`;
-}
-
-function pendingCardHTML(p) {
-  return `<div style="background:#050505;border:1px solid #111;border-radius:12px;padding:20px;opacity:0.5;position:relative;">
-    <div style="position:absolute;top:8px;right:8px;font-size:9px;color:#333;text-transform:uppercase;letter-spacing:1px;" class="mono">Pending</div>
-    <div style="font-size:12px;color:#333;margin-bottom:4px;" class="mono">${p.language} · ${p.year}</div>
-    <div style="font-size:14px;font-weight:600;color:#333;" class="serif">${p.title}</div>
-    <div style="margin-top:14px;">
-      ${["Fact Score (D)","Feel Score (L)","Gap"].map(l => `
-        <div style="margin-bottom:8px;">
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:10px;color:#222;"><span>${l}</span><span>—</span></div>
-          <div style="height:4px;background:#111;border-radius:2px;"><div style="height:100%;width:30%;background:#1a1a1a;border-radius:2px;"></div></div>
-        </div>`).join("")}
     </div>
   </div>`;
 }
@@ -431,251 +713,131 @@ function modalHTML(f) {
   </div>`;
 }
 
+
+
+let state = { filter: "all", search: "", sortBy: "rpdi-desc", selectedFilm: null };
+const CLS = [["Extreme Gaslighting","#ff5a3c"],["Gaslighting","#e9e3d6"],["Honest / Consistent","#5fd38a"],["Sanitized Fabrication","#f0a64a"]];
+const short = t => ({"All the President's Men":"APM","Rocketry: The Nambi Effect":"Rocketry","Saving Private Ryan":"SPR","The Kashmir Files":"Kashmir Files","Bajirao Mastani":"Bajirao","Mohenjo Daro":"Mohenjo","Sardar Udham":"Udham","Dhurandhar 1":"Dhurandhar"})[t] || t;
+
+function getFiltered() {
+  let list = FILMS.filter(f => {
+    if (state.search) { const s = state.search.toLowerCase(); return f.title.toLowerCase().includes(s) || f.director.toLowerCase().includes(s) || f.language.toLowerCase().includes(s); }
+    if (state.filter === "minimal") return f.rpdi < 0.25;
+    if (state.filter === "moderate") return f.rpdi >= 0.25 && f.rpdi < 0.50;
+    if (state.filter === "high") return f.rpdi >= 0.50 && f.rpdi < 0.75;
+    if (state.filter === "extreme") return f.rpdi >= 0.75;
+    return true;
+  });
+  list.sort((a, b) => state.sortBy === "rpdi" ? a.rpdi - b.rpdi : state.sortBy === "rpdi-desc" ? b.rpdi - a.rpdi : state.sortBy === "gap" ? b.gap - a.gap : state.sortBy === "year" ? b.year - a.year : state.sortBy === "imdb" ? b.imdb - a.imdb : 0);
+  return list;
+}
+
+/* ---------- dashboard in the hero (drawn once from the real data) ---------- */
+function dashboard() {
+  const avg = FILMS.reduce((s, f) => s + f.rpdi, 0) / FILMS.length;
+  const gas = FILMS.filter(f => f.gapClass.includes("Gaslighting")).length;
+  const top = FILMS.reduce((m, f) => f.rpdi > m.rpdi ? f : m), low = FILMS.reduce((m, f) => f.rpdi < m.rpdi ? f : m);
+  const sorted = [...FILMS].sort((a, b) => b.rpdi - a.rpdi);
+  const W = 640, H = 210, pad = 26, bw = (W - pad) / sorted.length;
+  const bars = sorted.map((f, i) => { const h = f.rpdi * (H - 46), x = pad + i * bw + 3, y = H - 34 - h, c = getRPDIColor(f.rpdi);
+    return `<g><title>${f.title}: ${f.rpdi.toFixed(3)}</title><rect x="${x}" y="${y}" width="${bw - 6}" height="${h}" rx="3" fill="${c}" opacity=".9"/>
+      <text x="${x + (bw - 6) / 2}" y="${H - 20}" transform="rotate(-38 ${x + (bw - 6) / 2} ${H - 20})" text-anchor="end" font-size="9" fill="#8f8882" font-family="Inter">${short(f.title)}</text></g>`; }).join("");
+  const grid = [0.25, 0.5, 0.75].map(v => `<line x1="${pad}" x2="${W}" y1="${H - 34 - v * (H - 46)}" y2="${H - 34 - v * (H - 46)}" stroke="rgba(255,255,255,.07)"/><text x="0" y="${H - 31 - v * (H - 46)}" font-size="9" fill="#5c5753" font-family="DM Mono">${v.toFixed(2)}</text>`).join("");
+  const counts = CLS.map(([n, c]) => [n, c, FILMS.filter(f => f.gapClass === n).length]);
+  document.getElementById("dash-cards").innerHTML = `
+    <div class="card"><div class="k">Average RPDI (16 films)</div><div class="v">${avg.toFixed(3)}<small>moderate</small></div><div class="ext">Range <b>${low.rpdi.toFixed(3)}</b> to <b>${top.rpdi.toFixed(3)}</b></div></div>
+    <div class="card"><div class="k">Films where the feel outruns the facts</div><div class="v">${gas}/${FILMS.length}<small>${Math.round(gas / FILMS.length * 100)}%</small></div><div class="ext">Negative Gap: gaslighting or extreme gaslighting</div></div>
+    <div class="card classes" style="grid-row:span 2"><div class="k" style="margin-bottom:6px">Gap classes</div>
+      ${counts.map(([n, c, k]) => `<div class="row"><span>${n}</span><span class="bar"><i style="width:${k / FILMS.length * 100}%;background:${c}"></i></span><b>${k}</b></div>`).join("")}
+      <div class="ext" style="margin-top:10px">Most distorted: <b>${top.title}</b> (${top.rpdi.toFixed(3)})<br>Least: <b>${low.title}</b> (${low.rpdi.toFixed(3)})</div></div>
+    <div class="card chart"><div class="hd"><span>RPDI by film</span><span class="mono" style="color:#8f8882;font-size:11px">0 = faithful · 1 = invented</span></div>
+      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="RPDI score for each of the 16 films, highest first">${grid}${bars}</svg></div>`;
+}
+
+/* ---------- legend + database ---------- */
 function render() {
   const filtered = getFiltered();
-  const avgRPDI = (FILMS.reduce((s,f) => s+f.rpdi, 0) / FILMS.length).toFixed(3);
-  const gaslightCount = FILMS.filter(f => f.gapClass.includes("Gaslighting")).length;
-  const minFilm = FILMS.reduce((m, f) => f.rpdi < m.rpdi ? f : m, FILMS[0]);
-  const floored = FILMS.filter(f => f.summary.includes("Spine-Floor"));
-  const flooredHigh = floored.filter(f => /High|Extreme/.test(f.rpdiClass)).length;
-  const imdbR = (() => { const n = FILMS.length, mx = FILMS.reduce((s,f)=>s+f.rpdi,0)/n, my = FILMS.reduce((s,f)=>s+f.imdb,0)/n;
-    let sxy = 0, sxx = 0, syy = 0; FILMS.forEach(f => { sxy += (f.rpdi-mx)*(f.imdb-my); sxx += (f.rpdi-mx)**2; syy += (f.imdb-my)**2; });
-    return (sxy / Math.sqrt(sxx*syy)).toFixed(2); })();
-
   document.getElementById("app").innerHTML = `
-    <!-- HERO -->
-    <div style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow:hidden;border-bottom:1px solid #111;">
-      <div style="position:absolute;width:600px;height:600px;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle, rgba(180,30,30,0.06) 0%, transparent 70%);pointer-events:none;"></div>
-      <div style="text-align:center;max-width:800px;padding:0 24px;position:relative;">
-        <div style="display:inline-flex;align-items:center;gap:8px;border:1px solid #1f1f1f;border-radius:100px;padding:6px 16px;margin-bottom:32px;font-size:11px;color:#555;text-transform:uppercase;letter-spacing:2px;" class="mono">
-          <div style="width:6px;height:6px;border-radius:50%;background:#D50000;animation:pulse 2s infinite;"></div>
-          Historical Cinema Intelligence
-        </div>
-        <h1 style="font-size:clamp(48px,10vw,96px);font-weight:900;letter-spacing:-2px;line-height:0.9;margin:0 0 24px;background:linear-gradient(135deg,#fff 0%,#666 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;" class="serif">RPDI Score</h1>
-        <p style="font-size:clamp(15px,2.5vw,20px);color:#555;line-height:1.6;max-width:560px;margin:0 auto 16px;font-weight:300;">The first mathematical framework measuring historical accuracy in world cinema.</p>
-        <p style="font-size:13px;color:#333;margin-bottom:48px;" class="mono">D = 1 − (Σwᵢaᵢ / Σwᵢ) · RPDI = 0.6D + 0.4L · Gap = D − L</p>
-        <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
-          ${[[String(FILMS.length),"Films Scored"],["500","Dataset Target"],[avgRPDI,"Average RPDI"],[String(gaslightCount),"Gaslighting Films"]].map(s => `
-            <div style="text-align:center;"><div style="font-size:32px;font-weight:800;color:#fff;line-height:1;" class="mono">${s[0]}</div><div style="font-size:11px;color:#444;text-transform:uppercase;letter-spacing:1.5px;margin-top:6px;">${s[1]}</div></div>`).join("")}
-        </div>
-        <div style="margin-top:48px;">
-          <button onclick="document.getElementById('database').scrollIntoView({behavior:'smooth'})" style="background:#fff;color:#000;border:none;padding:14px 32px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;margin-right:12px;">Explore Database</button>
-          <button onclick="document.getElementById('methodology').scrollIntoView({behavior:'smooth'})" style="background:transparent;color:#555;border:1px solid #1f1f1f;padding:14px 32px;border-radius:8px;font-size:14px;cursor:pointer;">How It Works</button>
-        </div>
-      </div>
-      <div style="position:absolute;bottom:32px;left:50%;transform:translateX(-50%);font-size:11px;color:#333;text-transform:uppercase;letter-spacing:2px;animation:bounce 2s infinite;" class="mono">↓ Scroll</div>
-    </div>
-
-    <!-- SCALE LEGEND -->
-    <div style="padding:40px 24px;border-bottom:1px solid #0d0d0d;max-width:1200px;margin:0 auto;">
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
-        ${[["0.00 – 0.24","Minimal Distortion","#00C853","Factual + honest"],["0.25 – 0.49","Moderate Distortion","#FFD600","Some dramatisation"],["0.50 – 0.74","High Distortion","#FF6D00","Significant invention"],["0.75 – 1.00","Extreme Distortion","#D50000","Historical fabrication"]].map(s => `
-          <div style="padding:14px 16px;border-radius:8px;background:${s[2]}08;border:1px solid ${s[2]}22;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><div style="width:8px;height:8px;border-radius:50%;background:${s[2]};box-shadow:0 0 6px ${s[2]};"></div><span style="font-size:11px;color:${s[2]};text-transform:uppercase;letter-spacing:1px;" class="mono">${s[1]}</span></div>
-            <div style="font-size:16px;color:#fff;font-weight:600;" class="mono">${s[0]}</div>
-            <div style="font-size:11px;color:#555;margin-top:2px;">${s[3]}</div>
-          </div>`).join("")}
-      </div>
-    </div>
-
-    <!-- DATABASE -->
-    <div id="database" style="max-width:1200px;margin:0 auto;padding:60px 24px;">
-      <div style="margin-bottom:36px;">
-        <div style="font-size:11px;color:#333;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;" class="mono">— Film Database</div>
-        <h2 style="font-size:36px;font-weight:700;margin:0;" class="serif">Scored Films</h2>
-      </div>
-      <div style="display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap;align-items:center;">
-        <input id="searchInput" value="${state.search}" placeholder="Search films, directors..." style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;padding:10px 16px;color:#fff;font-size:13px;outline:none;width:220px;" />
+    <div class="band"><div class="wrap"><div class="legend">
+      ${[["0.00 – 0.24","Minimal","#00C853","Factual and honest"],["0.25 – 0.49","Moderate","#FFD600","Some dramatisation"],["0.50 – 0.74","High","#FF6D00","Significant invention"],["0.75 – 1.00","Extreme","#D50000","Historical fabrication"]].map(s => `
+        <div style="padding:14px 16px;border-radius:12px;background:${s[2]}0a;border:1px solid ${s[2]}26;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div style="width:8px;height:8px;border-radius:50%;background:${s[2]};box-shadow:0 0 8px ${s[2]};"></div><span style="font-size:11px;color:${s[2]};text-transform:uppercase;letter-spacing:1px;" class="mono">${s[1]} distortion</span></div>
+          <div style="font-size:16px;color:#fff;font-weight:600;" class="mono">${s[0]}</div><div style="font-size:12px;color:#8a8580;margin-top:2px;">${s[3]}</div>
+        </div>`).join("")}
+    </div></div></div>
+    <section id="database" class="band"><div class="wrap" style="padding-top:80px">
+      <p class="eyebrow">The database</p>
+      <h2 class="h2">16 scored films</h2>
+      <div style="display:flex;gap:10px;margin:30px 0 22px;flex-wrap:wrap;align-items:center;">
+        <input id="searchInput" value="${state.search}" placeholder="Search films, directors..." style="background:#0d0a09;border:1px solid #1d1816;border-radius:999px;padding:10px 16px;color:#fff;font-size:13px;outline:none;width:230px;max-width:100%" />
         <div style="display:flex;gap:6px;flex-wrap:wrap;">
-          ${[["all","All Films"],["minimal","Minimal"],["moderate","Moderate"],["high","High"],["extreme","Extreme"]].map(f => `
-            <button class="filter-pill ${state.filter===f[0] ? 'active' : ''}" data-filter="${f[0]}">${f[1]}</button>`).join("")}
+          ${[["all","All"],["minimal","Minimal"],["moderate","Moderate"],["high","High"],["extreme","Extreme"]].map(f => `<button class="filter-pill ${state.filter===f[0] ? 'active' : ''}" data-filter="${f[0]}">${f[1]}</button>`).join("")}
         </div>
-        <select id="sortSelect" style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;padding:10px 14px;color:#555;font-size:12px;outline:none;cursor:pointer;margin-left:auto;" class="mono">
-          <option value="rpdi" ${state.sortBy==="rpdi"?"selected":""}>Sort: RPDI ↑</option>
-          <option value="rpdi-desc" ${state.sortBy==="rpdi-desc"?"selected":""}>Sort: RPDI ↓</option>
-          <option value="gap" ${state.sortBy==="gap"?"selected":""}>Sort: Gap ↓</option>
-          <option value="year" ${state.sortBy==="year"?"selected":""}>Sort: Year ↓</option>
-          <option value="imdb" ${state.sortBy==="imdb"?"selected":""}>Sort: IMDb ↓</option>
+        <select id="sortSelect" style="background:#0d0a09;border:1px solid #1d1816;border-radius:999px;padding:10px 14px;color:#aaa;font-size:12px;outline:none;cursor:pointer;margin-left:auto;" class="mono">
+          ${[["rpdi-desc","RPDI, highest first"],["rpdi","RPDI, lowest first"],["gap","Gap, highest first"],["year","Newest first"],["imdb","IMDb, highest first"]].map(o => `<option value="${o[0]}" ${state.sortBy===o[0]?"selected":""}>Sort: ${o[1]}</option>`).join("")}
         </select>
       </div>
-      <div style="font-size:12px;color:#333;margin-bottom:20px;" class="mono">Showing ${filtered.length} of ${FILMS.length} scored films${FILMS.some(f => f.stressTest) ? ` · <span style="color:#B388FF;">Stress test</span> marks films scored to test the method (AI stress tests used AI assistance)` : ""}</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;">
-        ${filtered.map(filmCardHTML).join("")}
-      </div>
-
-      <div style="margin-top:60px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-          <div>
-            <div style="font-size:11px;color:#333;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;" class="mono">— Scoring Queue</div>
-            <h3 style="font-size:24px;font-weight:700;margin:0;color:#555;" class="serif">${PENDING_COUNT} Films Pending</h3>
-          </div>
-          <button id="togglePending" style="background:#0d0d0d;border:1px solid #1a1a1a;color:#555;padding:8px 16px;border-radius:6px;font-size:12px;cursor:pointer;" class="mono">${state.showPending ? "Hide" : "Show Preview"}</button>
-        </div>
-        ${state.showPending ? `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;">
-          ${PENDING_FILMS.map(pendingCardHTML).join("")}
-          <div style="background:#050505;border:1px dashed #111;border-radius:12px;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:140px;text-align:center;">
-            <div style="font-size:28px;color:#222;margin-bottom:8px;">+${PENDING_COUNT - PENDING_FILMS.length}</div>
-            <div style="font-size:12px;color:#333;" class="mono">more in queue</div>
-          </div>
-        </div>` : ""}
-      </div>
-
-      <div style="margin-top:60px;padding:32px;border-radius:12px;background:#0a0a0a;border:1px solid #1a1a1a;">
-        <div style="font-size:11px;color:#333;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;" class="mono">— Community</div>
-        <h3 style="font-size:20px;font-weight:700;margin:0 0 8px;" class="serif">Request a Film</h3>
-        <p style="font-size:13px;color:#555;margin:0 0 20px;line-height:1.6;">Don't see a historical film you want scored? Submit a request and we'll add it to our queue.</p>
-        ${state.requested ? `<div style="padding:12px 16px;border-radius:8px;background:#00C85310;border:1px solid #00C85330;font-size:13px;color:#00C853;" class="mono">✓ Request received. We'll score it soon.</div>` :
-        `<div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <input id="requestInput" placeholder="Film title, year, language..." style="flex:1;min-width:200px;background:#111;border:1px solid #1f1f1f;border-radius:8px;padding:10px 16px;color:#fff;font-size:13px;outline:none;" />
-          <button id="submitRequest" style="background:#fff;color:#000;border:none;padding:10px 24px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">Submit</button>
-        </div>`}
-      </div>
-    </div>
-
-    <!-- METHODOLOGY -->
-    <div id="methodology" style="border-top:1px solid #0d0d0d;padding:80px 24px;max-width:1200px;margin:0 auto;">
-      <div style="font-size:11px;color:#333;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;" class="mono">— Framework</div>
-      <h2 style="font-size:36px;font-weight:700;margin:0 0 48px;" class="serif">How It Works</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;">
-        <div style="padding:24px;background:#0a0a0a;border:1px solid #111;border-radius:12px;">
-          <div style="font-size:11px;color:#4ECDC4;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;" class="mono">Fact Score (D)</div>
-          <div style="font-size:24px;color:#fff;margin-bottom:16px;font-weight:600;" class="mono">1 − (Σwᵢaᵢ / Σwᵢ)</div>
-          <p style="font-size:13px;color:#555;line-height:1.7;margin:0;">Each historical claim is scored for accuracy (0–1) and weighted by narrative importance. Spine-level claims (weight 5) drive major D score changes. Low D = high factual accuracy.</p>
-          <div style="margin-top:16px;">
-            ${[[5,"Spine","Remove this — film collapses"],[4,"Soul","Character motivations"],[3,"Skeleton","Major historical events"],[2,"Flesh","Biographical details"],[1,"Skin","Visual accuracy"]].map(r => `
-              <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #111;">
-                <div style="width:24px;height:24px;border-radius:4px;background:#4ECDC420;border:1px solid #4ECDC444;display:flex;align-items:center;justify-content:center;font-size:11px;color:#4ECDC4;flex-shrink:0;" class="mono">${r[0]}</div>
-                <div><div style="font-size:12px;color:#aaa;font-weight:600;">${r[1]}</div><div style="font-size:11px;color:#444;">${r[2]}</div></div>
-              </div>`).join("")}
-          </div>
-        </div>
-        <div style="padding:24px;background:#0a0a0a;border:1px solid #111;border-radius:12px;">
-          <div style="font-size:11px;color:#FF6B6B;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;" class="mono">Feel Score (L)</div>
-          <div style="font-size:24px;color:#fff;margin-bottom:16px;font-weight:600;" class="mono">(S + P + F + E) / 4</div>
-          <p style="font-size:13px;color:#555;line-height:1.7;margin:0 0 16px;">Measures narrative manipulation independent of factual claims. High L = emotionally dramatised regardless of accuracy.</p>
-          ${[["S","Simplification","Complex politics → simple hero/villain?"],["P","Portrayal","Human or superhuman protagonist?"],["F","Framing","Balanced or single ideological lens?"],["E","Exaggeration","Realistic or physically impossible action?"]].map(d => `
-            <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #111;">
-              <div style="width:24px;height:24px;border-radius:4px;background:#FF6B6B20;border:1px solid #FF6B6B44;display:flex;align-items:center;justify-content:center;font-size:11px;color:#FF6B6B;flex-shrink:0;" class="mono">${d[0]}</div>
-              <div><div style="font-size:12px;color:#aaa;font-weight:600;">${d[1]}</div><div style="font-size:11px;color:#444;">${d[2]}</div></div>
-            </div>`).join("")}
-        </div>
-        <div style="padding:24px;background:#0a0a0a;border:1px solid #111;border-radius:12px;">
-          <div style="font-size:11px;color:#D50000;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;" class="mono">The Gap — Original Contribution</div>
-          <div style="font-size:24px;color:#fff;margin-bottom:16px;font-weight:600;" class="mono">D − L</div>
-          <p style="font-size:13px;color:#555;line-height:1.7;margin:0 0 20px;">The most important metric. Reveals when films use factual accuracy as cover for emotional manipulation — a pattern we call cinematic gaslighting.</p>
-          ${[["≤ −0.203","Extreme Gaslighting","Feeling far outruns the facts","#D50000"],["−0.203 to −0.05","Gaslighting","True facts, false feeling","#FF6D00"],["−0.05 to +0.05","Honest / Consistent","Facts and feeling align","#00C853"],["+0.05 to +0.25","Sanitized Fabrication","Invented facts, calm telling","#FFD600"],["≥ +0.25","Extreme Sanitized Fabrication","Heavy invention, played straight","#B388FF"]].map(g => `
-            <div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #111;">
-              <div style="width:6px;height:6px;border-radius:50%;background:${g[3]};box-shadow:0 0 6px ${g[3]};flex-shrink:0;margin-left:9px;"></div>
-              <div><div style="font-size:12px;color:${g[3]};" class="mono">${g[0]}</div><div style="font-size:11px;color:#aaa;">${g[1]} — ${g[2]}</div></div>
-            </div>`).join("")}
-        </div>
-      </div>
-    </div>
-
-    <!-- STATS -->
-    <div style="border-top:1px solid #0d0d0d;padding:80px 24px;max-width:1200px;margin:0 auto;">
-      <div style="font-size:11px;color:#333;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;" class="mono">— Research Findings</div>
-      <h2 style="font-size:36px;font-weight:700;margin:0 0 48px;" class="serif">What The Data Shows</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;">
-        ${[[`${gaslightCount}/${FILMS.length}`,"Films Show Gaslighting","Gap of −0.05 or lower: the telling is more dramatic than the facts support","#FF6D00"],
-           [imdbR,"IMDb Correlation","Between IMDb rating and RPDI across all scored films. Higher-rated films tend to distort a little less, but ratings alone can't tell you how a film distorts","#4ECDC4"],
-           [`${flooredHigh}/${floored.length}`,"Spine-Floor Rule","Films whose central premise is fabricated are classed High Distortion or worse, whatever their average","#D50000"],
-           [minFilm.rpdi.toFixed(3),"Minimum RPDI",`${minFilm.title}, the lowest in the dataset${minFilm.stressTest ? (minFilm.stressTest === "plain" ? " (a stress test score)" : " (an AI stress test score)") : ""}`,"#00C853"]].map(s => `
-          <div style="padding:24px;background:#0a0a0a;border:1px solid ${s[3]}22;border-radius:12px;">
-            <div style="font-size:40px;font-weight:800;color:${s[3]};line-height:1;margin-bottom:12px;" class="mono">${s[0]}</div>
-            <div style="font-size:13px;color:#aaa;font-weight:600;margin-bottom:8px;">${s[1]}</div>
-            <div style="font-size:12px;color:#555;line-height:1.6;">${s[2]}</div>
-          </div>`).join("")}
-      </div>
-      <div style="margin-top:24px;padding:28px 32px;border-radius:12px;background:#0a0a0a;border:1px solid #1a1a1a;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:24px;">
-        <div style="grid-column:1 / -1;margin-bottom:8px;">
-          <div style="font-size:11px;color:#333;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;" class="mono">— Primary Survey Research (n=23)</div>
-          <div style="font-size:13px;color:#555;">Empirical validation of the problem RPDI solves</div>
-        </div>
-        ${[["91%","agree inaccurate historical films can hurt public understanding of real history"],["65%","say historical accuracy is what matters most when watching"]].map(s => `
-          <div><div style="font-size:28px;font-weight:800;color:#fff;" class="mono">${s[0]}</div><div style="font-size:12px;color:#444;margin-top:4px;">${s[1]}</div></div>`).join("")}
-      </div>
-    </div>
-
-    <!-- FOOTER -->
-    <div style="border-top:1px solid #0d0d0d;padding:40px 24px;max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
-      <div>
-        <div style="font-size:18px;font-weight:700;margin-bottom:4px;" class="serif">RPDI Score</div>
-        <div style="font-size:12px;color:#333;" class="mono">Created by Arjun Pathi · 2026</div>
-      </div>
-      <div style="display:flex;gap:24px;flex-wrap:wrap;">
-        <span onclick="document.getElementById('methodology').scrollIntoView({behavior:'smooth'})" style="font-size:12px;color:#444;cursor:pointer;" class="mono">Methodology</span>
-        <a href="https://medium.com/@pathiarjun15" target="_blank" rel="noopener noreferrer" style="font-size:12px;color:#444;cursor:pointer;text-decoration:none;" class="mono">Read the Series</a>
-        <span style="font-size:12px;color:#444;" class="mono">pathiarjun15@gmail.com</span>
-      </div>
-    </div>
-
-    <div class="modal-overlay ${state.selectedFilm ? 'open' : ''}" id="modalOverlay" onclick="closeModal()">
-      ${modalHTML(state.selectedFilm)}
-    </div>
-  `;
-
+      <div style="font-size:12px;color:#6b6560;margin-bottom:20px;" class="mono">Showing ${filtered.length} of ${FILMS.length} · <span style="color:#B388FF;">Stress test</span> marks films scored to test the method (AI stress tests used AI assistance)</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px;">${filtered.map(filmCardHTML).join("")}</div>
+    </div></section>
+    <div class="modal-overlay ${state.selectedFilm ? 'open' : ''}" id="modalOverlay" onclick="closeModal()">${modalHTML(state.selectedFilm)}</div>`;
   attachEvents();
 }
-
 function attachEvents() {
-  document.querySelectorAll(".film-card").forEach(card => {
-    card.addEventListener("click", () => {
-      const id = parseInt(card.dataset.id);
-      state.selectedFilm = FILMS.find(f => f.id === id);
-      render();
-    });
-  });
-  document.querySelectorAll(".filter-pill").forEach(btn => {
-    btn.addEventListener("click", () => {
-      state.filter = btn.dataset.filter;
-      state.search = "";
-      render();
-    });
-  });
-  const searchInput = document.getElementById("searchInput");
-  if (searchInput) {
-    searchInput.addEventListener("input", (e) => {
-      state.search = e.target.value;
-      render();
-      // restore focus + cursor position after re-render
-      const el = document.getElementById("searchInput");
-      el.focus();
-      el.setSelectionRange(el.value.length, el.value.length);
-    });
-  }
-  const sortSelect = document.getElementById("sortSelect");
-  if (sortSelect) {
-    sortSelect.addEventListener("change", (e) => {
-      state.sortBy = e.target.value;
-      render();
-    });
-  }
-  const togglePending = document.getElementById("togglePending");
-  if (togglePending) {
-    togglePending.addEventListener("click", () => {
-      state.showPending = !state.showPending;
-      render();
-    });
-  }
-  const submitRequest = document.getElementById("submitRequest");
-  if (submitRequest) {
-    submitRequest.addEventListener("click", () => {
-      const val = document.getElementById("requestInput").value;
-      if (val.trim()) {
-        state.requested = true;
-        render();
-      }
-    });
-  }
+  document.querySelectorAll(".film-card").forEach(card => card.addEventListener("click", () => { state.selectedFilm = FILMS.find(f => f.id === parseInt(card.dataset.id)); render(); }));
+  document.querySelectorAll(".filter-pill").forEach(btn => btn.addEventListener("click", () => { state.filter = btn.dataset.filter; state.search = ""; render(); }));
+  const si = document.getElementById("searchInput");
+  si && si.addEventListener("input", e => { state.search = e.target.value; render(); const el = document.getElementById("searchInput"); el.focus(); el.setSelectionRange(el.value.length, el.value.length); });
+  const ss = document.getElementById("sortSelect");
+  ss && ss.addEventListener("change", e => { state.sortBy = e.target.value; render(); });
+}
+function closeModal() { state.selectedFilm = null; render(); }
+document.addEventListener("keydown", e => { if (e.key === "Escape" && state.selectedFilm) closeModal(); });
+
+/* ---------- findings (static) ---------- */
+function findings() {
+  const gas = FILMS.filter(f => f.gapClass.includes("Gaslighting")).length;
+  const minFilm = FILMS.reduce((m, f) => f.rpdi < m.rpdi ? f : m);
+  const n = FILMS.length, mx = FILMS.reduce((s,f)=>s+f.rpdi,0)/n, my = FILMS.reduce((s,f)=>s+f.imdb,0)/n;
+  let sxy=0,sxx=0,syy=0; FILMS.forEach(f=>{sxy+=(f.rpdi-mx)*(f.imdb-my);sxx+=(f.rpdi-mx)**2;syy+=(f.imdb-my)**2;});
+  const r = (sxy/Math.sqrt(sxx*syy)).toFixed(2);
+  document.getElementById("findings-in").innerHTML = `
+    <p class="eyebrow">Findings</p><h2 class="h2">What the data shows</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:40px">
+      ${[[`${gas}/${n}`,"Films with a negative Gap","The telling is more dramatic than the facts support","#ff5a3c"],
+         [r,"Correlation with IMDb rating","Higher-rated films distort a little less, but a rating can't tell you how a film distorts","#4ECDC4"],
+         ["2","Positive-Gap films","Saving Private Ryan and U-571 (AI-scored): invented events told calmly","#f0a64a"],
+         [minFilm.rpdi.toFixed(3),"Lowest RPDI",`${minFilm.title}${minFilm.stressTest ? " (an AI stress test score)" : ""}`,"#5fd38a"]].map(s => `
+        <div style="padding:24px;background:rgba(255,255,255,.02);border:1px solid ${s[3]}2a;border-radius:16px;">
+          <div style="font-size:40px;font-weight:700;color:${s[3]};line-height:1;margin-bottom:12px;letter-spacing:-.02em">${s[0]}</div>
+          <div style="font-size:14px;color:#eee;font-weight:600;margin-bottom:8px;">${s[1]}</div>
+          <div style="font-size:13px;color:#8a8580;line-height:1.6;">${s[2]}</div></div>`).join("")}
+    </div>
+    <div style="margin-top:14px;padding:26px 28px;border-radius:16px;background:rgba(255,255,255,.02);border:1px solid var(--line);display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:22px;">
+      <div style="grid-column:1 / -1"><p class="eyebrow" style="color:#8a8580">Survey · 23 people</p><div style="font-size:13px;color:#8a8580;margin-top:8px">Why D counts for more than L in the 0.6 / 0.4 split. It supports the direction, not the exact numbers.</div></div>
+      ${[["91%","agree inaccurate historical films can hurt public understanding of real history"],["65%","say historical accuracy is what matters most when they watch one"]].map(s => `<div><div style="font-size:30px;font-weight:700;color:#fff">${s[0]}</div><div style="font-size:13px;color:#8a8580;margin-top:4px;line-height:1.5">${s[1]}</div></div>`).join("")}
+    </div>`;
 }
 
-function closeModal() {
-  state.selectedFilm = null;
-  render();
-}
+dashboard(); render(); findings();
 
-render();
+/* ---------- page behaviour ---------- */
+requestAnimationFrame(() => document.body.classList.add("go"));
+const nav = document.getElementById("nav");
+addEventListener("scroll", () => nav.classList.toggle("solid", scrollY > 40), { passive: true });
+const menu = document.getElementById("menu"), burger = document.getElementById("burger");
+burger.addEventListener("click", () => { const o = menu.classList.toggle("open"); burger.setAttribute("aria-expanded", o); });
+menu.addEventListener("click", e => { if (e.target.tagName === "A") menu.classList.remove("open"); });
+const secs = ["top","app","method","plane","findings","writeup"].map(id => document.getElementById(id));
+secs.forEach(s => s && new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) menu.querySelectorAll("a").forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + (e.target.id === "app" ? "database" : e.target.id))); }), { rootMargin: "-45% 0px -50% 0px" }).observe(s));
+document.getElementById("copy").addEventListener("click", async e => {
+  const b = e.currentTarget;
+  try { await navigator.clipboard.writeText("pathiarjun15@gmail.com"); b.textContent = "Copied"; }
+  catch (err) { const r = document.createRange(); r.selectNodeContents(document.getElementById("mail")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Selected, press Ctrl+C"; }
+  setTimeout(() => b.textContent = "Copy email", 2200);
+});
 </script>
+<script src="js/hero.js"></script>
+<script type="module" src="js/plane3d.js"></script>
 </body>
 </html>
