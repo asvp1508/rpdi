@@ -7,126 +7,129 @@
 <meta name="description" content="The Reality-Perception Distortion Index scores historical films claim by claim: what they get wrong (D), how they make it feel (L), and the Gap between. 16 films, by Arjun Pathi." />
 <meta property="og:title" content="RPDI · How far does a film bend history?" />
 <meta property="og:description" content="16 historical films scored claim by claim: facts (D), feel (L) and the Gap between. By Arjun Pathi." />
-<meta name="theme-color" content="#000000" />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect x=%226%22 y=%2214%22 width=%2252%22 height=%2236%22 rx=%226%22 fill=%22%23ff5a3c%22/><g fill=%22%23000%22><rect x=%2210%22 y=%2218%22 width=%225%22 height=%225%22/><rect x=%2210%22 y=%2241%22 width=%225%22 height=%225%22/><rect x=%2249%22 y=%2218%22 width=%225%22 height=%225%22/><rect x=%2249%22 y=%2241%22 width=%225%22 height=%225%22/></g></svg>" />
+<meta name="theme-color" content="#F3EEE4" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 fill=%22%231C2541%22/><path d=%22M12 22h40M12 32h40M12 42h40%22 stroke=%22%23F3EEE4%22 stroke-width=%223%22/><path d=%22M34 22c6 4 10 6 18 0M34 42c6-4 10-6 18 0%22 stroke=%22%233A7D7B%22 stroke-width=%223%22 fill=%22none%22/></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#000;--fg:#f7f4ef;--mut:#8b8682;--dim:#5c5753;--line:rgba(255,255,255,.09);--red:#ff5a3c;--red2:#d0201b;--amber:#ffb067;--panel:rgba(14,10,9,.82)}
+:root{
+  --paper:#F3EEE4; --paper2:#E8E1D3; --ink:#1C2541; --ink2:#3A7D7B;
+  --ink-70:rgba(28,37,65,.72); --ink-55:rgba(28,37,65,.58); --ink-35:rgba(28,37,65,.35); --ink-15:rgba(28,37,65,.14); --ink-08:rgba(28,37,65,.08);
+  --serif:Newsreader,Georgia,'Times New Roman',serif; --sans:'Instrument Sans',system-ui,-apple-system,Segoe UI,sans-serif;
+}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-html,body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
 a{color:inherit}
-.mono{font-family:'DM Mono',ui-monospace,monospace}
-.serif{font-family:'Playfair Display',Georgia,serif}
-::selection{background:#ff5a3c55}
+::selection{background:rgba(58,125,123,.25)}
 button,input,select{font-family:inherit}
+img{max-width:100%}
 .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
-.eyebrow{font:500 11px/1 'DM Mono',monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--red)}
-.h2{font:700 clamp(32px,4.4vw,52px)/1.04 'Playfair Display',Georgia,serif;letter-spacing:-.02em;margin:14px 0 0;text-wrap:balance}
-.lede{color:var(--mut);font-size:16px;line-height:1.7;max-width:620px;margin:18px 0 0}
-section{scroll-margin-top:80px}
+.eyebrow{font:500 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin:0}
+.h2{font:500 clamp(34px,4.6vw,56px)/1.04 var(--serif);letter-spacing:-.02em;margin:14px 0 0;text-wrap:balance}
+.lede{color:var(--ink-70);font-size:17px;line-height:1.7;max-width:640px;margin:18px 0 0}
+section{scroll-margin-top:72px}
+.rule{position:relative}.rule::before{content:"";position:absolute;left:24px;right:24px;top:0;border-top:1px solid var(--ink)}
 
-/* ---------- nav ---------- */
-.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:calc(14px + env(safe-area-inset-top,0px)) clamp(16px,3vw,40px) 14px;transition:background .4s}
-.nav.solid{background:rgba(0,0,0,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;letter-spacing:.02em}
-.logo svg{width:26px;height:26px}
-.menu{display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
-.menu a{padding:8px 14px;border-radius:999px;font-size:13px;color:#cfc9c2;text-decoration:none;transition:background .3s,color .3s}
-.menu a:hover,.menu a.on{background:rgba(255,255,255,.08);color:#fff}
-.pill{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;font-size:14px;font-weight:600;text-decoration:none;border:0;cursor:pointer;transition:box-shadow .35s,filter .35s,transform .35s}
-.pill.hot{background:linear-gradient(180deg,#ff6a3d,#d0201b);color:#fff;box-shadow:0 0 0 1px rgba(255,140,100,.35) inset,0 8px 30px -8px rgba(255,70,40,.55)}
-.pill.hot:hover{filter:brightness(1.12);box-shadow:0 0 0 1px rgba(255,170,130,.5) inset,0 10px 44px -6px rgba(255,80,40,.8)}
-.pill.dark{background:rgba(255,255,255,.06);color:#eee;border:1px solid rgba(255,255,255,.12)}
-.pill.dark:hover{background:rgba(255,255,255,.1);box-shadow:0 0 30px -8px rgba(255,90,60,.5)}
-.nav .pill{padding:9px 16px;font-size:13px}
-.burger{display:none;background:none;border:1px solid var(--line);color:#fff;border-radius:10px;width:40px;height:40px;font-size:18px}
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:1px solid var(--ink);padding-top:env(safe-area-inset-top,0px)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:60px}
+.logo{display:flex;align-items:baseline;gap:10px;text-decoration:none}
+.logo b{font:600 22px/1 var(--serif);letter-spacing:-.01em}
+.logo span{font-size:12px;color:var(--ink-55)}
+.menu{display:flex;gap:24px}
+.menu a{font-size:14px;color:var(--ink-70);text-decoration:none;padding:4px 0;border-bottom:1px solid transparent}
+.menu a:hover,.menu a.on{color:var(--ink);border-bottom-color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;font-size:14px;font-weight:500;text-decoration:none;border:1px solid var(--ink);cursor:pointer;background:transparent;color:var(--ink);transition:background .25s,color .25s}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.solid:hover{background:var(--ink2);border-color:var(--ink2)}
+.nav .btn{padding:8px 14px;font-size:13px}
+.burger{display:none;background:none;border:1px solid var(--ink);color:var(--ink);width:40px;height:40px;font-size:16px}
 
-/* ---------- hero ---------- */
-.hero{position:relative;min-height:max(100svh,760px);overflow:hidden;isolation:isolate}
-#hero-sky{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
-.hero-in{position:relative;padding:calc(31vh + 10px) 24px 0;text-align:center}
-.hero h1{margin:0 auto;max-width:1000px;font:900 clamp(44px,6.6vw,94px)/1 'Playfair Display',Georgia,serif;letter-spacing:-.025em;text-wrap:balance}
-.hero h1 .grad{background:linear-gradient(100deg,#ffd0a8 0%,#ff7a4a 40%,#e0261c 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic}
-.hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
-.hero h1 .ln>span{display:inline-block}
-.hero .sub{margin:22px auto 0;max-width:640px;font-size:clamp(15px,1.4vw,17px);line-height:1.6;color:#b9b2ab}
-.hero .cta{margin-top:30px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+/* hero */
+.hero{padding:clamp(48px,8vw,96px) 0 0}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:center}
+.hero h1{margin:16px 0 0;font:500 clamp(46px,6.4vw,92px)/.98 var(--serif);letter-spacing:-.03em;text-wrap:balance}
+.hero h1 em{font-style:italic;color:var(--ink2)}
+.hero .sub{margin:24px 0 0;max-width:560px;font-size:18px;line-height:1.65;color:var(--ink-70)}
+.hero .cta{margin-top:30px;display:flex;gap:12px;flex-wrap:wrap}
+.hero-art svg{display:block;width:100%;height:auto}
 
-/* ---------- dashboard ---------- */
-.dash-wrap{position:relative;margin:clamp(48px,7vh,80px) auto 0;width:min(1204px,calc(100% - 32px))}
-.dash-glow{position:absolute;left:8%;right:8%;top:-1px;height:2px;background:linear-gradient(90deg,transparent,#ff8a5c 20%,#fff1e4 50%,#ff8a5c 80%,transparent);box-shadow:0 0 18px 2px rgba(255,90,50,.7),0 0 70px 10px rgba(255,60,30,.35);z-index:2;border-radius:2px}
-.dash{position:relative;display:grid;grid-template-columns:210px 1fr;border-radius:14px 14px 0 0;background:var(--panel);border:1px solid rgba(255,110,80,.28);border-bottom:0;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);overflow:hidden;text-align:left;min-height:420px}
-.side{padding:18px 14px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
-.side .brand{display:flex;align-items:center;justify-content:space-between;font-weight:700;margin:2px 6px 14px}
-.side a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;font-size:13px;color:#a8a29b;text-decoration:none}
-.side a:hover{background:rgba(255,255,255,.05);color:#fff}
-.side a.on{background:rgba(255,255,255,.08);color:#fff}
-.side a svg{width:15px;height:15px;opacity:.85}
-.side hr{border:0;border-top:1px solid var(--line);margin:8px 4px}
-.promo{margin-top:auto;padding:14px;border-radius:12px;background:linear-gradient(160deg,rgba(255,90,60,.22),rgba(255,90,60,.04));border:1px solid rgba(255,110,80,.3)}
-.promo b{display:block;font-size:13px}.promo p{margin:6px 0 10px;font-size:12px;color:#c9bfb6;line-height:1.45}
-.promo a{display:inline-flex;padding:6px 12px;border-radius:999px;background:#fff;color:#000;font-size:12px;font-weight:600;text-decoration:none}
-.main{padding:16px 18px 0;min-width:0}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#8f8882;font-size:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
-.topbar .who{display:flex;align-items:center;gap:10px;color:#ddd}
-.topbar .who i{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#ff8a5c,#7a1410);display:inline-block}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1.05fr;gap:14px;padding:14px 0}
-.card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
-.card .k{font-size:11px;color:#8f8882}
-.card .v{font:600 30px/1.1 Inter,sans-serif;margin-top:8px;letter-spacing:-.02em}
-.card .v small{font:500 12px 'DM Mono',monospace;margin-left:8px;color:var(--red)}
-.chart{grid-column:1 / span 2}
-.chart .hd{display:flex;justify-content:space-between;font-size:13px;color:#ddd}
-.chart svg{display:block;width:100%;height:auto;margin-top:8px}
-.classes .row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--line);font-size:12.5px;color:#cfc8c0}
-.classes .row:last-child{border:0}
-.classes .row b{font:500 13px 'DM Mono',monospace;color:#fff}
-.classes .bar{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.06);margin:0 6px;overflow:hidden}
-.classes .bar i{display:block;height:100%;border-radius:2px}
-.ext{font-size:12px;color:#8f8882;margin-top:6px;line-height:1.5}
-.ext b{color:#eee;font-weight:600}
+/* numbers strip */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:clamp(48px,7vw,88px);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.stat{padding:22px 22px 24px;border-right:1px solid var(--ink-15);min-width:0}
+.stat:last-child{border-right:0}
+.stat .v{font:500 44px/1 var(--serif);letter-spacing:-.02em}
+.stat .k{margin-top:10px;font-size:13px;line-height:1.5;color:var(--ink-70)}
+.bars{margin-top:44px}
+.bars .hd{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--ink-70)}
+.bars svg{display:block;width:100%;height:auto;margin-top:10px}
+.scale{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-top:18px;border-top:1px solid var(--ink-15)}
+.scale div{padding:12px 14px 0 0;font-size:13px;color:var(--ink-70);line-height:1.45}
+.scale i{display:inline-block;width:12px;height:12px;margin-right:8px;vertical-align:-1px}
+.scale b{display:block;color:var(--ink);font-weight:600;margin-bottom:2px}
 
-/* entrance */
-.rise{opacity:0;transform:translateY(24px)}
-.go .rise{animation:rise .9s cubic-bezier(.16,1,.3,1) forwards}
-.go .ln>span{animation:wipe 1s cubic-bezier(.16,1,.3,1) both}
-.ln>span{transform:translateY(105%)}
-@keyframes rise{to{opacity:1;transform:none}}
-@keyframes wipe{to{transform:none}}
-.navin{opacity:0;transform:translateY(-12px)}.go .navin{animation:rise .8s .05s cubic-bezier(.16,1,.3,1) forwards}
+/* database */
+.controls{display:flex;gap:10px;margin:30px 0 18px;flex-wrap:wrap;align-items:center}
+.controls input,.controls select{background:transparent;border:1px solid var(--ink-35);padding:10px 14px;color:var(--ink);font-size:14px;outline:none}
+.controls input:focus,.controls select:focus{border-color:var(--ink)}
+.controls input{width:240px;max-width:100%}
+.controls select{margin-left:auto;cursor:pointer}
+.fpill{padding:9px 14px;font-size:13px;cursor:pointer;background:transparent;color:var(--ink-70);border:1px solid var(--ink-35)}
+.fpill.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.note{font-size:13px;color:var(--ink-55);margin-bottom:22px}
+.films{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:28px 22px}
+.film{cursor:pointer;min-width:0}
+.film .poster{aspect-ratio:2/3;overflow:hidden;background:var(--paper2);border:1px solid var(--ink)}
+.film .poster img{width:100%;height:100%;object-fit:cover;display:block;filter:url(#duo);transition:filter .4s}
+.film:hover .poster img,.film:focus-visible .poster img{filter:none}
+.film .meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:12px}
+.film .t{font:500 21px/1.15 var(--serif);letter-spacing:-.01em}
+.film .s{font:500 22px/1 var(--serif)}
+.film .sub2{font-size:13px;color:var(--ink-55);margin-top:4px}
+.film .cls{display:inline-block;margin-top:10px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px}
+.tag{display:inline-block;margin-left:8px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);border:1px solid var(--ink2);padding:1px 6px;vertical-align:1px}
+.mbar{display:grid;grid-template-columns:52px 1fr 52px;align-items:center;gap:10px;font-size:12px;color:var(--ink-70);margin-top:8px}
+.mbar .tr{height:6px;background:var(--ink-08);position:relative}
+.mbar .tr i{position:absolute;top:0;bottom:0;left:0}
+.mbar .tr.gap::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--ink-35)}
+.mbar b{font-weight:600;color:var(--ink);text-align:right}
 
-/* ---------- legend + database ---------- */
-.band{border-top:1px solid var(--line)}
-.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;padding:40px 0}
-.film-card{background:rgba(12,9,8,.7);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:20px;cursor:pointer;transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .35s,box-shadow .35s;position:relative;overflow:hidden}
-.film-card:hover{border-color:rgba(255,110,80,.35);transform:translateY(-6px);box-shadow:0 24px 48px rgba(0,0,0,.55),0 0 40px -20px rgba(255,80,40,.6)}
-.filter-pill{padding:8px 14px;border-radius:999px;font-size:12px;cursor:pointer;background:#0d0a09;color:#8a8580;border:1px solid #1d1816}
-.filter-pill.active{background:#fff;color:#000;border-color:#fff}
-.glow-bar-bg{height:4px;background:#1a1513;border-radius:2px;overflow:hidden}
-.glow-bar-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.16,1,.3,1)}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px;backdrop-filter:blur(8px)}
-.modal-overlay.open{display:flex}
-.modal-box{background:rgba(12,9,8,.92);border-radius:22px;padding:30px;max-width:680px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 40px 80px rgba(0,0,0,.7)}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(28,37,65,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal.open{display:flex}
+.mbox{background:var(--paper);border:1px solid var(--ink);max-width:720px;width:100%;max-height:90vh;overflow:auto;padding:28px}
+.mtop{display:flex;gap:18px;align-items:flex-start}
+.mtop img{width:96px;aspect-ratio:2/3;object-fit:cover;border:1px solid var(--ink);filter:url(#duo);flex-shrink:0}
+.mtop h3{font:500 32px/1.1 var(--serif);margin:4px 0 0;letter-spacing:-.01em}
+.x{margin-left:auto;background:none;border:1px solid var(--ink);width:38px;height:38px;font-size:18px;cursor:pointer;color:var(--ink);flex-shrink:0}
+.mnums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);margin:22px 0}
+.mnums div{padding:14px 12px;border-right:1px solid var(--ink-15)}.mnums div:last-child{border-right:0}
+.mnums b{display:block;font:500 28px/1 var(--serif)}
+.mnums span{font-size:12px;color:var(--ink-55)}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;font-size:14px;line-height:1.5}
+.facts .k,.mh{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-55);margin-bottom:4px}
+.dl{margin:22px 0 0;padding:0;list-style:none;counter-reset:d}
+.dl li{counter-increment:d;display:grid;grid-template-columns:28px 1fr;padding:10px 0;border-top:1px solid var(--ink-15);font-size:14px;line-height:1.5}
+.dl li::before{content:counter(d);font:500 18px/1.2 var(--serif);color:var(--ink2)}
 
-/* ---------- rules (shared with the portfolio, recoloured for the dark site) ---------- */
-
-.fx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,19rem),1fr));border-top:1px solid rgba(236,230,218,0.72);border-left:1px solid rgba(236,230,218,0.72)}
-.fx-card{display:flex;flex-direction:column;min-width:0;border-right:1px solid rgba(236,230,218,0.72);border-bottom:1px solid rgba(236,230,218,0.72)}
-.fx-art{aspect-ratio:240/110;background:#120d0b;border-bottom:1px solid rgba(236,230,218,0.54)}
+/* rules (shared with the portfolio) */
+.fx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,19rem),1fr));border-top:1px solid var(--ink);border-left:1px solid var(--ink);margin-top:44px}
+.fx-card{display:flex;flex-direction:column;min-width:0;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.fx-art{aspect-ratio:240/110;background:var(--paper2);border-bottom:1px solid var(--ink-35)}
 .fx-art svg{display:block}.fx-art svg *{transform-box:fill-box}
 .fx-body{padding:1.4rem 1.4rem 1.6rem}
-.fx-num{font-size:.7rem;letter-spacing:.12em;color:#ff5a3c}
-.fx-name{margin-top:.35rem;font-family:Newsreader,Georgia,serif;font-size:1.45rem;font-weight:600;line-height:1.15;letter-spacing:-.02em}
-.fx-one{margin-top:.8rem;font-size:.95rem;line-height:1.6;color:rgba(236,230,218,0.68)}
-.fx-more{margin-top:1rem;font-size:.88rem;color:rgba(236,230,218,0.65)}
-.fx-more summary{cursor:pointer;font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#ff5a3c}
+.fx-num{font-size:.75rem;letter-spacing:.12em;color:var(--ink2);margin:0}
+.fx-name{margin:.35rem 0 0;font:500 1.5rem/1.15 var(--serif);letter-spacing:-.01em}
+.fx-one{margin:.8rem 0 0;font-size:.97rem;line-height:1.6;color:var(--ink-70)}
+.fx-more{margin-top:1rem;font-size:.9rem;color:var(--ink-70)}
+.fx-more summary{cursor:pointer;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
 .fx-more summary::after{content:" +"}.fx-more[open] summary::after{content:" −"}
-.fx-more ul{margin-top:.8rem;display:grid;gap:.45rem}
+.fx-more ul{margin:.8rem 0 0;padding:0;list-style:none;display:grid;gap:.45rem}
 .fx-more li{padding-left:1rem;position:relative;line-height:1.55}
-.fx-more li::before{content:"";position:absolute;left:0;top:.62em;width:.4rem;height:1px;background:#ff5a3c}
+.fx-more li::before{content:"";position:absolute;left:0;top:.62em;width:.4rem;height:1px;background:var(--ink2)}
 .fx-row{transform-origin:left center;transform:scaleX(0);animation:fxRow 6s infinite}
 .fx-n1{animation-delay:.25s}.fx-n2{animation-delay:.5s}.fx-n3{animation-delay:.75s}.fx-n4{animation-delay:1s}.fx-n5{animation-delay:1.25s}.fx-n6{animation-delay:1.5s}
 @keyframes fxRow{0%{transform:scaleX(0)}12%,80%{transform:scaleX(1)}92%,100%{transform:scaleX(0)}}
@@ -168,108 +171,93 @@ section{scroll-margin-top:80px}
 .fx-seg,.fx-dot,.fx-flip,.fx-flag,.fx-same,.fx-jump{opacity:1}
 .fx-arc{stroke-dashoffset:0}.fx-ring{stroke-dashoffset:38}}
 
-.fx-grid{margin-top:44px;border-color:rgba(255,255,255,.14)!important}
-.fx-card{background:#090706;border-color:rgba(255,255,255,.14)!important}
-.fx-art{border-color:rgba(255,255,255,.12)!important}
-.fx-name{font-family:'Playfair Display',Georgia,serif!important;color:#fff}
-.fx-num{font-family:'DM Mono',monospace}
-
-/* ---------- 3D ---------- */
-.f3d{margin:40px 0 0;border:1px solid rgba(255,110,80,.25);border-radius:16px;overflow:hidden;background:radial-gradient(120% 90% at 50% 0%,#1a0d09 0%,#050303 70%)}
+/* 3D */
+.f3d{margin:40px 0 0;border:1px solid var(--ink);background:var(--paper2)}
 .f3d canvas{display:block;width:100%;aspect-ratio:16/9;cursor:grab;touch-action:pan-y}
-.f3d figcaption{border-top:1px solid var(--line);padding:12px 16px;font-size:13px;color:#a69d95;line-height:1.55}
-.key{display:flex;flex-wrap:wrap;gap:6px 18px;padding:12px 16px 0;font-size:12px;color:#b9b2ab}
-.key i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.f3d figcaption{border-top:1px solid var(--ink);padding:12px 16px;font-size:14px;color:var(--ink-70);line-height:1.55}
+.key{display:flex;flex-wrap:wrap;gap:6px 20px;padding:14px 16px 0;font-size:13px;color:var(--ink-70)}
+.key i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
 
-/* ---------- write-up + footer ---------- */
-.posts{margin-top:36px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:12px}
-.post{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.02);text-decoration:none;transition:border-color .3s,background .3s}
-.post:hover{border-color:rgba(255,110,80,.4);background:rgba(255,90,60,.05)}
-.post .n{font:500 12px 'DM Mono',monospace;color:var(--red);min-width:22px;padding-top:2px}
-.post .t{font-size:14.5px;line-height:1.45;color:#eee}
-.foot{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;padding-top:60px;padding-bottom:calc(48px + env(safe-area-inset-bottom,0px))}
+/* findings */
+.fnd{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:40px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.fnd div{padding:24px 20px;border-right:1px solid var(--ink-15);min-width:0}.fnd div:last-child{border-right:0}
+.fnd b{display:block;font:500 46px/1 var(--serif);letter-spacing:-.02em}
+.fnd strong{display:block;font-size:15px;font-weight:600;margin-top:12px}
+.fnd p{margin:6px 0 0;font-size:14px;line-height:1.55;color:var(--ink-70)}
+.survey{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:24px;margin-top:28px;padding:24px 0;border-bottom:1px solid var(--ink-15)}
+.survey b{display:block;font:500 36px/1 var(--serif);color:var(--ink2)}
+.survey p{margin:6px 0 0;font-size:14px;line-height:1.55;color:var(--ink-70)}
+
+/* write-up + footer */
+.posts{margin-top:36px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));border-top:1px solid var(--ink)}
+.post{display:grid;grid-template-columns:36px 1fr;gap:10px;padding:16px 4px;border-bottom:1px solid var(--ink-15);text-decoration:none}
+.post:hover .t{text-decoration:underline;text-underline-offset:3px}
+.post .n{font:500 18px/1.3 var(--serif);color:var(--ink2)}
+.post .t{font:400 17px/1.4 var(--serif)}
+.foot{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;padding-top:56px;padding-bottom:calc(56px + env(safe-area-inset-bottom,0px))}
 .links{display:flex;flex-wrap:wrap;gap:10px}
-.mail{display:flex;align-items:center;gap:10px;margin-top:16px;flex-wrap:wrap}
-.mail code{font:500 14px 'DM Mono',monospace;color:#fff;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:10px 14px;user-select:all}
+.mail{display:flex;align-items:center;gap:10px;margin-top:18px;flex-wrap:wrap}
+.mail code{font:500 15px var(--sans);border:1px solid var(--ink-35);padding:10px 14px;user-select:all}
 
-/* ---------- phones ---------- */
+/* phones */
 @media (max-width:900px){
-  .menu,.nav .pill.hot{display:none}
+  .menu{display:none}
   .burger{display:inline-flex;align-items:center;justify-content:center}
-  .menu.open{display:flex;position:absolute;top:calc(64px + env(safe-area-inset-top,0px));left:16px;right:16px;flex-direction:column;border-radius:16px;background:rgba(10,8,7,.96);padding:8px}
-  .hero-in{padding-top:calc(24vh + 10px)}
-  .dash{grid-template-columns:1fr}
-  .side{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:12px;gap:6px}
-  .side .brand,.side hr,.promo{display:none}
-  .side a{white-space:nowrap;border:1px solid var(--line)}
-  .grid3{grid-template-columns:1fr}
-  .chart{grid-column:auto}
+  .menu.open{display:flex;position:absolute;top:60px;left:0;right:0;flex-direction:column;gap:0;background:var(--paper);border-bottom:1px solid var(--ink);padding:8px 24px 16px}
+  .menu.open a{padding:12px 0;border-bottom:1px solid var(--ink-15)}
+  .nav .btn.solid{display:none}
+  .hero-grid{grid-template-columns:1fr}
+  .stats,.fnd{grid-template-columns:1fr 1fr}
+  .stat:nth-child(2),.fnd div:nth-child(2){border-right:0}
+  .stat:nth-child(-n+2),.fnd div:nth-child(-n+2){border-bottom:1px solid var(--ink-15)}
+  .scale{grid-template-columns:1fr 1fr}
+  .survey{grid-template-columns:1fr}
   .foot{grid-template-columns:1fr}
+  .controls select{margin-left:0}
+  .mnums{grid-template-columns:1fr 1fr}
+  .facts{grid-template-columns:1fr}
 }
-@media (prefers-reduced-motion:reduce){.rise,.navin{opacity:1;transform:none}.ln>span{transform:none}.go .rise,.go .ln>span,.go .navin{animation:none}}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="duo" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".33 .33 .33 0 0 .33 .33 .33 0 0 .33 .33 .33 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues="0.110 0.953"/><feFuncG type="table" tableValues="0.145 0.933"/><feFuncB type="table" tableValues="0.255 0.894"/></feComponentTransfer></filter></svg>
 
-<!-- NAV -->
-<header class="nav navin" id="nav">
-  <a class="logo" href="#top" aria-label="RPDI home">
-    <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="14" width="52" height="36" rx="6" fill="#ff5a3c"/><g fill="#000"><rect x="10" y="18" width="5" height="5"/><rect x="10" y="41" width="5" height="5"/><rect x="49" y="18" width="5" height="5"/><rect x="49" y="41" width="5" height="5"/></g><path d="M22 40 L30 26 L36 34 L42 28" stroke="#000" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    RPDI
-  </a>
-  <nav class="menu" id="menu">
-    <a href="#top" class="on">Home</a><a href="#database">Films</a><a href="#method">Method</a><a href="#plane">3D</a><a href="#findings">Findings</a><a href="#writeup">Write-up</a>
-  </nav>
+<header class="nav" id="nav"><div class="wrap">
+  <a class="logo" href="#top"><b>RPDI</b><span>Reality-Perception Distortion Index</span></a>
+  <nav class="menu" id="menu"><a href="#database">Films</a><a href="#method">Method</a><a href="#plane">3D</a><a href="#findings">Findings</a><a href="#writeup">Write-up</a></nav>
   <div style="display:flex;gap:10px;align-items:center">
-    <a class="pill hot" href="https://arjun-pathi-portfolio.vercel.app/rpdi-tool/" target="_blank" rel="noopener">Scoring tool</a>
+    <a class="btn solid" href="https://arjun-pathi-portfolio.vercel.app/rpdi-tool/" target="_blank" rel="noopener">Scoring tool</a>
     <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">☰</button>
   </div>
-</header>
+</div></header>
 
-<!-- HERO -->
-<section class="hero" id="top">
-  <canvas id="hero-sky" aria-hidden="true"></canvas>
-  <div class="hero-in">
-    <h1><span class="ln"><span><span class="grad">RPDI</span> How far does</span></span><span class="ln"><span>a film bend history?</span></span></h1>
-    <p class="sub rise" style="animation-delay:.55s">The Reality-Perception Distortion Index scores a historical film claim by claim: what it gets wrong (D), how it makes it feel (L), and the Gap between the two. 16 films, scored by hand and in the open.</p>
-    <div class="cta rise" style="animation-delay:.7s">
-      <a class="pill hot" href="#database">Explore the 16 films</a>
-      <a class="pill dark" href="#method">How a film is scored</a>
+<section class="hero" id="top"><div class="wrap">
+  <div class="hero-grid">
+    <div>
+      <p class="eyebrow">16 films · scored by hand · Oct 2026</p>
+      <h1>How far does a film <em>bend</em> history?</h1>
+      <p class="sub">The Reality-Perception Distortion Index scores a historical film claim by claim: what it gets wrong (D), how it makes it feel (L), and the Gap between the two.</p>
+      <div class="cta"><a class="btn solid" href="#database">See the 16 films</a><a class="btn" href="#method">How a film is scored</a></div>
     </div>
-    <div class="dash-wrap rise" style="animation-delay:.85s">
-      <div class="dash-glow"></div>
-      <div class="dash">
-        <aside class="side">
-          <div class="brand">RPDI <span class="mono" style="font-size:11px;color:#8f8882">v4</span></div>
-          <a href="#database" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14"/></svg>Films</a>
-          <a href="#method"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h7"/></svg>Rules</a>
-          <a href="#plane"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 16l9 5 9-5"/></svg>3D plane</a>
-          <a href="#findings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Findings</a>
-          <hr>
-          <a href="#writeup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h12l4 4v12H4z"/><path d="M8 12h8M8 16h5"/></svg>Write-up</a>
-          <a href="https://github.com/asvp1508/rpdi" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>GitHub</a>
-          <div class="promo"><b>Score a film yourself</b><p>The same tool used for all 16 films, with every rule built in.</p><a href="https://arjun-pathi-portfolio.vercel.app/rpdi-tool/" target="_blank" rel="noopener">Open the tool</a></div>
-        </aside>
-        <div class="main">
-          <div class="topbar"><span class="mono">Dataset closed · 16 films · Oct 2026</span><span class="who"><i></i>Arjun Pathi</span></div>
-          <div class="grid3" id="dash-cards"></div>
-        </div>
-      </div>
-    </div>
+    <div class="hero-art"><svg viewBox="0 0 560 400" role="img" aria-label="A ruled grid, the historical record, bending into a warped grid, the film" xmlns="http://www.w3.org/2000/svg"><rect x="40" y="40" width="480" height="320" fill="#E8E1D3"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="40.0,40.0 44.0,40.0 48.0,40.0 52.0,40.0 56.0,40.0 60.0,40.0 64.0,40.0 68.0,40.0 72.0,40.0 76.0,40.0 80.0,40.0 84.0,40.0 88.0,40.0 92.0,40.0 96.0,40.0 100.0,40.0 104.0,40.0 108.0,40.0 112.0,40.0 116.0,40.0 120.0,40.0 124.0,40.0 128.0,40.0 132.0,40.0 136.0,40.0 140.0,40.0 144.0,40.0 148.0,40.0 152.0,40.0 156.0,40.0 160.0,40.0 164.0,40.0 168.0,40.0 172.0,40.0 176.0,40.0 180.0,40.0 184.0,40.0 188.0,40.0 192.0,40.0 196.0,40.0 200.0,40.0 204.0,40.0 208.0,40.0 212.0,40.0 216.0,40.0 220.0,40.0 224.0,40.0 228.0,40.0 232.0,40.0 236.0,40.0 240.0,40.0 244.0,40.0 248.0,40.0 252.0,40.0 256.0,40.0 260.0,40.1 263.9,40.2 267.9,40.3 271.9,40.4 275.8,40.5 279.7,40.6 283.6,40.8 287.5,40.8 291.4,40.9 295.3,40.9 299.2,40.9"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="291.4,40.9 295.3,40.9 299.2,40.9 303.0,40.8 306.9,40.6 310.7,40.4 314.5,40.1 318.4,39.7 322.2,39.4 326.0,39.0 329.8,38.6 333.6,38.2 337.4,37.8 341.2,37.5 345.0,37.2 348.8,37.0 352.7,36.8 356.5,36.7 360.3,36.5 364.2,36.5 368.1,36.4 371.9,36.3 375.8,36.2 379.7,36.1 383.7,35.9 387.6,35.6 391.6,35.3 395.6,34.9 399.6,34.5 403.6,34.0 407.7,33.6 411.8,33.1 415.9,32.7 420.0,32.4 424.2,32.2 428.4,32.2 432.6,32.4 436.8,32.8 441.1,33.5 445.3,34.5 449.6,35.7 454.0,37.3 458.3,39.0 462.7,41.0 467.0,43.2 471.4,45.5 475.8,47.8 480.2,50.1 484.7,52.3 489.1,54.4 493.5,56.2 498.0,57.7 502.4,58.8 506.9,59.6 511.3,59.9 515.7,59.7 520.1,59.2 524.5,58.2"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="40.0,72.0 44.0,72.0 48.0,72.0 52.0,72.0 56.0,72.0 60.0,72.0 64.0,72.0 68.0,72.0 72.0,72.0 76.0,72.0 80.0,72.0 84.0,72.0 88.0,72.0 92.0,72.0 96.0,72.0 100.0,72.0 104.0,72.0 108.0,72.0 112.0,72.0 116.0,72.0 120.0,72.0 124.0,72.0 128.0,72.0 132.0,72.0 136.0,72.0 140.0,72.0 144.0,72.0 148.0,72.0 152.0,72.0 156.0,72.0 160.0,72.0 164.0,72.0 168.0,72.0 172.0,72.0 176.0,72.0 180.0,72.0 184.0,72.0 188.0,72.0 192.0,72.0 196.0,72.0 200.0,72.0 204.0,72.0 208.0,72.0 212.0,72.0 216.0,72.0 220.0,72.0 224.0,72.0 228.0,72.0 232.0,72.0 236.0,72.0 240.0,72.0 244.0,72.0 248.0,72.0 252.0,72.0 256.0,72.0 260.0,72.1 263.9,72.1 267.9,72.2 271.8,72.3 275.7,72.4 279.7,72.5 283.6,72.5 287.5,72.6 291.4,72.5 295.3,72.4 299.2,72.2"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="291.4,72.5 295.3,72.4 299.2,72.2 303.1,72.0 306.9,71.7 310.8,71.3 314.7,70.9 318.6,70.4 322.5,69.9 326.4,69.4 330.4,68.9 334.3,68.4 338.2,68.0 342.2,67.7 346.2,67.5 350.1,67.3 354.2,67.2 358.2,67.2 362.2,67.4 366.3,67.5 370.4,67.8 374.5,68.0 378.6,68.3 382.7,68.6 386.9,68.8 391.1,69.1 395.3,69.2 399.5,69.4 403.8,69.5 408.0,69.5 412.3,69.5 416.6,69.5 421.0,69.6 425.3,69.7 429.7,69.8 434.0,70.1 438.4,70.5 442.8,71.1 447.2,71.9 451.6,72.9 456.0,74.1 460.4,75.5 464.8,77.0 469.2,78.7 473.6,80.4 478.0,82.2 482.4,84.0 486.8,85.6 491.2,87.2 495.5,88.5 499.8,89.5 504.1,90.2 508.4,90.5 512.7,90.4 516.9,89.9 521.2,89.0 525.3,87.6 529.5,85.9"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="40.0,104.0 44.0,104.0 48.0,104.0 52.0,104.0 56.0,104.0 60.0,104.0 64.0,104.0 68.0,104.0 72.0,104.0 76.0,104.0 80.0,104.0 84.0,104.0 88.0,104.0 92.0,104.0 96.0,104.0 100.0,104.0 104.0,104.0 108.0,104.0 112.0,104.0 116.0,104.0 120.0,104.0 124.0,104.0 128.0,104.0 132.0,104.0 136.0,104.0 140.0,104.0 144.0,104.0 148.0,104.0 152.0,104.0 156.0,104.0 160.0,104.0 164.0,104.0 168.0,104.0 172.0,104.0 176.0,104.0 180.0,104.0 184.0,104.0 188.0,104.0 192.0,104.0 196.0,104.0 200.0,104.0 204.0,104.0 208.0,104.0 212.0,104.0 216.0,104.0 220.0,104.0 224.0,104.0 228.0,104.0 232.0,104.0 236.0,104.0 240.0,104.0 244.0,104.0 248.0,104.0 252.0,104.0 256.0,104.0 260.0,104.1 263.9,104.1 267.9,104.2 271.9,104.2 275.8,104.2 279.8,104.2 283.8,104.2 287.7,104.1 291.7,104.0 295.7,103.8 299.6,103.5"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="291.7,104.0 295.7,103.8 299.6,103.5 303.6,103.2 307.6,102.8 311.6,102.3 315.6,101.8 319.7,101.3 323.7,100.8 327.8,100.3 331.9,99.8 336.0,99.4 340.1,99.1 344.2,99.0 348.4,98.9 352.5,99.0 356.7,99.2 360.9,99.5 365.1,99.9 369.4,100.5 373.6,101.1 377.9,101.7 382.2,102.5 386.5,103.2 390.8,103.9 395.1,104.5 399.4,105.1 403.7,105.6 408.1,106.0 412.4,106.4 416.8,106.7 421.1,106.9 425.5,107.1 429.8,107.3 434.2,107.4 438.5,107.7 442.9,107.9 447.2,108.3 451.5,108.8 455.8,109.4 460.1,110.1 464.3,111.0 468.6,111.9 472.8,113.0 477.0,114.0 481.1,115.1 485.3,116.1 489.4,116.9 493.5,117.7 497.6,118.2 501.6,118.4 505.6,118.3 509.6,117.9 513.5,117.1 517.4,116.0 521.3,114.5 525.1,112.7 529.0,110.6"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="40.0,136.0 44.0,136.0 48.0,136.0 52.0,136.0 56.0,136.0 60.0,136.0 64.0,136.0 68.0,136.0 72.0,136.0 76.0,136.0 80.0,136.0 84.0,136.0 88.0,136.0 92.0,136.0 96.0,136.0 100.0,136.0 104.0,136.0 108.0,136.0 112.0,136.0 116.0,136.0 120.0,136.0 124.0,136.0 128.0,136.0 132.0,136.0 136.0,136.0 140.0,136.0 144.0,136.0 148.0,136.0 152.0,136.0 156.0,136.0 160.0,136.0 164.0,136.0 168.0,136.0 172.0,136.0 176.0,136.0 180.0,136.0 184.0,136.0 188.0,136.0 192.0,136.0 196.0,136.0 200.0,136.0 204.0,136.0 208.0,136.0 212.0,136.0 216.0,136.0 220.0,136.0 224.0,136.0 228.0,136.0 232.0,136.0 236.0,136.0 240.0,136.0 244.0,136.0 248.0,136.0 252.0,136.0 256.0,136.0 260.0,136.0 264.0,136.0 268.0,136.1 272.0,136.1 276.0,136.0 280.0,136.0 284.1,135.9 288.1,135.7 292.2,135.5 296.2,135.3"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="292.2,135.5 296.2,135.3 300.3,134.9 304.4,134.6 308.5,134.1 312.6,133.7 316.8,133.2 320.9,132.8 325.1,132.3 329.3,132.0 333.5,131.7 337.7,131.5 341.9,131.4 346.1,131.5 350.3,131.7 354.6,132.1 358.9,132.6 363.1,133.3 367.4,134.1 371.7,134.9 375.9,135.9 380.2,136.9 384.5,138.0 388.8,139.0 393.0,139.9 397.3,140.8 401.6,141.6 405.8,142.2 410.0,142.8 414.3,143.1 418.5,143.3 422.7,143.4 426.8,143.4 431.0,143.3 435.1,143.2 439.2,143.0 443.3,142.8 447.4,142.6 451.4,142.5 455.5,142.5 459.4,142.6 463.4,142.7 467.3,142.9 471.2,143.2 475.1,143.5 479.0,143.8 482.8,144.0 486.6,144.2 490.3,144.3 494.1,144.2 497.8,143.9 501.5,143.3 505.2,142.5 508.8,141.5 512.4,140.1 516.1,138.5 519.7,136.7 523.2,134.6"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="40.0,168.0 44.0,168.0 48.0,168.0 52.0,168.0 56.0,168.0 60.0,168.0 64.0,168.0 68.0,168.0 72.0,168.0 76.0,168.0 80.0,168.0 84.0,168.0 88.0,168.0 92.0,168.0 96.0,168.0 100.0,168.0 104.0,168.0 108.0,168.0 112.0,168.0 116.0,168.0 120.0,168.0 124.0,168.0 128.0,168.0 132.0,168.0 136.0,168.0 140.0,168.0 144.0,168.0 148.0,168.0 152.0,168.0 156.0,168.0 160.0,168.0 164.0,168.0 168.0,168.0 172.0,168.0 176.0,168.0 180.0,168.0 184.0,168.0 188.0,168.0 192.0,168.0 196.0,168.0 200.0,168.0 204.0,168.0 208.0,168.0 212.0,168.0 216.0,168.0 220.0,168.0 224.0,168.0 228.0,168.0 232.0,168.0 236.0,168.0 240.0,168.0 244.0,168.0 248.0,168.0 252.0,168.0 256.0,168.0 260.0,168.0 264.1,168.0 268.1,168.0 272.1,167.9 276.2,167.9 280.3,167.8 284.4,167.6 288.5,167.5 292.6,167.2 296.7,167.0"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="292.6,167.2 296.7,167.0 300.8,166.7 305.0,166.4 309.1,166.0 313.3,165.7 317.5,165.3 321.6,165.0 325.8,164.8 330.0,164.6 334.2,164.5 338.4,164.6 342.6,164.8 346.8,165.1 351.0,165.6 355.2,166.3 359.3,167.1 363.5,168.0 367.7,169.1 371.8,170.2 376.0,171.4 380.1,172.5 384.2,173.7 388.3,174.8 392.4,175.8 396.4,176.6 400.5,177.3 404.5,177.8 408.5,178.0 412.5,178.1 416.4,178.0 420.3,177.7 424.2,177.2 428.1,176.6 432.0,175.8 435.8,175.0 439.6,174.2 443.3,173.4 447.1,172.6 450.8,171.8 454.5,171.2 458.2,170.6 461.9,170.2 465.5,169.8 469.1,169.6 472.8,169.4 476.4,169.2 479.9,169.0 483.5,168.8 487.1,168.5 490.7,168.1 494.2,167.5 497.8,166.8 501.3,165.9 504.9,164.8 508.5,163.6 512.1,162.2 515.6,160.7"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="40.0,200.0 44.0,200.0 48.0,200.0 52.0,200.0 56.0,200.0 60.0,200.0 64.0,200.0 68.0,200.0 72.0,200.0 76.0,200.0 80.0,200.0 84.0,200.0 88.0,200.0 92.0,200.0 96.0,200.0 100.0,200.0 104.0,200.0 108.0,200.0 112.0,200.0 116.0,200.0 120.0,200.0 124.0,200.0 128.0,200.0 132.0,200.0 136.0,200.0 140.0,200.0 144.0,200.0 148.0,200.0 152.0,200.0 156.0,200.0 160.0,200.0 164.0,200.0 168.0,200.0 172.0,200.0 176.0,200.0 180.0,200.0 184.0,200.0 188.0,200.0 192.0,200.0 196.0,200.0 200.0,200.0 204.0,200.0 208.0,200.0 212.0,200.0 216.0,200.0 220.0,200.0 224.0,200.0 228.0,200.0 232.0,200.0 236.0,200.0 240.0,200.0 244.0,200.0 248.0,200.0 252.0,200.0 256.0,200.0 260.0,200.0 264.1,199.9 268.1,199.9 272.2,199.9 276.3,199.8 280.3,199.7 284.4,199.6 288.5,199.4 292.6,199.3 296.7,199.1"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="292.6,199.3 296.7,199.1 300.8,198.9 305.0,198.7 309.1,198.4 313.2,198.2 317.3,198.1 321.4,198.0 325.5,197.9 329.6,198.0 333.7,198.1 337.7,198.4 341.8,198.8 345.9,199.3 349.9,200.0 353.9,200.9 357.9,201.8 361.9,202.8 365.9,204.0 369.8,205.1 373.7,206.3 377.6,207.4 381.5,208.4 385.4,209.3 389.2,210.0 393.0,210.6 396.8,210.9 400.6,211.0 404.3,210.8 408.1,210.4 411.8,209.7 415.5,208.8 419.2,207.8 422.8,206.5 426.5,205.2 430.1,203.7 433.7,202.3 437.4,200.9 441.0,199.5 444.6,198.3 448.1,197.2 451.7,196.2 455.3,195.4 458.9,194.8 462.5,194.3 466.1,194.0 469.7,193.8 473.3,193.7 477.0,193.7 480.6,193.6 484.3,193.6 488.0,193.5 491.7,193.3 495.4,193.0 499.1,192.6 502.9,192.0 506.7,191.4 510.6,190.7"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="40.0,232.0 44.0,232.0 48.0,232.0 52.0,232.0 56.0,232.0 60.0,232.0 64.0,232.0 68.0,232.0 72.0,232.0 76.0,232.0 80.0,232.0 84.0,232.0 88.0,232.0 92.0,232.0 96.0,232.0 100.0,232.0 104.0,232.0 108.0,232.0 112.0,232.0 116.0,232.0 120.0,232.0 124.0,232.0 128.0,232.0 132.0,232.0 136.0,232.0 140.0,232.0 144.0,232.0 148.0,232.0 152.0,232.0 156.0,232.0 160.0,232.0 164.0,232.0 168.0,232.0 172.0,232.0 176.0,232.0 180.0,232.0 184.0,232.0 188.0,232.0 192.0,232.0 196.0,232.0 200.0,232.0 204.0,232.0 208.0,232.0 212.0,232.0 216.0,232.0 220.0,232.0 224.0,232.0 228.0,232.0 232.0,232.0 236.0,232.0 240.0,232.0 244.0,232.0 248.0,232.0 252.0,232.0 256.0,232.0 260.0,232.0 264.1,231.9 268.1,231.9 272.1,231.9 276.2,231.8 280.2,231.8 284.2,231.7 288.3,231.6 292.3,231.6 296.4,231.5"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="292.3,231.6 296.4,231.5 300.4,231.4 304.4,231.3 308.4,231.3 312.4,231.2 316.4,231.2 320.3,231.3 324.3,231.4 328.2,231.6 332.2,231.9 336.1,232.3 340.0,232.8 343.8,233.4 347.7,234.1 351.5,234.9 355.4,235.8 359.2,236.8 362.9,237.8 366.7,238.7 370.5,239.7 374.2,240.5 377.9,241.2 381.6,241.7 385.3,242.0 389.0,242.1 392.7,242.0 396.3,241.5 400.0,240.8 403.7,239.9 407.3,238.6 410.9,237.2 414.6,235.6 418.2,233.9 421.9,232.1 425.6,230.2 429.2,228.4 432.9,226.7 436.6,225.1 440.3,223.6 444.0,222.4 447.7,221.5 451.5,220.8 455.3,220.3 459.1,220.1 462.9,220.1 466.7,220.4 470.6,220.8 474.5,221.3 478.4,221.9 482.4,222.5 486.4,223.2 490.4,223.8 494.4,224.3 498.5,224.7 502.6,225.0 506.8,225.2 511.0,225.4"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="40.0,264.0 44.0,264.0 48.0,264.0 52.0,264.0 56.0,264.0 60.0,264.0 64.0,264.0 68.0,264.0 72.0,264.0 76.0,264.0 80.0,264.0 84.0,264.0 88.0,264.0 92.0,264.0 96.0,264.0 100.0,264.0 104.0,264.0 108.0,264.0 112.0,264.0 116.0,264.0 120.0,264.0 124.0,264.0 128.0,264.0 132.0,264.0 136.0,264.0 140.0,264.0 144.0,264.0 148.0,264.0 152.0,264.0 156.0,264.0 160.0,264.0 164.0,264.0 168.0,264.0 172.0,264.0 176.0,264.0 180.0,264.0 184.0,264.0 188.0,264.0 192.0,264.0 196.0,264.0 200.0,264.0 204.0,264.0 208.0,264.0 212.0,264.0 216.0,264.0 220.0,264.0 224.0,264.0 228.0,264.0 232.0,264.0 236.0,264.0 240.0,264.0 244.0,264.0 248.0,264.0 252.0,264.0 256.0,264.0 260.0,264.0 264.0,264.0 268.0,264.0 272.0,264.0 276.0,264.0 280.0,264.0 283.9,264.0 287.9,264.0 291.8,264.1 295.8,264.1 299.7,264.1"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="291.8,264.1 295.8,264.1 299.7,264.1 303.6,264.2 307.5,264.2 311.4,264.3 315.2,264.4 319.1,264.5 322.9,264.7 326.8,264.9 330.6,265.3 334.4,265.6 338.2,266.1 341.9,266.6 345.7,267.2 349.4,267.9 353.2,268.5 356.9,269.2 360.7,269.9 364.4,270.6 368.1,271.1 371.8,271.5 375.5,271.8 379.3,271.9 383.0,271.7 386.7,271.4 390.5,270.7 394.2,269.9 398.0,268.7 401.7,267.4 405.5,265.8 409.3,264.0 413.1,262.1 417.0,260.2 420.8,258.2 424.7,256.3 428.6,254.4 432.5,252.8 436.5,251.3 440.5,250.1 444.5,249.2 448.5,248.7 452.6,248.4 456.7,248.5 460.8,248.9 464.9,249.6 469.1,250.6 473.3,251.7 477.5,253.0 481.8,254.4 486.0,255.9 490.3,257.4 494.7,258.7 499.0,260.0 503.4,261.2 507.8,262.2 512.2,263.0 516.6,263.7"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="40.0,296.0 44.0,296.0 48.0,296.0 52.0,296.0 56.0,296.0 60.0,296.0 64.0,296.0 68.0,296.0 72.0,296.0 76.0,296.0 80.0,296.0 84.0,296.0 88.0,296.0 92.0,296.0 96.0,296.0 100.0,296.0 104.0,296.0 108.0,296.0 112.0,296.0 116.0,296.0 120.0,296.0 124.0,296.0 128.0,296.0 132.0,296.0 136.0,296.0 140.0,296.0 144.0,296.0 148.0,296.0 152.0,296.0 156.0,296.0 160.0,296.0 164.0,296.0 168.0,296.0 172.0,296.0 176.0,296.0 180.0,296.0 184.0,296.0 188.0,296.0 192.0,296.0 196.0,296.0 200.0,296.0 204.0,296.0 208.0,296.0 212.0,296.0 216.0,296.0 220.0,296.0 224.0,296.0 228.0,296.0 232.0,296.0 236.0,296.0 240.0,296.0 244.0,296.0 248.0,296.0 252.0,296.0 256.0,296.0 260.0,296.0 263.9,296.0 267.9,296.1 271.9,296.1 275.8,296.2 279.7,296.3 283.6,296.4 287.5,296.5 291.4,296.6 295.3,296.7 299.2,296.8"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="291.4,296.6 295.3,296.7 299.2,296.8 303.0,296.9 306.9,297.0 310.7,297.1 314.6,297.2 318.4,297.3 322.2,297.4 326.0,297.6 329.8,297.8 333.6,298.0 337.4,298.3 341.2,298.6 345.0,298.9 348.8,299.3 352.6,299.7 356.5,300.0 360.3,300.4 364.1,300.6 368.0,300.8 371.9,300.8 375.7,300.7 379.6,300.4 383.6,299.9 387.5,299.2 391.4,298.3 395.4,297.2 399.4,295.9 403.4,294.4 407.5,292.7 411.6,290.9 415.7,289.1 419.8,287.3 423.9,285.5 428.1,283.9 432.3,282.4 436.5,281.2 440.8,280.2 445.0,279.6 449.3,279.3 453.6,279.4 458.0,279.9 462.3,280.7 466.7,281.8 471.1,283.3 475.5,285.0 479.9,287.0 484.3,289.0 488.7,291.1 493.2,293.3 497.6,295.3 502.0,297.3 506.5,299.0 510.9,300.6 515.3,301.9 519.8,302.9 524.2,303.7"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="40.0,328.0 44.0,328.0 48.0,328.0 52.0,328.0 56.0,328.0 60.0,328.0 64.0,328.0 68.0,328.0 72.0,328.0 76.0,328.0 80.0,328.0 84.0,328.0 88.0,328.0 92.0,328.0 96.0,328.0 100.0,328.0 104.0,328.0 108.0,328.0 112.0,328.0 116.0,328.0 120.0,328.0 124.0,328.0 128.0,328.0 132.0,328.0 136.0,328.0 140.0,328.0 144.0,328.0 148.0,328.0 152.0,328.0 156.0,328.0 160.0,328.0 164.0,328.0 168.0,328.0 172.0,328.0 176.0,328.0 180.0,328.0 184.0,328.0 188.0,328.0 192.0,328.0 196.0,328.0 200.0,328.0 204.0,328.0 208.0,328.0 212.0,328.0 216.0,328.0 220.0,328.0 224.0,328.0 228.0,328.0 232.0,328.0 236.0,328.0 240.0,328.0 244.0,328.0 248.0,328.0 252.0,328.0 256.0,328.0 260.0,328.0 263.9,328.1 267.9,328.2 271.8,328.3 275.7,328.4 279.7,328.5 283.6,328.6 287.5,328.8 291.4,328.9 295.3,329.1 299.1,329.2"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="291.4,328.9 295.3,329.1 299.1,329.2 303.0,329.3 306.9,329.3 310.8,329.3 314.7,329.4 318.6,329.4 322.5,329.3 326.4,329.3 330.3,329.3 334.2,329.3 338.2,329.3 342.1,329.4 346.1,329.4 350.0,329.5 354.0,329.5 358.1,329.6 362.1,329.6 366.1,329.5 370.2,329.4 374.3,329.2 378.4,328.9 382.5,328.5 386.7,327.8 390.9,327.1 395.1,326.2 399.3,325.1 403.5,323.8 407.8,322.5 412.1,321.1 416.4,319.6 420.7,318.2 425.0,316.8 429.4,315.5 433.7,314.5 438.1,313.6 442.5,313.0 446.9,312.7 451.3,312.8 455.7,313.2 460.1,314.0 464.5,315.2 468.9,316.7 473.3,318.6 477.7,320.7 482.1,323.0 486.5,325.4 490.9,327.9 495.3,330.4 499.6,332.9 503.9,335.1 508.2,337.2 512.5,339.0 516.8,340.4 521.0,341.6 525.2,342.3 529.4,342.7"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="40.0,360.0 44.0,360.0 48.0,360.0 52.0,360.0 56.0,360.0 60.0,360.0 64.0,360.0 68.0,360.0 72.0,360.0 76.0,360.0 80.0,360.0 84.0,360.0 88.0,360.0 92.0,360.0 96.0,360.0 100.0,360.0 104.0,360.0 108.0,360.0 112.0,360.0 116.0,360.0 120.0,360.0 124.0,360.0 128.0,360.0 132.0,360.0 136.0,360.0 140.0,360.0 144.0,360.0 148.0,360.0 152.0,360.0 156.0,360.0 160.0,360.0 164.0,360.0 168.0,360.0 172.0,360.0 176.0,360.0 180.0,360.0 184.0,360.0 188.0,360.0 192.0,360.0 196.0,360.0 200.0,360.0 204.0,360.0 208.0,360.0 212.0,360.0 216.0,360.0 220.0,360.0 224.0,360.0 228.0,360.0 232.0,360.0 236.0,360.0 240.0,360.0 244.0,360.0 248.0,360.0 252.0,360.0 256.0,360.0 260.0,360.1 263.9,360.1 267.9,360.2 271.9,360.4 275.8,360.5 279.8,360.6 283.7,360.8 287.7,360.9 291.7,361.0 295.6,361.1 299.6,361.2"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="291.7,361.0 295.6,361.1 299.6,361.2 303.6,361.2 307.6,361.1 311.6,361.0 315.6,360.9 319.6,360.7 323.7,360.5 327.7,360.2 331.8,360.0 335.9,359.7 340.0,359.5 344.1,359.3 348.2,359.1 352.4,358.9 356.6,358.8 360.8,358.7 365.0,358.5 369.2,358.4 373.5,358.2 377.7,358.0 382.0,357.7 386.3,357.3 390.6,356.8 394.9,356.3 399.2,355.6 403.6,354.8 407.9,354.0 412.3,353.1 416.6,352.2 421.0,351.2 425.3,350.4 429.7,349.6 434.0,348.9 438.4,348.5 442.7,348.3 447.0,348.3 451.4,348.7 455.7,349.4 460.0,350.4 464.2,351.7 468.5,353.4 472.7,355.4 476.9,357.5 481.1,359.9 485.3,362.4 489.4,365.0 493.5,367.5 497.6,369.9 501.6,372.2 505.7,374.2 509.6,375.9 513.6,377.2 517.5,378.1 521.4,378.7 525.3,378.8 529.1,378.5"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="40.0,40.0 40.0,44.0 40.0,48.0 40.0,52.0 40.0,56.0 40.0,60.0 40.0,64.0 40.0,68.0 40.0,72.0 40.0,76.0 40.0,80.0 40.0,84.0 40.0,88.0 40.0,92.0 40.0,96.0 40.0,100.0 40.0,104.0 40.0,108.0 40.0,112.0 40.0,116.0 40.0,120.0 40.0,124.0 40.0,128.0 40.0,132.0 40.0,136.0 40.0,140.0 40.0,144.0 40.0,148.0 40.0,152.0 40.0,156.0 40.0,160.0 40.0,164.0 40.0,168.0 40.0,172.0 40.0,176.0 40.0,180.0 40.0,184.0 40.0,188.0 40.0,192.0 40.0,196.0 40.0,200.0 40.0,204.0 40.0,208.0 40.0,212.0 40.0,216.0 40.0,220.0 40.0,224.0 40.0,228.0 40.0,232.0 40.0,236.0 40.0,240.0 40.0,244.0 40.0,248.0 40.0,252.0 40.0,256.0 40.0,260.0 40.0,264.0 40.0,268.0 40.0,272.0 40.0,276.0 40.0,280.0 40.0,284.0 40.0,288.0 40.0,292.0 40.0,296.0 40.0,300.0 40.0,304.0 40.0,308.0 40.0,312.0 40.0,316.0 40.0,320.0 40.0,324.0 40.0,328.0 40.0,332.0 40.0,336.0 40.0,340.0 40.0,344.0 40.0,348.0 40.0,352.0 40.0,356.0 40.0,360.0"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="80.0,40.0 80.0,44.0 80.0,48.0 80.0,52.0 80.0,56.0 80.0,60.0 80.0,64.0 80.0,68.0 80.0,72.0 80.0,76.0 80.0,80.0 80.0,84.0 80.0,88.0 80.0,92.0 80.0,96.0 80.0,100.0 80.0,104.0 80.0,108.0 80.0,112.0 80.0,116.0 80.0,120.0 80.0,124.0 80.0,128.0 80.0,132.0 80.0,136.0 80.0,140.0 80.0,144.0 80.0,148.0 80.0,152.0 80.0,156.0 80.0,160.0 80.0,164.0 80.0,168.0 80.0,172.0 80.0,176.0 80.0,180.0 80.0,184.0 80.0,188.0 80.0,192.0 80.0,196.0 80.0,200.0 80.0,204.0 80.0,208.0 80.0,212.0 80.0,216.0 80.0,220.0 80.0,224.0 80.0,228.0 80.0,232.0 80.0,236.0 80.0,240.0 80.0,244.0 80.0,248.0 80.0,252.0 80.0,256.0 80.0,260.0 80.0,264.0 80.0,268.0 80.0,272.0 80.0,276.0 80.0,280.0 80.0,284.0 80.0,288.0 80.0,292.0 80.0,296.0 80.0,300.0 80.0,304.0 80.0,308.0 80.0,312.0 80.0,316.0 80.0,320.0 80.0,324.0 80.0,328.0 80.0,332.0 80.0,336.0 80.0,340.0 80.0,344.0 80.0,348.0 80.0,352.0 80.0,356.0 80.0,360.0"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="120.0,40.0 120.0,44.0 120.0,48.0 120.0,52.0 120.0,56.0 120.0,60.0 120.0,64.0 120.0,68.0 120.0,72.0 120.0,76.0 120.0,80.0 120.0,84.0 120.0,88.0 120.0,92.0 120.0,96.0 120.0,100.0 120.0,104.0 120.0,108.0 120.0,112.0 120.0,116.0 120.0,120.0 120.0,124.0 120.0,128.0 120.0,132.0 120.0,136.0 120.0,140.0 120.0,144.0 120.0,148.0 120.0,152.0 120.0,156.0 120.0,160.0 120.0,164.0 120.0,168.0 120.0,172.0 120.0,176.0 120.0,180.0 120.0,184.0 120.0,188.0 120.0,192.0 120.0,196.0 120.0,200.0 120.0,204.0 120.0,208.0 120.0,212.0 120.0,216.0 120.0,220.0 120.0,224.0 120.0,228.0 120.0,232.0 120.0,236.0 120.0,240.0 120.0,244.0 120.0,248.0 120.0,252.0 120.0,256.0 120.0,260.0 120.0,264.0 120.0,268.0 120.0,272.0 120.0,276.0 120.0,280.0 120.0,284.0 120.0,288.0 120.0,292.0 120.0,296.0 120.0,300.0 120.0,304.0 120.0,308.0 120.0,312.0 120.0,316.0 120.0,320.0 120.0,324.0 120.0,328.0 120.0,332.0 120.0,336.0 120.0,340.0 120.0,344.0 120.0,348.0 120.0,352.0 120.0,356.0 120.0,360.0"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="160.0,40.0 160.0,44.0 160.0,48.0 160.0,52.0 160.0,56.0 160.0,60.0 160.0,64.0 160.0,68.0 160.0,72.0 160.0,76.0 160.0,80.0 160.0,84.0 160.0,88.0 160.0,92.0 160.0,96.0 160.0,100.0 160.0,104.0 160.0,108.0 160.0,112.0 160.0,116.0 160.0,120.0 160.0,124.0 160.0,128.0 160.0,132.0 160.0,136.0 160.0,140.0 160.0,144.0 160.0,148.0 160.0,152.0 160.0,156.0 160.0,160.0 160.0,164.0 160.0,168.0 160.0,172.0 160.0,176.0 160.0,180.0 160.0,184.0 160.0,188.0 160.0,192.0 160.0,196.0 160.0,200.0 160.0,204.0 160.0,208.0 160.0,212.0 160.0,216.0 160.0,220.0 160.0,224.0 160.0,228.0 160.0,232.0 160.0,236.0 160.0,240.0 160.0,244.0 160.0,248.0 160.0,252.0 160.0,256.0 160.0,260.0 160.0,264.0 160.0,268.0 160.0,272.0 160.0,276.0 160.0,280.0 160.0,284.0 160.0,288.0 160.0,292.0 160.0,296.0 160.0,300.0 160.0,304.0 160.0,308.0 160.0,312.0 160.0,316.0 160.0,320.0 160.0,324.0 160.0,328.0 160.0,332.0 160.0,336.0 160.0,340.0 160.0,344.0 160.0,348.0 160.0,352.0 160.0,356.0 160.0,360.0"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="200.0,40.0 200.0,44.0 200.0,48.0 200.0,52.0 200.0,56.0 200.0,60.0 200.0,64.0 200.0,68.0 200.0,72.0 200.0,76.0 200.0,80.0 200.0,84.0 200.0,88.0 200.0,92.0 200.0,96.0 200.0,100.0 200.0,104.0 200.0,108.0 200.0,112.0 200.0,116.0 200.0,120.0 200.0,124.0 200.0,128.0 200.0,132.0 200.0,136.0 200.0,140.0 200.0,144.0 200.0,148.0 200.0,152.0 200.0,156.0 200.0,160.0 200.0,164.0 200.0,168.0 200.0,172.0 200.0,176.0 200.0,180.0 200.0,184.0 200.0,188.0 200.0,192.0 200.0,196.0 200.0,200.0 200.0,204.0 200.0,208.0 200.0,212.0 200.0,216.0 200.0,220.0 200.0,224.0 200.0,228.0 200.0,232.0 200.0,236.0 200.0,240.0 200.0,244.0 200.0,248.0 200.0,252.0 200.0,256.0 200.0,260.0 200.0,264.0 200.0,268.0 200.0,272.0 200.0,276.0 200.0,280.0 200.0,284.0 200.0,288.0 200.0,292.0 200.0,296.0 200.0,300.0 200.0,304.0 200.0,308.0 200.0,312.0 200.0,316.0 200.0,320.0 200.0,324.0 200.0,328.0 200.0,332.0 200.0,336.0 200.0,340.0 200.0,344.0 200.0,348.0 200.0,352.0 200.0,356.0 200.0,360.0"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="240.0,40.0 240.0,44.0 240.0,48.0 240.0,52.0 240.0,56.0 240.0,60.0 240.0,64.0 240.0,68.0 240.0,72.0 240.0,76.0 240.0,80.0 240.0,84.0 240.0,88.0 240.0,92.0 240.0,96.0 240.0,100.0 240.0,104.0 240.0,108.0 240.0,112.0 240.0,116.0 240.0,120.0 240.0,124.0 240.0,128.0 240.0,132.0 240.0,136.0 240.0,140.0 240.0,144.0 240.0,148.0 240.0,152.0 240.0,156.0 240.0,160.0 240.0,164.0 240.0,168.0 240.0,172.0 240.0,176.0 240.0,180.0 240.0,184.0 240.0,188.0 240.0,192.0 240.0,196.0 240.0,200.0 240.0,204.0 240.0,208.0 240.0,212.0 240.0,216.0 240.0,220.0 240.0,224.0 240.0,228.0 240.0,232.0 240.0,236.0 240.0,240.0 240.0,244.0 240.0,248.0 240.0,252.0 240.0,256.0 240.0,260.0 240.0,264.0 240.0,268.0 240.0,272.0 240.0,276.0 240.0,280.0 240.0,284.0 240.0,288.0 240.0,292.0 240.0,296.0 240.0,300.0 240.0,304.0 240.0,308.0 240.0,312.0 240.0,316.0 240.0,320.0 240.0,324.0 240.0,328.0 240.0,332.0 240.0,336.0 240.0,340.0 240.0,344.0 240.0,348.0 240.0,352.0 240.0,356.0 240.0,360.0"/><polyline fill="none" stroke="#1C2541" stroke-width="1" stroke-opacity=".55" points="279.7,40.6 279.7,44.6 279.7,48.6 279.7,52.6 279.7,56.6 279.7,60.6 279.7,64.5 279.7,68.5 279.7,72.5 279.7,76.5 279.7,80.4 279.7,84.4 279.7,88.4 279.7,92.3 279.7,96.3 279.8,100.3 279.8,104.2 279.8,108.2 279.9,112.2 279.9,116.1 279.9,120.1 279.9,124.1 280.0,128.0 280.0,132.0 280.0,136.0 280.1,139.9 280.1,143.9 280.1,147.9 280.2,151.9 280.2,155.8 280.2,159.8 280.3,163.8 280.3,167.8 280.3,171.7 280.3,175.7 280.3,179.7 280.3,183.7 280.3,187.7 280.3,191.7 280.3,195.7 280.3,199.7 280.3,203.7 280.3,207.7 280.3,211.7 280.3,215.7 280.3,219.7 280.3,223.7 280.2,227.8 280.2,231.8 280.2,235.8 280.2,239.8 280.1,243.8 280.1,247.9 280.1,251.9 280.0,255.9 280.0,260.0 280.0,264.0 279.9,268.0 279.9,272.0 279.9,276.1 279.8,280.1 279.8,284.2 279.8,288.2 279.8,292.2 279.7,296.3 279.7,300.3 279.7,304.3 279.7,308.4 279.7,312.4 279.7,316.4 279.7,320.4 279.7,324.5 279.7,328.5 279.7,332.5 279.7,336.5 279.7,340.6 279.7,344.6 279.7,348.6 279.7,352.6 279.8,356.6 279.8,360.6"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="318.4,39.7 318.3,43.6 318.3,47.4 318.3,51.2 318.4,55.1 318.4,58.9 318.5,62.7 318.5,66.6 318.6,70.4 318.7,74.2 318.8,78.1 319.0,81.9 319.1,85.8 319.2,89.6 319.4,93.5 319.5,97.4 319.7,101.3 319.8,105.2 320.0,109.1 320.2,113.0 320.3,116.9 320.5,120.9 320.6,124.8 320.8,128.8 320.9,132.8 321.1,136.8 321.2,140.8 321.3,144.8 321.4,148.8 321.5,152.8 321.5,156.9 321.6,160.9 321.6,165.0 321.7,169.1 321.7,173.2 321.7,177.3 321.6,181.4 321.6,185.5 321.5,189.7 321.5,193.8 321.4,198.0 321.3,202.1 321.2,206.3 321.1,210.4 320.9,214.6 320.8,218.8 320.7,222.9 320.5,227.1 320.3,231.3 320.2,235.4 320.0,239.6 319.9,243.8 319.7,247.9 319.5,252.1 319.4,256.2 319.2,260.4 319.1,264.5 319.0,268.6 318.8,272.8 318.7,276.9 318.6,281.0 318.5,285.1 318.5,289.2 318.4,293.2 318.4,297.3 318.3,301.3 318.3,305.4 318.3,309.4 318.4,313.4 318.4,317.4 318.4,321.4 318.5,325.4 318.6,329.4 318.7,333.3 318.8,337.3 318.9,341.2 319.0,345.1 319.2,349.0 319.3,352.9 319.5,356.8 319.6,360.7"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="356.5,36.7 356.6,40.4 356.7,44.2 356.9,48.0 357.1,51.8 357.3,55.6 357.6,59.5 357.9,63.3 358.2,67.2 358.5,71.2 358.8,75.1 359.2,79.1 359.5,83.2 359.9,87.2 360.2,91.3 360.6,95.4 360.9,99.5 361.2,103.6 361.6,107.8 361.9,112.0 362.2,116.2 362.4,120.4 362.7,124.7 362.9,129.0 363.1,133.3 363.3,137.6 363.4,141.9 363.5,146.2 363.6,150.6 363.6,154.9 363.6,159.3 363.6,163.7 363.5,168.0 363.4,172.4 363.3,176.8 363.1,181.1 362.9,185.5 362.7,189.8 362.5,194.2 362.2,198.5 361.9,202.8 361.6,207.1 361.2,211.4 360.9,215.7 360.6,220.0 360.2,224.2 359.9,228.4 359.5,232.6 359.2,236.8 358.8,240.9 358.5,245.1 358.2,249.2 357.9,253.2 357.6,257.3 357.4,261.3 357.1,265.3 356.9,269.2 356.7,273.2 356.6,277.1 356.5,281.0 356.4,284.8 356.4,288.7 356.4,292.5 356.4,296.3 356.5,300.0 356.6,303.8 356.7,307.5 356.8,311.2 357.0,314.9 357.3,318.6 357.5,322.3 357.8,325.9 358.1,329.6 358.4,333.2 358.7,336.8 359.0,340.5 359.4,344.1 359.7,347.7 360.1,351.4 360.4,355.0 360.8,358.7"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="395.6,34.9 396.0,39.1 396.4,43.3 396.9,47.6 397.3,51.9 397.9,56.2 398.4,60.5 399.0,64.9 399.5,69.4 400.1,73.8 400.7,78.3 401.2,82.8 401.8,87.3 402.3,91.9 402.8,96.5 403.3,101.0 403.7,105.6 404.2,110.2 404.5,114.8 404.9,119.4 405.2,124.0 405.4,128.6 405.6,133.1 405.7,137.7 405.8,142.2 405.8,146.8 405.8,151.3 405.7,155.8 405.6,160.2 405.4,164.7 405.1,169.1 404.8,173.4 404.5,177.8 404.1,182.0 403.7,186.3 403.2,190.5 402.8,194.7 402.2,198.8 401.7,202.9 401.2,207.0 400.6,211.0 400.0,214.9 399.5,218.9 398.9,222.7 398.3,226.6 397.8,230.4 397.3,234.1 396.8,237.8 396.3,241.5 395.9,245.2 395.5,248.8 395.2,252.4 394.9,255.9 394.6,259.4 394.4,262.9 394.3,266.4 394.2,269.9 394.2,273.3 394.2,276.7 394.3,280.1 394.4,283.6 394.6,287.0 394.8,290.4 395.1,293.8 395.4,297.2 395.8,300.6 396.2,304.1 396.7,307.5 397.1,311.0 397.7,314.5 398.2,318.0 398.7,321.5 399.3,325.1 399.9,328.7 400.4,332.3 401.0,336.0 401.5,339.7 402.1,343.4 402.6,347.2 403.1,351.0 403.6,354.8"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="436.8,32.8 437.5,37.6 438.3,42.4 439.0,47.2 439.8,52.0 440.5,56.8 441.3,61.6 442.1,66.4 442.8,71.1 443.5,75.9 444.2,80.6 444.8,85.3 445.4,90.0 445.9,94.6 446.4,99.2 446.8,103.8 447.2,108.3 447.5,112.8 447.7,117.2 447.8,121.6 447.9,125.9 447.9,130.2 447.8,134.4 447.6,138.6 447.4,142.6 447.1,146.7 446.7,150.7 446.3,154.6 445.8,158.5 445.3,162.3 444.7,166.0 444.0,169.7 443.3,173.4 442.6,177.0 441.9,180.5 441.1,184.0 440.4,187.4 439.6,190.9 438.8,194.2 438.1,197.6 437.4,200.9 436.6,204.2 436.0,207.4 435.3,210.6 434.7,213.9 434.2,217.1 433.7,220.3 433.3,223.5 432.9,226.7 432.6,229.9 432.4,233.1 432.2,236.3 432.1,239.6 432.1,242.8 432.2,246.1 432.3,249.4 432.5,252.8 432.8,256.2 433.2,259.6 433.6,263.1 434.1,266.6 434.6,270.2 435.2,273.8 435.8,277.4 436.5,281.2 437.2,284.9 438.0,288.8 438.7,292.7 439.5,296.6 440.2,300.6 441.0,304.7 441.8,308.8 442.5,313.0 443.2,317.2 443.9,321.5 444.6,325.9 445.2,330.3 445.7,334.7 446.2,339.2 446.7,343.7 447.0,348.3"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="480.2,50.1 481.2,54.8 482.1,59.4 482.9,63.9 483.8,68.4 484.6,72.8 485.4,77.1 486.1,81.4 486.8,85.6 487.4,89.8 487.9,93.9 488.4,97.9 488.8,101.8 489.0,105.7 489.3,109.5 489.4,113.3 489.4,116.9 489.3,120.5 489.2,124.1 489.0,127.6 488.6,131.0 488.2,134.4 487.8,137.7 487.2,141.0 486.6,144.2 485.9,147.4 485.1,150.6 484.4,153.7 483.5,156.8 482.7,159.9 481.8,162.9 480.9,166.0 479.9,169.0 479.0,172.1 478.1,175.1 477.2,178.2 476.4,181.2 475.5,184.3 474.8,187.4 474.0,190.6 473.3,193.7 472.7,196.9 472.2,200.2 471.7,203.5 471.3,206.8 471.0,210.2 470.8,213.7 470.6,217.2 470.6,220.8 470.6,224.4 470.8,228.1 471.0,231.9 471.3,235.7 471.7,239.6 472.1,243.6 472.7,247.6 473.3,251.7 474.0,255.9 474.7,260.1 475.5,264.5 476.3,268.8 477.2,273.3 478.1,277.8 479.0,282.3 479.9,287.0 480.8,291.6 481.7,296.3 482.6,301.1 483.5,305.9 484.3,310.7 485.1,315.6 485.8,320.5 486.5,325.4 487.2,330.4 487.7,335.3 488.2,340.3 488.6,345.2 488.9,350.2 489.2,355.1 489.3,360.1 489.4,365.0"/><polyline fill="none" stroke="#3A7D7B" stroke-width="1.3" points="524.5,58.2 525.4,61.9 526.2,65.5 526.9,69.1 527.6,72.5 528.2,76.0 528.7,79.3 529.1,82.6 529.5,85.9 529.8,89.1 529.9,92.3 530.0,95.4 530.0,98.5 529.9,101.5 529.7,104.6 529.3,107.6 529.0,110.6 528.5,113.6 527.9,116.5 527.3,119.5 526.6,122.5 525.8,125.5 525.0,128.5 524.1,131.6 523.2,134.6 522.3,137.7 521.3,140.9 520.4,144.1 519.4,147.3 518.4,150.6 517.5,153.9 516.5,157.3 515.6,160.7 514.8,164.2 514.0,167.8 513.2,171.4 512.5,175.2 511.9,178.9 511.4,182.8 510.9,186.7 510.6,190.7 510.3,194.8 510.1,199.0 510.0,203.2 510.0,207.5 510.1,211.9 510.3,216.3 510.6,220.8 511.0,225.4 511.4,230.0 512.0,234.7 512.6,239.4 513.3,244.2 514.0,249.0 514.8,253.9 515.7,258.8 516.6,263.7 517.5,268.7 518.5,273.7 519.4,278.7 520.4,283.7 521.4,288.7 522.3,293.7 523.3,298.7 524.2,303.7 525.0,308.7 525.9,313.7 526.6,318.6 527.3,323.5 527.9,328.4 528.5,333.2 529.0,338.0 529.4,342.7 529.7,347.4 529.9,352.1 530.0,356.6 530.0,361.1 529.9,365.6 529.7,369.9 529.5,374.2 529.1,378.5"/><line x1="280" y1="26" x2="280" y2="374" stroke="#1C2541" stroke-dasharray="3 4" stroke-width="1"/><text x="40" y="26" font-family="Instrument Sans,Helvetica,sans-serif" font-size="13" letter-spacing="1.5" fill="#1C2541">THE RECORD</text><text x="520" y="26" text-anchor="end" font-family="Instrument Sans,Helvetica,sans-serif" font-size="13" letter-spacing="1.5" fill="#3A7D7B">THE SCREEN</text><text x="40" y="388" font-family="Newsreader,Georgia,serif" font-style="italic" font-size="15" fill="#1C2541">what happened</text><text x="520" y="388" text-anchor="end" font-family="Newsreader,Georgia,serif" font-style="italic" font-size="15" fill="#3A7D7B">what the film shows</text></svg></div>
   </div>
-</section>
+  <div class="stats" id="stats"></div>
+  <div class="bars" id="bars"></div>
+</div></section>
 
-<!-- LEGEND + DATABASE (re-rendered by the filters) -->
-<div id="app"></div>
+<section id="database" style="margin-top:96px"><div class="wrap rule" style="padding-top:56px">
+  <p class="eyebrow">The database</p>
+  <h2 class="h2">16 scored films</h2>
+  <div id="app"></div>
+</div></section>
 
-<!-- METHOD -->
-<section id="method" class="band"><div class="wrap" style="padding-top:90px;padding-bottom:20px">
+<section id="method" style="margin-top:96px"><div class="wrap rule" style="padding-top:56px">
   <p class="eyebrow">The method · locked</p>
   <h2 class="h2">How a film gets scored</h2>
-  <p class="lede">Every rule exists to stop one researcher from quietly bending his own data: fixed tier weights, a fixed claim quota, hard ceilings on what can ever count as fully verified, and a floor rule that stops an invented premise hiding behind accurate scenery.</p>
+  <p class="lede">Every rule exists to stop one researcher from quietly bending his own data: fixed tier weights, a fixed claim quota, hard ceilings on what can ever count as fully verified, and a floor rule that stops a film hiding an invented premise behind accurate scenery.</p>
   <div class="fx-grid">
       <article class="fx-card">
-        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="40" y="16" width="160" height="8" fill="#5d5148"/><rect class="fx-row fx-n0" x="40" y="16" width="150" height="8" fill="#ff5a3c" fill-opacity=".8"/><rect x="40" y="28" width="160" height="8" fill="#5d5148"/><rect class="fx-row fx-n1" x="40" y="28" width="141" height="8" fill="#ff5a3c" fill-opacity=".8"/><rect x="40" y="40" width="160" height="8" fill="#5d5148"/><rect class="fx-row fx-n2" x="40" y="40" width="132" height="8" fill="#ff5a3c" fill-opacity=".8"/><rect x="40" y="52" width="160" height="8" fill="#5d5148"/><rect class="fx-row fx-n3" x="40" y="52" width="123" height="8" fill="#ff5a3c" fill-opacity=".8"/><rect x="40" y="64" width="160" height="8" fill="#5d5148"/><rect class="fx-row fx-n4" x="40" y="64" width="114" height="8" fill="#ff5a3c" fill-opacity=".8"/><rect x="40" y="76" width="160" height="8" fill="#5d5148"/><rect class="fx-row fx-n5" x="40" y="76" width="105" height="8" fill="#ff5a3c" fill-opacity=".8"/><rect x="40" y="88" width="160" height="8" fill="#5d5148"/><rect class="fx-row fx-n6" x="40" y="88" width="96" height="8" fill="#ff5a3c" fill-opacity=".8"/><text x="120" y="106" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">claims logged in the order they appear</text></svg></div>
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="40" y="16" width="160" height="8" fill="#c3c7d0"/><rect class="fx-row fx-n0" x="40" y="16" width="150" height="8" fill="#3A7D7B" fill-opacity=".8"/><rect x="40" y="28" width="160" height="8" fill="#c3c7d0"/><rect class="fx-row fx-n1" x="40" y="28" width="141" height="8" fill="#3A7D7B" fill-opacity=".8"/><rect x="40" y="40" width="160" height="8" fill="#c3c7d0"/><rect class="fx-row fx-n2" x="40" y="40" width="132" height="8" fill="#3A7D7B" fill-opacity=".8"/><rect x="40" y="52" width="160" height="8" fill="#c3c7d0"/><rect class="fx-row fx-n3" x="40" y="52" width="123" height="8" fill="#3A7D7B" fill-opacity=".8"/><rect x="40" y="64" width="160" height="8" fill="#c3c7d0"/><rect class="fx-row fx-n4" x="40" y="64" width="114" height="8" fill="#3A7D7B" fill-opacity=".8"/><rect x="40" y="76" width="160" height="8" fill="#c3c7d0"/><rect class="fx-row fx-n5" x="40" y="76" width="105" height="8" fill="#3A7D7B" fill-opacity=".8"/><rect x="40" y="88" width="160" height="8" fill="#c3c7d0"/><rect class="fx-row fx-n6" x="40" y="88" width="96" height="8" fill="#3A7D7B" fill-opacity=".8"/><text x="120" y="106" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#7d869b">claims logged in the order they appear</text></svg></div>
         <div class="fx-body">
           <p class="fx-num">01</p>
           <h4 class="fx-name">Extracting the claims</h4>
@@ -278,7 +266,7 @@ section{scroll-margin-top:80px}
         </div>
       </article>
       <article class="fx-card">
-        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="22" y="24" width="30" height="56" fill="#5d5148"/><rect class="fx-rise fx-r0" x="22" y="24" width="30" height="56" fill="#ff5a3c"/><text x="37" y="18" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#ece6da">5</text><text x="37" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">SPINE</text><rect x="64" y="34" width="30" height="46" fill="#5d5148"/><rect class="fx-rise fx-r1" x="64" y="34" width="30" height="46" fill="#ff5a3c"/><text x="79" y="28" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#ece6da">4</text><text x="79" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">SOUL</text><rect x="106" y="45" width="30" height="35" fill="#5d5148"/><rect class="fx-rise fx-r2" x="106" y="45" width="30" height="35" fill="#ff5a3c"/><text x="121" y="39" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#ece6da">3</text><text x="121" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">SKELETON</text><rect x="148" y="56" width="30" height="24" fill="#5d5148"/><rect class="fx-rise fx-r3" x="148" y="56" width="30" height="24" fill="#ff5a3c"/><text x="163" y="50" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#ece6da">2</text><text x="163" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">FLESH</text><rect x="190" y="67" width="30" height="13" fill="#5d5148"/><rect class="fx-rise fx-r4" x="190" y="67" width="30" height="13" fill="#ff5a3c"/><text x="205" y="61" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#ece6da">1</text><text x="205" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">SKIN</text></svg></div>
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="22" y="24" width="30" height="56" fill="#c3c7d0"/><rect class="fx-rise fx-r0" x="22" y="24" width="30" height="56" fill="#3A7D7B"/><text x="37" y="18" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#1C2541">5</text><text x="37" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#7d869b">SPINE</text><rect x="64" y="34" width="30" height="46" fill="#c3c7d0"/><rect class="fx-rise fx-r1" x="64" y="34" width="30" height="46" fill="#3A7D7B"/><text x="79" y="28" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#1C2541">4</text><text x="79" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#7d869b">SOUL</text><rect x="106" y="45" width="30" height="35" fill="#c3c7d0"/><rect class="fx-rise fx-r2" x="106" y="45" width="30" height="35" fill="#3A7D7B"/><text x="121" y="39" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#1C2541">3</text><text x="121" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#7d869b">SKELETON</text><rect x="148" y="56" width="30" height="24" fill="#c3c7d0"/><rect class="fx-rise fx-r3" x="148" y="56" width="30" height="24" fill="#3A7D7B"/><text x="163" y="50" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#1C2541">2</text><text x="163" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#7d869b">FLESH</text><rect x="190" y="67" width="30" height="13" fill="#c3c7d0"/><rect class="fx-rise fx-r4" x="190" y="67" width="30" height="13" fill="#3A7D7B"/><text x="205" y="61" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#1C2541">1</text><text x="205" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#7d869b">SKIN</text></svg></div>
         <div class="fx-body">
           <p class="fx-num">02</p>
           <h4 class="fx-name">The five weight tiers</h4>
@@ -287,7 +275,7 @@ section{scroll-margin-top:80px}
         </div>
       </article>
       <article class="fx-card">
-        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect class="fx-seg fx-s0" x="25" y="40" width="17.0" height="26" fill="#ff5a3c" fill-opacity=".85"/><text x="34.5" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">10%</text><rect class="fx-seg fx-s1" x="44.0" y="40" width="26.5" height="26" fill="#ff5a3c" fill-opacity=".85"/><text x="58.25" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">15%</text><rect class="fx-seg fx-s2" x="72.5" y="40" width="45.5" height="26" fill="#a69c90" fill-opacity=".85"/><text x="96.25" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">25%</text><rect class="fx-seg fx-s3" x="120.0" y="40" width="45.5" height="26" fill="#a69c90" fill-opacity=".85"/><text x="143.75" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">25%</text><rect class="fx-seg fx-s4" x="167.5" y="40" width="45.5" height="26" fill="#ece6da" fill-opacity=".85"/><text x="191.25" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">25%</text><text x="120" y="24" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#ece6da">every film, same shape</text><text x="214" y="96" text-anchor="end" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">skin absorbs rounding</text></svg></div>
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect class="fx-seg fx-s0" x="25" y="40" width="17.0" height="26" fill="#3A7D7B" fill-opacity=".85"/><text x="34.5" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#7d869b">10%</text><rect class="fx-seg fx-s1" x="44.0" y="40" width="26.5" height="26" fill="#3A7D7B" fill-opacity=".85"/><text x="58.25" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#7d869b">15%</text><rect class="fx-seg fx-s2" x="72.5" y="40" width="45.5" height="26" fill="#7d869b" fill-opacity=".85"/><text x="96.25" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#7d869b">25%</text><rect class="fx-seg fx-s3" x="120.0" y="40" width="45.5" height="26" fill="#7d869b" fill-opacity=".85"/><text x="143.75" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#7d869b">25%</text><rect class="fx-seg fx-s4" x="167.5" y="40" width="45.5" height="26" fill="#1C2541" fill-opacity=".85"/><text x="191.25" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#7d869b">25%</text><text x="120" y="24" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#1C2541">every film, same shape</text><text x="214" y="96" text-anchor="end" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#7d869b">skin absorbs rounding</text></svg></div>
         <div class="fx-body">
           <p class="fx-num">03</p>
           <h4 class="fx-name">The claim quota</h4>
@@ -296,7 +284,7 @@ section{scroll-margin-top:80px}
         </div>
       </article>
       <article class="fx-card">
-        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><line x1="30" y1="54" x2="210" y2="54" stroke="#5d5148" stroke-width="2"/><line x1="30" y1="48" x2="30" y2="60" stroke="#5d5148" stroke-width="2"/><text x="30" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#a69c90">0</text><line x1="75" y1="48" x2="75" y2="60" stroke="#5d5148" stroke-width="2"/><text x="75" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#a69c90">.25</text><line x1="120" y1="48" x2="120" y2="60" stroke="#5d5148" stroke-width="2"/><text x="120" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#a69c90">.50</text><line x1="165" y1="48" x2="165" y2="60" stroke="#5d5148" stroke-width="2"/><text x="165" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#a69c90">.75</text><line x1="210" y1="48" x2="210" y2="60" stroke="#5d5148" stroke-width="2"/><text x="210" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#a69c90">1</text><circle class="fx-step5" cx="30" cy="54" r="7" fill="#ff5a3c"/><text x="30" y="30" text-anchor="start" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">fabricated</text><text x="210" y="30" text-anchor="end" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">fully verified</text><text x="120" y="98" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">finer 0.1 steps only for real nuance</text></svg></div>
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><line x1="30" y1="54" x2="210" y2="54" stroke="#c3c7d0" stroke-width="2"/><line x1="30" y1="48" x2="30" y2="60" stroke="#c3c7d0" stroke-width="2"/><text x="30" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#7d869b">0</text><line x1="75" y1="48" x2="75" y2="60" stroke="#c3c7d0" stroke-width="2"/><text x="75" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#7d869b">.25</text><line x1="120" y1="48" x2="120" y2="60" stroke="#c3c7d0" stroke-width="2"/><text x="120" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#7d869b">.50</text><line x1="165" y1="48" x2="165" y2="60" stroke="#c3c7d0" stroke-width="2"/><text x="165" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#7d869b">.75</text><line x1="210" y1="48" x2="210" y2="60" stroke="#c3c7d0" stroke-width="2"/><text x="210" y="76" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#7d869b">1</text><circle class="fx-step5" cx="30" cy="54" r="7" fill="#3A7D7B"/><text x="30" y="30" text-anchor="start" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#7d869b">fabricated</text><text x="210" y="30" text-anchor="end" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#7d869b">fully verified</text><text x="120" y="98" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#7d869b">finer 0.1 steps only for real nuance</text></svg></div>
         <div class="fx-body">
           <p class="fx-num">04</p>
           <h4 class="fx-name">The accuracy scale</h4>
@@ -305,7 +293,7 @@ section{scroll-margin-top:80px}
         </div>
       </article>
       <article class="fx-card">
-        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="26" y="26" width="34" height="54" fill="none" stroke="#5d5148"/><rect class="fx-cap fx-c0" x="26" y="31.4" width="34" height="48.6" fill="#ff5a3c" fill-opacity=".75"/><line x1="23" y1="31.4" x2="63" y2="31.4" stroke="#ece6da" stroke-width="1.5"/><text x="43" y="20" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ece6da">0.9</text><text x="43" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">dialogue</text><rect x="78" y="26" width="34" height="54" fill="none" stroke="#5d5148"/><rect class="fx-cap fx-c1" x="78" y="39.5" width="34" height="40.5" fill="#ff5a3c" fill-opacity=".75"/><line x1="75" y1="39.5" x2="115" y2="39.5" stroke="#ece6da" stroke-width="1.5"/><text x="95" y="20" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ece6da">0.75</text><text x="95" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">motivation</text><rect x="130" y="26" width="34" height="54" fill="none" stroke="#5d5148"/><rect class="fx-cap fx-c2" x="130" y="47.6" width="34" height="32.4" fill="#ff5a3c" fill-opacity=".75"/><line x1="127" y1="47.6" x2="167" y2="47.6" stroke="#ece6da" stroke-width="1.5"/><text x="147" y="20" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ece6da">0.6</text><text x="147" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">covert op</text><rect x="182" y="26" width="34" height="54" fill="none" stroke="#5d5148"/><rect class="fx-cap fx-c3" x="182" y="63.8" width="34" height="16.2" fill="#ff5a3c" fill-opacity=".75"/><line x1="179" y1="63.8" x2="219" y2="63.8" stroke="#ece6da" stroke-width="1.5"/><text x="199" y="20" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ece6da">0.3</text><text x="199" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">mythology</text></svg></div>
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="26" y="26" width="34" height="54" fill="none" stroke="#c3c7d0"/><rect class="fx-cap fx-c0" x="26" y="31.4" width="34" height="48.6" fill="#3A7D7B" fill-opacity=".75"/><line x1="23" y1="31.4" x2="63" y2="31.4" stroke="#1C2541" stroke-width="1.5"/><text x="43" y="20" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#1C2541">0.9</text><text x="43" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#7d869b">dialogue</text><rect x="78" y="26" width="34" height="54" fill="none" stroke="#c3c7d0"/><rect class="fx-cap fx-c1" x="78" y="39.5" width="34" height="40.5" fill="#3A7D7B" fill-opacity=".75"/><line x1="75" y1="39.5" x2="115" y2="39.5" stroke="#1C2541" stroke-width="1.5"/><text x="95" y="20" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#1C2541">0.75</text><text x="95" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#7d869b">motivation</text><rect x="130" y="26" width="34" height="54" fill="none" stroke="#c3c7d0"/><rect class="fx-cap fx-c2" x="130" y="47.6" width="34" height="32.4" fill="#3A7D7B" fill-opacity=".75"/><line x1="127" y1="47.6" x2="167" y2="47.6" stroke="#1C2541" stroke-width="1.5"/><text x="147" y="20" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#1C2541">0.6</text><text x="147" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#7d869b">covert op</text><rect x="182" y="26" width="34" height="54" fill="none" stroke="#c3c7d0"/><rect class="fx-cap fx-c3" x="182" y="63.8" width="34" height="16.2" fill="#3A7D7B" fill-opacity=".75"/><line x1="179" y1="63.8" x2="219" y2="63.8" stroke="#1C2541" stroke-width="1.5"/><text x="199" y="20" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#1C2541">0.3</text><text x="199" y="94" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#7d869b">mythology</text></svg></div>
         <div class="fx-body">
           <p class="fx-num">05</p>
           <h4 class="fx-name">Ceilings by claim type</h4>
@@ -314,7 +302,7 @@ section{scroll-margin-top:80px}
         </div>
       </article>
       <article class="fx-card">
-        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><text x="120" y="34" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#ece6da">D = 1 − (Σ wᵢaᵢ) / (Σ wᵢ)</text><rect x="44" y="50" width="20" height="40" fill="#5d5148"/><rect class="fx-rise fx-r0" x="44" y="82.0" width="20" height="8.0" fill="#ff5a3c"/><rect x="76" y="58" width="20" height="32" fill="#5d5148"/><rect class="fx-rise fx-r1" x="76" y="64.4" width="20" height="25.6" fill="#ff5a3c"/><rect x="108" y="66" width="20" height="24" fill="#5d5148"/><rect class="fx-rise fx-r2" x="108" y="66" width="20" height="24" fill="#ff5a3c"/><rect x="140" y="74" width="20" height="16" fill="#5d5148"/><rect class="fx-rise fx-r3" x="140" y="82.0" width="20" height="8.0" fill="#ff5a3c"/><rect x="172" y="82" width="20" height="8" fill="#5d5148"/><rect class="fx-rise fx-r4" x="172" y="82" width="20" height="8" fill="#ff5a3c"/><text x="120" y="104" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">weight × accuracy, tier by tier</text></svg></div>
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><text x="120" y="34" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#1C2541">D = 1 − (Σ wᵢaᵢ) / (Σ wᵢ)</text><rect x="44" y="50" width="20" height="40" fill="#c3c7d0"/><rect class="fx-rise fx-r0" x="44" y="82.0" width="20" height="8.0" fill="#3A7D7B"/><rect x="76" y="58" width="20" height="32" fill="#c3c7d0"/><rect class="fx-rise fx-r1" x="76" y="64.4" width="20" height="25.6" fill="#3A7D7B"/><rect x="108" y="66" width="20" height="24" fill="#c3c7d0"/><rect class="fx-rise fx-r2" x="108" y="66" width="20" height="24" fill="#3A7D7B"/><rect x="140" y="74" width="20" height="16" fill="#c3c7d0"/><rect class="fx-rise fx-r3" x="140" y="82.0" width="20" height="8.0" fill="#3A7D7B"/><rect x="172" y="82" width="20" height="8" fill="#c3c7d0"/><rect class="fx-rise fx-r4" x="172" y="82" width="20" height="8" fill="#3A7D7B"/><text x="120" y="104" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#7d869b">weight × accuracy, tier by tier</text></svg></div>
         <div class="fx-body">
           <p class="fx-num">06</p>
           <h4 class="fx-name">The D score</h4>
@@ -323,7 +311,7 @@ section{scroll-margin-top:80px}
         </div>
       </article>
       <article class="fx-card">
-        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="30" y="64" width="80" height="22" fill="#5d5148"/><text x="70" y="79" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#a69c90">MODERATE</text><text x="124" y="80" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="13" fill="#ff5a3c">→</text><g class="fx-flip"><rect x="140" y="64" width="80" height="22" fill="#ff5a3c"/><text x="180" y="79" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="700" fill="#2b211c">HIGH</text></g><g class="fx-flag"><text x="120" y="26" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ece6da">spine claim scores 0.2 or less</text></g><g transform="translate(106,34)"><rect x="0" y="0" width="3" height="22" fill="#ece6da"/><rect x="7" y="0" width="3" height="22" fill="#ece6da"/><rect class="fx-stump" x="14" y="0" width="3" height="22" fill="#ece6da"/></g></svg></div>
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="30" y="64" width="80" height="22" fill="#c3c7d0"/><text x="70" y="79" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#7d869b">MODERATE</text><text x="124" y="80" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="13" fill="#3A7D7B">→</text><g class="fx-flip"><rect x="140" y="64" width="80" height="22" fill="#3A7D7B"/><text x="180" y="79" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="700" fill="#E8E1D3">HIGH</text></g><g class="fx-flag"><text x="120" y="26" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#1C2541">spine claim scores 0.2 or less</text></g><g transform="translate(106,34)"><rect x="0" y="0" width="3" height="22" fill="#1C2541"/><rect x="7" y="0" width="3" height="22" fill="#1C2541"/><rect class="fx-stump" x="14" y="0" width="3" height="22" fill="#1C2541"/></g></svg></div>
         <div class="fx-body">
           <p class="fx-num">07</p>
           <h4 class="fx-name">The Spine-Floor Rule</h4>
@@ -332,7 +320,7 @@ section{scroll-margin-top:80px}
         </div>
       </article>
       <article class="fx-card">
-        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><circle cx="32" cy="46" r="17" fill="none" stroke="#5d5148" stroke-width="1.5"/><circle class="fx-ring fx-c0" cx="32" cy="46" r="17" fill="none" stroke="#ff5a3c" stroke-width="2.5" stroke-dasharray="107" stroke-dashoffset="107" transform="rotate(-90 32 46)"/><text x="32" y="51" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#ece6da">S</text><text x="32" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">simplification</text><circle cx="84" cy="46" r="17" fill="none" stroke="#5d5148" stroke-width="1.5"/><circle class="fx-ring fx-c1" cx="84" cy="46" r="17" fill="none" stroke="#ff5a3c" stroke-width="2.5" stroke-dasharray="107" stroke-dashoffset="107" transform="rotate(-90 84 46)"/><text x="84" y="51" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#ece6da">P</text><text x="84" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">portrayal</text><circle cx="136" cy="46" r="17" fill="none" stroke="#5d5148" stroke-width="1.5"/><circle class="fx-ring fx-c2" cx="136" cy="46" r="17" fill="none" stroke="#ff5a3c" stroke-width="2.5" stroke-dasharray="107" stroke-dashoffset="107" transform="rotate(-90 136 46)"/><text x="136" y="51" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#ece6da">F</text><text x="136" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">framing</text><circle cx="188" cy="46" r="17" fill="none" stroke="#5d5148" stroke-width="1.5"/><circle class="fx-ring fx-c3" cx="188" cy="46" r="17" fill="none" stroke="#ff5a3c" stroke-width="2.5" stroke-dasharray="107" stroke-dashoffset="107" transform="rotate(-90 188 46)"/><text x="188" y="51" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#ece6da">E</text><text x="188" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#a69c90">exaggeration</text><text x="120" y="100" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">how it was shown, not whether it was true</text></svg></div>
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><circle cx="32" cy="46" r="17" fill="none" stroke="#c3c7d0" stroke-width="1.5"/><circle class="fx-ring fx-c0" cx="32" cy="46" r="17" fill="none" stroke="#3A7D7B" stroke-width="2.5" stroke-dasharray="107" stroke-dashoffset="107" transform="rotate(-90 32 46)"/><text x="32" y="51" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#1C2541">S</text><text x="32" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#7d869b">simplification</text><circle cx="84" cy="46" r="17" fill="none" stroke="#c3c7d0" stroke-width="1.5"/><circle class="fx-ring fx-c1" cx="84" cy="46" r="17" fill="none" stroke="#3A7D7B" stroke-width="2.5" stroke-dasharray="107" stroke-dashoffset="107" transform="rotate(-90 84 46)"/><text x="84" y="51" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#1C2541">P</text><text x="84" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#7d869b">portrayal</text><circle cx="136" cy="46" r="17" fill="none" stroke="#c3c7d0" stroke-width="1.5"/><circle class="fx-ring fx-c2" cx="136" cy="46" r="17" fill="none" stroke="#3A7D7B" stroke-width="2.5" stroke-dasharray="107" stroke-dashoffset="107" transform="rotate(-90 136 46)"/><text x="136" y="51" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#1C2541">F</text><text x="136" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#7d869b">framing</text><circle cx="188" cy="46" r="17" fill="none" stroke="#c3c7d0" stroke-width="1.5"/><circle class="fx-ring fx-c3" cx="188" cy="46" r="17" fill="none" stroke="#3A7D7B" stroke-width="2.5" stroke-dasharray="107" stroke-dashoffset="107" transform="rotate(-90 188 46)"/><text x="188" y="51" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#1C2541">E</text><text x="188" y="80" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="6" font-weight="500" fill="#7d869b">exaggeration</text><text x="120" y="100" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#7d869b">how it was shown, not whether it was true</text></svg></div>
         <div class="fx-body">
           <p class="fx-num">08</p>
           <h4 class="fx-name">The four feel dimensions</h4>
@@ -341,7 +329,7 @@ section{scroll-margin-top:80px}
         </div>
       </article>
       <article class="fx-card">
-        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="30" y="40" width="80" height="26" fill="none" stroke="#5d5148"/><text x="70" y="57" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#a69c90">weight 1</text><text x="124" y="58" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="13" fill="#ff5a3c">→</text><g class="fx-flip"><rect x="140" y="40" width="80" height="26" fill="none" stroke="#ff5a3c"/><text x="180" y="57" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#ff5a3c">weight 2</text></g><g class="fx-flag"><text x="120" y="92" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ece6da">only with citable evidence from the film</text></g><text x="120" y="24" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">never on genre assumption</text></svg></div>
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="30" y="40" width="80" height="26" fill="none" stroke="#c3c7d0"/><text x="70" y="57" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#7d869b">weight 1</text><text x="124" y="58" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="13" fill="#3A7D7B">→</text><g class="fx-flip"><rect x="140" y="40" width="80" height="26" fill="none" stroke="#3A7D7B"/><text x="180" y="57" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="8" font-weight="500" fill="#3A7D7B">weight 2</text></g><g class="fx-flag"><text x="120" y="92" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#1C2541">only with citable evidence from the film</text></g><text x="120" y="24" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#7d869b">never on genre assumption</text></svg></div>
         <div class="fx-body">
           <p class="fx-num">09</p>
           <h4 class="fx-name">Evidence-gated weights</h4>
@@ -350,7 +338,7 @@ section{scroll-margin-top:80px}
         </div>
       </article>
       <article class="fx-card">
-        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><text x="120" y="30" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="11" font-weight="600" fill="#ece6da">L = (wS·S + wP·P + wF·F + wE·E)</text><text x="120" y="46" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="11" font-weight="600" fill="#ece6da">/ (wS + wP + wF + wE)</text><rect x="40" y="64" width="160" height="12" fill="#5d5148"/><rect class="fx-grow" x="40" y="64" width="112" height="12" fill="#ff5a3c"/><text x="120" y="98" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">one feel score out of four readings</text></svg></div>
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><text x="120" y="30" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="11" font-weight="600" fill="#1C2541">L = (wS·S + wP·P + wF·F + wE·E)</text><text x="120" y="46" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="11" font-weight="600" fill="#1C2541">/ (wS + wP + wF + wE)</text><rect x="40" y="64" width="160" height="12" fill="#c3c7d0"/><rect class="fx-grow" x="40" y="64" width="112" height="12" fill="#3A7D7B"/><text x="120" y="98" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#7d869b">one feel score out of four readings</text></svg></div>
         <div class="fx-body">
           <p class="fx-num">10</p>
           <h4 class="fx-name">The L score</h4>
@@ -359,7 +347,7 @@ section{scroll-margin-top:80px}
         </div>
       </article>
       <article class="fx-card">
-        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="30" y="40" width="108" height="26" fill="#ff5a3c"/><text x="84" y="58" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="10" font-weight="700" fill="#2b211c">D  ×  0.6</text><rect x="142" y="40" width="72" height="26" fill="#ece6da" fill-opacity=".85"/><text x="178" y="58" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="10" font-weight="700" fill="#2b211c">L × 0.4</text><text x="120" y="26" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="10" font-weight="600" fill="#ece6da">RPDI = 0.6(D) + 0.4(L)</text><g class="fx-flag"><text x="120" y="92" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#a69c90">facts come first, feeling second</text></g></svg></div>
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><rect x="30" y="40" width="108" height="26" fill="#3A7D7B"/><text x="84" y="58" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="10" font-weight="700" fill="#E8E1D3">D  ×  0.6</text><rect x="142" y="40" width="72" height="26" fill="#1C2541" fill-opacity=".85"/><text x="178" y="58" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="10" font-weight="700" fill="#E8E1D3">L × 0.4</text><text x="120" y="26" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="10" font-weight="600" fill="#1C2541">RPDI = 0.6(D) + 0.4(L)</text><g class="fx-flag"><text x="120" y="92" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#7d869b">facts come first, feeling second</text></g></svg></div>
         <div class="fx-body">
           <p class="fx-num">11</p>
           <h4 class="fx-name">RPDI</h4>
@@ -368,7 +356,7 @@ section{scroll-margin-top:80px}
         </div>
       </article>
       <article class="fx-card">
-        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><line x1="20" y1="58" x2="220" y2="58" stroke="#5d5148" stroke-width="1.5"/><line x1="120" y1="30" x2="120" y2="86" stroke="#ece6da" stroke-opacity=".5" stroke-dasharray="3 3"/><text x="120" y="24" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="10" font-weight="600" fill="#ece6da">Gap = D − L</text><text x="56" y="100" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ff5a3c">gaslighting</text><text x="186" y="100" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#ff5a3c">sanitized fabrication</text><circle class="fx-dot fx-d0" cx="44" cy="58" r="4" fill="#ff5a3c"/><circle class="fx-dot fx-d1" cx="62" cy="58" r="4" fill="#ff5a3c"/><circle class="fx-dot fx-d2" cx="74" cy="58" r="4" fill="#ff5a3c"/><circle class="fx-dot fx-d3" cx="88" cy="58" r="4" fill="#ff5a3c"/><circle class="fx-dot fx-d4" cx="100" cy="58" r="4" fill="#ff5a3c"/><circle class="fx-dot fx-d5" cx="112" cy="58" r="4" fill="#ff5a3c"/><circle class="fx-dot fx-d6" cx="170" cy="58" r="4" fill="#ece6da"/></svg></div>
+        <div class="fx-art"><svg viewBox="0 0 240 110" width="100%" height="100%" aria-hidden="true"><line x1="20" y1="58" x2="220" y2="58" stroke="#c3c7d0" stroke-width="1.5"/><line x1="120" y1="30" x2="120" y2="86" stroke="#1C2541" stroke-opacity=".5" stroke-dasharray="3 3"/><text x="120" y="24" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="10" font-weight="600" fill="#1C2541">Gap = D − L</text><text x="56" y="100" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#3A7D7B">gaslighting</text><text x="186" y="100" text-anchor="middle" font-family="Instrument Sans,Helvetica,Arial,sans-serif" font-size="7" font-weight="500" fill="#3A7D7B">sanitized fabrication</text><circle class="fx-dot fx-d0" cx="44" cy="58" r="4" fill="#3A7D7B"/><circle class="fx-dot fx-d1" cx="62" cy="58" r="4" fill="#3A7D7B"/><circle class="fx-dot fx-d2" cx="74" cy="58" r="4" fill="#3A7D7B"/><circle class="fx-dot fx-d3" cx="88" cy="58" r="4" fill="#3A7D7B"/><circle class="fx-dot fx-d4" cx="100" cy="58" r="4" fill="#3A7D7B"/><circle class="fx-dot fx-d5" cx="112" cy="58" r="4" fill="#3A7D7B"/><circle class="fx-dot fx-d6" cx="170" cy="58" r="4" fill="#1C2541"/></svg></div>
         <div class="fx-body">
           <p class="fx-num">12</p>
           <h4 class="fx-name">The Gap</h4>
@@ -377,48 +365,45 @@ section{scroll-margin-top:80px}
         </div>
       </article>
       </div>
-    
 </div></section>
 
-<!-- 3D -->
-<section id="plane" class="band" style="margin-top:70px"><div class="wrap" style="padding-top:90px">
+<section id="plane" style="margin-top:96px"><div class="wrap rule" style="padding-top:56px">
   <p class="eyebrow">Fig. 1 · the 16 films in 3D</p>
   <h2 class="h2">Every film sits on one tilted plane.</h2>
-  <p class="lede">RPDI is 0.6&thinsp;D + 0.4&thinsp;L, so every score lies on a flat plane above the D–L floor. What separates the films is where they stand on that floor. The red line is D = L. Almost every film falls on the side where the portrayal runs ahead of the facts: the negative Gap.</p>
+  <p class="lede">RPDI is 0.6&thinsp;D + 0.4&thinsp;L, so every score lies on a flat plane above the D–L floor. What separates the films is where they stand on that floor. The teal line is D = L. Almost every film falls on the side where the portrayal runs ahead of the facts.</p>
   <figure class="f3d">
-    <div class="key"><span><i style="background:#ff5a3c"></i>Extreme gaslighting</span><span><i style="background:#e9e3d6"></i>Gaslighting</span><span><i style="background:#f0a64a"></i>Sanitized fabrication</span><span><i style="background:#5fd38a"></i>Honest / consistent</span></div>
+    <div class="key"><span><i style="background:#1C2541"></i>Extreme gaslighting</span><span><i style="background:#8a90a3"></i>Gaslighting</span><span><i style="background:#3A7D7B"></i>Honest / consistent</span><span><i style="background:#F3EEE4;border:2px solid #3A7D7B;width:10px;height:10px;box-sizing:border-box"></i>Sanitized fabrication</span></div>
     <canvas id="plane-gl" aria-label="3D scatter of the 16 films: D across, L going back, RPDI up"></canvas>
-    <figcaption><b style="color:#fff">Fig. 1</b> — D across, L going back, RPDI up. Saving Private Ryan and U-571 score the same, so they share a point. Drag sideways to turn it.</figcaption>
+    <figcaption><b>Fig. 1</b>: D across, L going back, RPDI up. Saving Private Ryan and U-571 score the same, so they share a point. Drag sideways to turn it.</figcaption>
   </figure>
 </div></section>
 
-<!-- FINDINGS -->
-<section id="findings" class="band" style="margin-top:90px"><div class="wrap" style="padding-top:90px" id="findings-in"></div></section>
+<section id="findings" style="margin-top:96px"><div class="wrap rule" style="padding-top:56px" id="findings-in"></div></section>
 
-<!-- WRITE-UP -->
-<section id="writeup" class="band" style="margin-top:90px"><div class="wrap" style="padding-top:90px">
+<section id="writeup" style="margin-top:96px"><div class="wrap rule" style="padding-top:56px">
   <p class="eyebrow">The write-up · 11 parts on Medium</p>
   <h2 class="h2">How it was built, mistakes included.</h2>
   <div class="posts"><a class="post" href="https://pathiarjun15.medium.com/part-1-the-movie-rating-that-had-to-exist-9460731cd9d5" target="_blank" rel="noopener"><span class="n">01</span><span class="t">There's No Rating for How Much a Movie Bends History. So I Started Building One.</span></a><a class="post" href="https://pathiarjun15.medium.com/part-2-not-every-mistake-in-a-movie-deserves-the-same-punishment-f55eb8812bd4" target="_blank" rel="noopener"><span class="n">02</span><span class="t">Not Every Historical Mistake in a Movie Deserves the Same Punishment</span></a><a class="post" href="https://pathiarjun15.medium.com/part-3-why-cinematic-portrayal-mattered-more-than-youd-expect-2d1d3fefb01f" target="_blank" rel="noopener"><span class="n">03</span><span class="t">A Film Can Get the Facts Right and Still Show Them Wrong</span></a><a class="post" href="https://pathiarjun15.medium.com/part-4-how-i-accidently-discovered-the-distance-between-truth-and-portrayal-b929852fd073" target="_blank" rel="noopener"><span class="n">04</span><span class="t">A Spreadsheet Mistake Showed Me the Gap Between History and How Films Show It</span></a><a class="post" href="https://pathiarjun15.medium.com/part-5-the-rule-that-kept-breaking-itself-390edbc52db8" target="_blank" rel="noopener"><span class="n">05</span><span class="t">Why My Film-Scoring Rule Kept Breaking Itself</span></a><a class="post" href="https://pathiarjun15.medium.com/part-6-how-the-new-tool-introduced-a-new-rule-c516c3ee4b9c" target="_blank" rel="noopener"><span class="n">06</span><span class="t">Building a Scoring Tool Exposed a Loophole in My Own Rules</span></a><a class="post" href="https://pathiarjun15.medium.com/part-7-scoring-dhurandhar-1-the-first-real-test-16bb30ad817f" target="_blank" rel="noopener"><span class="n">07</span><span class="t">How Historically Accurate Is Dhurandhar? Scoring It Claim by Claim</span></a><a class="post" href="https://pathiarjun15.medium.com/part-8-four-films-down-so-is-the-tool-d19964a8f2cc" target="_blank" rel="noopener"><span class="n">08</span><span class="t">Two Scored Films Lost to a Bug, and the Tool I Rebuilt After</span></a><a class="post" href="https://pathiarjun15.medium.com/part-9-the-hollywood-scores-and-the-gap-revamp-b09832f7cb60" target="_blank" rel="noopener"><span class="n">09</span><span class="t">What Happens When You Score a Film That Was Built to Be Accurate</span></a><a class="post" href="https://pathiarjun15.medium.com/part-10-the-ai-automation-stress-test-03123c512058" target="_blank" rel="noopener"><span class="n">10</span><span class="t">Can AI Score a Film's Historical Accuracy? I Let Gemini Try</span></a><a class="post" href="https://pathiarjun15.medium.com/part-11-everything-rpdi-is-all-at-once-48f0fdc6560c" target="_blank" rel="noopener"><span class="n">11</span><span class="t">16 Films, One Index: What I Learned Measuring How Movies Bend History</span></a></div>
 </div></section>
 
-<!-- FOOTER -->
-<footer class="band" style="margin-top:90px"><div class="wrap foot">
+<footer style="margin-top:96px"><div class="wrap rule foot">
   <div>
-    <div class="serif" style="font-size:28px;font-weight:700">RPDI</div>
-    <p style="color:var(--mut);font-size:14px;line-height:1.7;max-width:460px;margin:10px 0 0">Reality-Perception Distortion Index. Built and scored by Arjun Pathi, 2026. The data, rules and tool are all open.</p>
-    <div class="mail"><code id="mail">pathiarjun15@gmail.com</code><button class="pill dark" id="copy" type="button">Copy email</button></div>
+    <div style="font:600 30px/1 var(--serif)">RPDI</div>
+    <p style="color:var(--ink-70);font-size:15px;line-height:1.7;max-width:460px;margin:12px 0 0">Reality-Perception Distortion Index. Built and scored by Arjun Pathi, 2026. The data, rules and tool are all open.</p>
+    <div class="mail"><code id="mail">pathiarjun15@gmail.com</code><button class="btn" id="copy" type="button">Copy email</button></div>
   </div>
   <div>
     <p class="eyebrow" style="margin-bottom:14px">Links</p>
     <div class="links">
-      <a class="pill dark" href="https://github.com/asvp1508/rpdi" target="_blank" rel="noopener">GitHub</a>
-      <a class="pill dark" href="https://pathiarjun15.medium.com/" target="_blank" rel="noopener">Medium</a>
-      <a class="pill dark" href="https://arjun-pathi-portfolio.vercel.app/rpdi-tool/" target="_blank" rel="noopener">Scoring tool</a>
-      <a class="pill dark" href="https://arjun-pathi-portfolio.vercel.app/" target="_blank" rel="noopener">Portfolio</a>
+      <a class="btn" href="https://github.com/asvp1508/rpdi" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://pathiarjun15.medium.com/" target="_blank" rel="noopener">Medium</a>
+      <a class="btn" href="https://arjun-pathi-portfolio.vercel.app/rpdi-tool/" target="_blank" rel="noopener">Scoring tool</a>
+      <a class="btn" href="https://arjun-pathi-portfolio.vercel.app/" target="_blank" rel="noopener">Portfolio</a>
     </div>
   </div>
 </div></footer>
+
+<div class="modal" id="modal"></div>
 
 <script>
 const FILMS = [
@@ -599,237 +584,136 @@ const FILMS = [
     color:"#00C853" }
 ];
 window.RPDI_FILMS = FILMS;
-function getRPDIColor(rpdi) {
-  if (rpdi < 0.25) return "#00C853";
-  if (rpdi < 0.50) return "#FFD600";
-  if (rpdi < 0.75) return "#FF6D00";
-  return "#D50000";
-}
-function stars(n) { return "⭐".repeat(n) + "☆".repeat(5 - n); }
-
-function glowBar(value, color, label) {
-  return `<div style="margin-bottom:8px;">
-    <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px;color:#888;" class="mono">
-      <span>${label}</span><span style="color:${color}">${value.toFixed(3)}</span>
-    </div>
-    <div class="glow-bar-bg"><div class="glow-bar-fill" style="width:${Math.min(100,Math.abs(value)*100)}%;background:${color};box-shadow:0 0 8px ${color};"></div></div>
-  </div>`;
-}
-
-function stressBadge(f, big) {
-  if (!f.stressTest) return '';
-  const sz = big ? 13 : 11;
-  const ai = f.stressTest !== "plain";
-  const label = ai ? "AI stress test" : "Stress test";
-  const tip = ai ? "AI stress test score: scored with AI assistance to test the method, not part of the hand-scored set" : "Stress test score: scored to test the method, not part of the main set";
-  return `<span title="${tip}" style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;padding:2px 7px;border-radius:999px;border:1px solid #B388FF55;background:#B388FF14;color:#B388FF;font-size:${big?11:10}px;letter-spacing:0.5px;vertical-align:middle;white-space:nowrap;" class="mono"><svg width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6L4.5 18.5A2 2 0 0 0 6.2 21.5h11.6a2 2 0 0 0 1.7-3L14 9V3"/><path d="M7 15h10"/></svg>${label}</span>`;
-}
-
-function filmCardHTML(f) {
-  const color = getRPDIColor(f.rpdi);
-  const posterHTML = f.poster
-    ? `<div style="margin:-20px -20px 14px;border-radius:20px 20px 0 0;overflow:hidden;aspect-ratio:2/3;">
-        <img src="${f.poster}" alt="${f.title} poster" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" />
-      </div>`
-    : '';
-  return `<div class="film-card" data-id="${f.id}">
-    ${posterHTML}
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
-      <div>
-        <div style="font-size:13px;color:#555;margin-bottom:4px;" class="mono">${f.language} · ${f.year}${stressBadge(f)}</div>
-        <div style="font-size:16px;font-weight:700;color:#fff;line-height:1.3;" class="serif">${f.title}</div>
-      </div>
-      <div style="background:${color}18;border:1px solid ${color}44;border-radius:8px;padding:6px 10px;text-align:center;min-width:60px;flex-shrink:0;margin-left:12px;">
-        <div style="font-size:18px;font-weight:800;color:${color};" class="mono">${f.rpdi.toFixed(3)}</div>
-        <div style="font-size:9px;color:#666;text-transform:uppercase;letter-spacing:1px;">RPDI</div>
-      </div>
-    </div>
-    <div style="font-size:12px;color:#555;margin-bottom:14px;" class="mono">dir. ${f.director}</div>
-    ${glowBar(f.d, "#4ECDC4", "Fact Score (D)")}
-    ${glowBar(f.l, "#FF6B6B", "Feel Score (L)")}
-    ${glowBar(f.gap, color, "Gap")}
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid #1a1a1a;">
-      <div style="font-size:10px;color:${color};background:${color}15;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;" class="mono">${f.rpdiClass}</div>
-      <div style="font-size:11px;color:#555;" class="mono">IMDb ${f.imdb} · ${stars(f.confidence)}</div>
-    </div>
-  </div>`;
-}
-
-function modalHTML(f) {
-  if (!f) return "";
-  const color = getRPDIColor(f.rpdi);
-  const scores = [
-    { label: "RPDI", value: f.rpdi.toFixed(3), color },
-    { label: "Gap", value: f.gap.toFixed(3), color: getRPDIColor(f.gap) },
-    { label: "D Score", value: f.d.toFixed(3), color: "#4ECDC4" },
-    { label: "L Score", value: f.l.toFixed(3), color: "#FF6B6B" },
-  ];
-  const posterThumb = f.poster
-    ? `<img src="${f.poster}" alt="${f.title} poster" style="width:72px;height:108px;object-fit:cover;border-radius:8px;border:1px solid #222;flex-shrink:0;margin-right:16px;" />`
-    : '';
-  return `<div class="modal-box" style="border:1px solid ${color}44;" onclick="event.stopPropagation()">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;">
-      <div style="display:flex;align-items:flex-start;">
-        ${posterThumb}
-        <div>
-          <div style="font-size:12px;color:#555;margin-bottom:6px;" class="mono">${f.country} · ${f.language} · ${f.year} · ${f.runtime} min${stressBadge(f, true)}</div>
-          <h2 style="font-size:26px;font-weight:700;color:#fff;margin:0;line-height:1.2;" class="serif">${f.title}</h2>
-          <div style="font-size:13px;color:#666;margin-top:6px;" class="mono">Directed by ${f.director}</div>
-        </div>
-      </div>
-      <button onclick="closeModal()" style="background:#1a1a1a;border:1px solid #333;color:#fff;width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:16px;flex-shrink:0;margin-left:16px;">×</button>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;">
-      ${scores.map(s => `<div style="background:#111;border:1px solid #1f1f1f;border-radius:10px;padding:14px 12px;text-align:center;">
-        <div style="font-size:22px;font-weight:800;color:${s.color};" class="mono">${s.value}</div>
-        <div style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:1px;margin-top:4px;">${s.label}</div>
-      </div>`).join("")}
-    </div>
-    <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
-      <div style="background:${color}15;border:1px solid ${color}33;border-radius:6px;padding:6px 12px;font-size:11px;color:${color};text-transform:uppercase;letter-spacing:0.5px;" class="mono">RPDI: ${f.rpdiClass}</div>
-      <div style="background:#ffffff0a;border:1px solid #1f1f1f;border-radius:6px;padding:6px 12px;font-size:11px;color:#888;" class="mono">Gap: ${f.gapClass}</div>
-      <div style="background:#ffffff0a;border:1px solid #1f1f1f;border-radius:6px;padding:6px 12px;font-size:11px;color:#888;" class="mono">Confidence: ${stars(f.confidence)}</div>
-      <div style="background:#ffffff0a;border:1px solid #1f1f1f;border-radius:6px;padding:6px 12px;font-size:11px;color:#888;" class="mono">IMDb: ${f.imdb}</div>
-    </div>
-    <div style="background:#111;border-radius:10px;padding:16px;margin-bottom:20px;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div><div style="font-size:10px;color:#444;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;" class="mono">Historical Subject</div><div style="font-size:13px;color:#aaa;">${f.subject}</div></div>
-        <div><div style="font-size:10px;color:#444;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;" class="mono">Historical Period</div><div style="font-size:13px;color:#aaa;">${f.period}</div></div>
-        <div><div style="font-size:10px;color:#444;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;" class="mono">Lead Cast</div><div style="font-size:13px;color:#aaa;">${f.cast.join(", ")}</div></div>
-        <div><div style="font-size:10px;color:#444;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;" class="mono">Streaming</div><div style="font-size:13px;color:#aaa;">${f.streaming}</div></div>
-      </div>
-    </div>
-    <div style="margin-bottom:20px;">
-      <div style="font-size:11px;color:#444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;" class="mono">Top Distortions</div>
-      ${f.distortions.map((d,i) => `<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;padding:10px 12px;background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;">
-        <div style="width:20px;height:20px;border-radius:4px;background:${color}20;border:1px solid ${color}44;display:flex;align-items:center;justify-content:center;font-size:10px;color:${color};flex-shrink:0;" class="mono">${i+1}</div>
-        <div style="font-size:13px;color:#888;line-height:1.5;">${d}</div>
-      </div>`).join("")}
-    </div>
-    <div style="background:#111;border:1px solid #1a1a1a;border-radius:10px;padding:16px;">
-      <div style="font-size:10px;color:#444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;" class="mono">Analysis</div>
-      <p style="font-size:13px;color:#888;line-height:1.7;margin:0;">${f.summary}</p>
-    </div>
-  </div>`;
-}
-
-
-
-let state = { filter: "all", search: "", sortBy: "rpdi-desc", selectedFilm: null };
-const CLS = [["Extreme Gaslighting","#ff5a3c"],["Gaslighting","#e9e3d6"],["Honest / Consistent","#5fd38a"],["Sanitized Fabrication","#f0a64a"]];
+const INK = "#1C2541", INK2 = "#3A7D7B";
+// RPDI classes run from the second ink (faithful) to the first ink (invented)
+const LEVELS = [
+  { key: "minimal",  name: "Minimal",  range: "0.00–0.24", note: "Factual and honest",     fill: "#3A7D7B", text: "#F3EEE4", min: 0,    max: 0.25 },
+  { key: "moderate", name: "Moderate", range: "0.25–0.49", note: "Some dramatisation",     fill: "#6F8E95", text: "#F3EEE4", min: 0.25, max: 0.5 },
+  { key: "high",     name: "High",     range: "0.50–0.74", note: "Significant invention",  fill: "#3C4866", text: "#F3EEE4", min: 0.5,  max: 0.75 },
+  { key: "extreme",  name: "Extreme",  range: "0.75–1.00", note: "Historical fabrication", fill: "#1C2541", text: "#F3EEE4", min: 0.75, max: 2 },
+];
+const level = v => LEVELS.find(l => v >= l.min && v < l.max) || LEVELS[0];
 const short = t => ({"All the President's Men":"APM","Rocketry: The Nambi Effect":"Rocketry","Saving Private Ryan":"SPR","The Kashmir Files":"Kashmir Files","Bajirao Mastani":"Bajirao","Mohenjo Daro":"Mohenjo","Sardar Udham":"Udham","Dhurandhar 1":"Dhurandhar"})[t] || t;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);
 
-function getFiltered() {
-  let list = FILMS.filter(f => {
-    if (state.search) { const s = state.search.toLowerCase(); return f.title.toLowerCase().includes(s) || f.director.toLowerCase().includes(s) || f.language.toLowerCase().includes(s); }
-    if (state.filter === "minimal") return f.rpdi < 0.25;
-    if (state.filter === "moderate") return f.rpdi >= 0.25 && f.rpdi < 0.50;
-    if (state.filter === "high") return f.rpdi >= 0.50 && f.rpdi < 0.75;
-    if (state.filter === "extreme") return f.rpdi >= 0.75;
-    return true;
-  });
-  list.sort((a, b) => state.sortBy === "rpdi" ? a.rpdi - b.rpdi : state.sortBy === "rpdi-desc" ? b.rpdi - a.rpdi : state.sortBy === "gap" ? b.gap - a.gap : state.sortBy === "year" ? b.year - a.year : state.sortBy === "imdb" ? b.imdb - a.imdb : 0);
-  return list;
+function stressTag(f) {
+  if (!f.stressTest) return "";
+  const ai = f.stressTest !== "plain";
+  return `<span class="tag" title="${ai ? "Scored with AI assistance to test the method" : "Scored to test the method"}">${ai ? "AI stress test" : "Stress test"}</span>`;
+}
+function mbar(label, v, color, signed) {
+  const w = Math.min(100, Math.abs(v) * 100);
+  const pos = signed ? (v < 0 ? `left:${50 - w / 2}%;width:${w / 2}%` : `left:50%;width:${w / 2}%`) : `width:${w}%`;
+  return `<div class="mbar"><span>${label}</span><span class="tr${signed ? " gap" : ""}"><i style="${pos};background:${color}"></i></span><b>${v.toFixed(3)}</b></div>`;
 }
 
-/* ---------- dashboard in the hero (drawn once from the real data) ---------- */
-function dashboard() {
-  const avg = FILMS.reduce((s, f) => s + f.rpdi, 0) / FILMS.length;
-  const gas = FILMS.filter(f => f.gapClass.includes("Gaslighting")).length;
-  const top = FILMS.reduce((m, f) => f.rpdi > m.rpdi ? f : m), low = FILMS.reduce((m, f) => f.rpdi < m.rpdi ? f : m);
-  const sorted = [...FILMS].sort((a, b) => b.rpdi - a.rpdi);
-  const W = 640, H = 210, pad = 26, bw = (W - pad) / sorted.length;
-  const bars = sorted.map((f, i) => { const h = f.rpdi * (H - 46), x = pad + i * bw + 3, y = H - 34 - h, c = getRPDIColor(f.rpdi);
-    return `<g><title>${f.title}: ${f.rpdi.toFixed(3)}</title><rect x="${x}" y="${y}" width="${bw - 6}" height="${h}" rx="3" fill="${c}" opacity=".9"/>
-      <text x="${x + (bw - 6) / 2}" y="${H - 20}" transform="rotate(-38 ${x + (bw - 6) / 2} ${H - 20})" text-anchor="end" font-size="9" fill="#8f8882" font-family="Inter">${short(f.title)}</text></g>`; }).join("");
-  const grid = [0.25, 0.5, 0.75].map(v => `<line x1="${pad}" x2="${W}" y1="${H - 34 - v * (H - 46)}" y2="${H - 34 - v * (H - 46)}" stroke="rgba(255,255,255,.07)"/><text x="0" y="${H - 31 - v * (H - 46)}" font-size="9" fill="#5c5753" font-family="DM Mono">${v.toFixed(2)}</text>`).join("");
-  const counts = CLS.map(([n, c]) => [n, c, FILMS.filter(f => f.gapClass === n).length]);
-  document.getElementById("dash-cards").innerHTML = `
-    <div class="card"><div class="k">Average RPDI (16 films)</div><div class="v">${avg.toFixed(3)}<small>moderate</small></div><div class="ext">Range <b>${low.rpdi.toFixed(3)}</b> to <b>${top.rpdi.toFixed(3)}</b></div></div>
-    <div class="card"><div class="k">Films where the feel outruns the facts</div><div class="v">${gas}/${FILMS.length}<small>${Math.round(gas / FILMS.length * 100)}%</small></div><div class="ext">Negative Gap: gaslighting or extreme gaslighting</div></div>
-    <div class="card classes" style="grid-row:span 2"><div class="k" style="margin-bottom:6px">Gap classes</div>
-      ${counts.map(([n, c, k]) => `<div class="row"><span>${n}</span><span class="bar"><i style="width:${k / FILMS.length * 100}%;background:${c}"></i></span><b>${k}</b></div>`).join("")}
-      <div class="ext" style="margin-top:10px">Most distorted: <b>${top.title}</b> (${top.rpdi.toFixed(3)})<br>Least: <b>${low.title}</b> (${low.rpdi.toFixed(3)})</div></div>
-    <div class="card chart"><div class="hd"><span>RPDI by film</span><span class="mono" style="color:#8f8882;font-size:11px">0 = faithful · 1 = invented</span></div>
-      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="RPDI score for each of the 16 films, highest first">${grid}${bars}</svg></div>`;
+/* top: numbers and the RPDI-by-film chart, drawn from the data */
+function drawTop() {
+  const n = FILMS.length, avg = FILMS.reduce((s, f) => s + f.rpdi, 0) / n;
+  const neg = FILMS.filter(f => f.gap < -0.05).length, pos = FILMS.filter(f => f.gap > 0.05).length;
+  const claims = FILMS.reduce((s, f) => s + (f.claims || 20), 0);
+  document.getElementById("stats").innerHTML = [
+    [n, "historical films, Indian and Hollywood"],
+    [avg.toFixed(3), "average RPDI: moderate distortion"],
+    [`${neg}/${n}`, "films whose portrayal runs ahead of their facts (negative Gap)"],
+    [pos, "films that invent but tell it calmly (positive Gap)"],
+  ].map(([v, k]) => `<div class="stat"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("");
+  const s = [...FILMS].sort((a, b) => b.rpdi - a.rpdi), W = 1152, H = 230, base = H - 46, top = 14, bw = W / s.length;
+  const y = v => base - v * (base - top);
+  const grid = [0, 0.25, 0.5, 0.75, 1].map(v => `<line x1="0" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(28,37,65,${v ? .12 : .9})"/>`).join("");
+  const bars = s.map((f, i) => { const L = level(f.rpdi), x = i * bw + 6, w = bw - 12;
+    return `<g><title>${esc(f.title)}: ${f.rpdi.toFixed(3)}</title><rect x="${x}" y="${y(f.rpdi)}" width="${w}" height="${base - y(f.rpdi)}" fill="${L.fill}"/>
+      <text x="${x + w / 2}" y="${y(f.rpdi) - 6}" text-anchor="middle" font-size="12" fill="${INK}" font-family="Instrument Sans,sans-serif">${f.rpdi.toFixed(2)}</text>
+      <text x="${x + w / 2}" y="${base + 18}" text-anchor="middle" font-size="12" fill="rgba(28,37,65,.72)" font-family="Instrument Sans,sans-serif">${esc(short(f.title))}</text></g>`; }).join("");
+  document.getElementById("bars").innerHTML = `<div class="hd"><span>RPDI by film, highest first</span><span>0 = faithful to the record · 1 = invented</span></div>
+    <div style="overflow-x:auto"><svg viewBox="0 0 ${W} ${H}" style="min-width:760px" role="img" aria-label="RPDI score for each of the 16 films">${grid}${bars}</svg></div>
+    <div class="scale">${LEVELS.map(l => `<div><i style="background:${l.fill}"></i><b>${l.name} · ${l.range}</b>${l.note}</div>`).join("")}</div>`;
 }
 
-/* ---------- legend + database ---------- */
+/* database */
+let state = { filter: "all", search: "", sortBy: "rpdi-desc", sel: null };
+function filtered() {
+  const q = state.search.toLowerCase();
+  let list = FILMS.filter(f => q ? (f.title + " " + f.director + " " + f.language).toLowerCase().includes(q) : state.filter === "all" || level(f.rpdi).key === state.filter);
+  const by = { "rpdi": (a, b) => a.rpdi - b.rpdi, "rpdi-desc": (a, b) => b.rpdi - a.rpdi, "gap": (a, b) => b.gap - a.gap, "year": (a, b) => b.year - a.year, "imdb": (a, b) => b.imdb - a.imdb }[state.sortBy];
+  return list.sort(by);
+}
+function card(f) {
+  const L = level(f.rpdi);
+  return `<article class="film" tabindex="0" data-id="${f.id}">
+    <div class="poster">${f.poster ? `<img src="${f.poster}" alt="${esc(f.title)} poster" loading="lazy">` : ""}</div>
+    <div class="meta"><div class="t">${esc(f.title)}</div><div class="s">${f.rpdi.toFixed(3)}</div></div>
+    <div class="sub2">${esc(f.language)} · ${f.year} · dir. ${esc(f.director)}${stressTag(f)}</div>
+    <span class="cls" style="background:${L.fill};color:${L.text}">${L.name} distortion</span>
+    ${mbar("Fact D", f.d, INK)}${mbar("Feel L", f.l, INK2)}${mbar("Gap", f.gap, f.gap < 0 ? INK : INK2, true)}
+  </article>`;
+}
+function modal(f) {
+  const L = level(f.rpdi);
+  return `<div class="mbox" role="dialog" aria-modal="true" aria-label="${esc(f.title)}" onclick="event.stopPropagation()">
+    <div class="mtop">${f.poster ? `<img src="${f.poster}" alt="">` : ""}
+      <div><div class="sub2" style="font-size:13px;color:var(--ink-55)">${esc(f.country)} · ${esc(f.language)} · ${f.year} · ${f.runtime} min${stressTag(f)}</div>
+      <h3>${esc(f.title)}</h3><div class="sub2" style="font-size:14px;color:var(--ink-70);margin-top:6px">Directed by ${esc(f.director)}</div>
+      <span class="cls" style="display:inline-block;margin-top:10px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;background:${L.fill};color:${L.text}">${L.name} distortion · ${esc(f.gapClass)}</span></div>
+      <button class="x" onclick="closeModal()" aria-label="Close">×</button></div>
+    <div class="mnums">${[["RPDI", f.rpdi], ["Fact D", f.d], ["Feel L", f.l], ["Gap", f.gap]].map(([k, v]) => `<div><b>${v.toFixed(3)}</b><span>${k}</span></div>`).join("")}</div>
+    <div class="facts">
+      <div><div class="k">Subject</div>${esc(f.subject)}</div><div><div class="k">Period</div>${esc(f.period)}</div>
+      <div><div class="k">Lead cast</div>${esc(f.cast.join(", "))}</div><div><div class="k">Streaming</div>${esc(f.streaming)}</div>
+      <div><div class="k">IMDb</div>${f.imdb}</div><div><div class="k">Confidence</div>${f.confidence} of 5</div>
+    </div>
+    <div class="mh" style="margin-top:24px">Biggest distortions</div>
+    <ol class="dl">${f.distortions.map(d => `<li>${esc(d)}</li>`).join("")}</ol>
+    <div class="mh" style="margin-top:22px">Scores</div><p style="margin:4px 0 0;font-size:14px;line-height:1.6;color:var(--ink-70)">${esc(f.summary)}</p>
+  </div>`;
+}
 function render() {
-  const filtered = getFiltered();
+  const list = filtered();
   document.getElementById("app").innerHTML = `
-    <div class="band"><div class="wrap"><div class="legend">
-      ${[["0.00 – 0.24","Minimal","#00C853","Factual and honest"],["0.25 – 0.49","Moderate","#FFD600","Some dramatisation"],["0.50 – 0.74","High","#FF6D00","Significant invention"],["0.75 – 1.00","Extreme","#D50000","Historical fabrication"]].map(s => `
-        <div style="padding:14px 16px;border-radius:12px;background:${s[2]}0a;border:1px solid ${s[2]}26;">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div style="width:8px;height:8px;border-radius:50%;background:${s[2]};box-shadow:0 0 8px ${s[2]};"></div><span style="font-size:11px;color:${s[2]};text-transform:uppercase;letter-spacing:1px;" class="mono">${s[1]} distortion</span></div>
-          <div style="font-size:16px;color:#fff;font-weight:600;" class="mono">${s[0]}</div><div style="font-size:12px;color:#8a8580;margin-top:2px;">${s[3]}</div>
-        </div>`).join("")}
-    </div></div></div>
-    <section id="database" class="band"><div class="wrap" style="padding-top:80px">
-      <p class="eyebrow">The database</p>
-      <h2 class="h2">16 scored films</h2>
-      <div style="display:flex;gap:10px;margin:30px 0 22px;flex-wrap:wrap;align-items:center;">
-        <input id="searchInput" value="${state.search}" placeholder="Search films, directors..." style="background:#0d0a09;border:1px solid #1d1816;border-radius:999px;padding:10px 16px;color:#fff;font-size:13px;outline:none;width:230px;max-width:100%" />
-        <div style="display:flex;gap:6px;flex-wrap:wrap;">
-          ${[["all","All"],["minimal","Minimal"],["moderate","Moderate"],["high","High"],["extreme","Extreme"]].map(f => `<button class="filter-pill ${state.filter===f[0] ? 'active' : ''}" data-filter="${f[0]}">${f[1]}</button>`).join("")}
-        </div>
-        <select id="sortSelect" style="background:#0d0a09;border:1px solid #1d1816;border-radius:999px;padding:10px 14px;color:#aaa;font-size:12px;outline:none;cursor:pointer;margin-left:auto;" class="mono">
-          ${[["rpdi-desc","RPDI, highest first"],["rpdi","RPDI, lowest first"],["gap","Gap, highest first"],["year","Newest first"],["imdb","IMDb, highest first"]].map(o => `<option value="${o[0]}" ${state.sortBy===o[0]?"selected":""}>Sort: ${o[1]}</option>`).join("")}
-        </select>
-      </div>
-      <div style="font-size:12px;color:#6b6560;margin-bottom:20px;" class="mono">Showing ${filtered.length} of ${FILMS.length} · <span style="color:#B388FF;">Stress test</span> marks films scored to test the method (AI stress tests used AI assistance)</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px;">${filtered.map(filmCardHTML).join("")}</div>
-    </div></section>
-    <div class="modal-overlay ${state.selectedFilm ? 'open' : ''}" id="modalOverlay" onclick="closeModal()">${modalHTML(state.selectedFilm)}</div>`;
-  attachEvents();
+    <div class="controls">
+      <input id="q" value="${esc(state.search)}" placeholder="Search films or directors" aria-label="Search films">
+      ${[["all","All"],...LEVELS.map(l => [l.key, l.name])].map(([k, n]) => `<button class="fpill ${state.filter === k && !state.search ? "on" : ""}" data-f="${k}">${n}</button>`).join("")}
+      <select id="sort" aria-label="Sort">${[["rpdi-desc","RPDI, highest first"],["rpdi","RPDI, lowest first"],["gap","Gap, highest first"],["year","Newest first"],["imdb","IMDb, highest first"]].map(([v, n]) => `<option value="${v}" ${state.sortBy === v ? "selected" : ""}>${n}</option>`).join("")}</select>
+    </div>
+    <div class="note">Showing ${list.length} of ${FILMS.length}. Posters print in two inks; hover for colour. Films marked as stress tests were scored to test the method.</div>
+    <div class="films">${list.map(card).join("")}</div>`;
+  document.querySelectorAll(".film").forEach(c => { const open = () => openModal(+c.dataset.id); c.addEventListener("click", open); c.addEventListener("keydown", e => { if (e.key === "Enter") open(); }); });
+  document.querySelectorAll(".fpill").forEach(b => b.addEventListener("click", () => { state.filter = b.dataset.f; state.search = ""; render(); }));
+  const q = document.getElementById("q");
+  q.addEventListener("input", e => { state.search = e.target.value; render(); const el = document.getElementById("q"); el.focus(); el.setSelectionRange(el.value.length, el.value.length); });
+  document.getElementById("sort").addEventListener("change", e => { state.sortBy = e.target.value; render(); });
 }
-function attachEvents() {
-  document.querySelectorAll(".film-card").forEach(card => card.addEventListener("click", () => { state.selectedFilm = FILMS.find(f => f.id === parseInt(card.dataset.id)); render(); }));
-  document.querySelectorAll(".filter-pill").forEach(btn => btn.addEventListener("click", () => { state.filter = btn.dataset.filter; state.search = ""; render(); }));
-  const si = document.getElementById("searchInput");
-  si && si.addEventListener("input", e => { state.search = e.target.value; render(); const el = document.getElementById("searchInput"); el.focus(); el.setSelectionRange(el.value.length, el.value.length); });
-  const ss = document.getElementById("sortSelect");
-  ss && ss.addEventListener("change", e => { state.sortBy = e.target.value; render(); });
-}
-function closeModal() { state.selectedFilm = null; render(); }
-document.addEventListener("keydown", e => { if (e.key === "Escape" && state.selectedFilm) closeModal(); });
+const M = document.getElementById("modal");
+function openModal(id) { const f = FILMS.find(x => x.id === id); M.innerHTML = modal(f); M.classList.add("open"); }
+function closeModal() { M.classList.remove("open"); M.innerHTML = ""; }
+M.addEventListener("click", closeModal);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && M.classList.contains("open")) closeModal(); });
 
-/* ---------- findings (static) ---------- */
+/* findings */
 function findings() {
-  const gas = FILMS.filter(f => f.gapClass.includes("Gaslighting")).length;
-  const minFilm = FILMS.reduce((m, f) => f.rpdi < m.rpdi ? f : m);
-  const n = FILMS.length, mx = FILMS.reduce((s,f)=>s+f.rpdi,0)/n, my = FILMS.reduce((s,f)=>s+f.imdb,0)/n;
-  let sxy=0,sxx=0,syy=0; FILMS.forEach(f=>{sxy+=(f.rpdi-mx)*(f.imdb-my);sxx+=(f.rpdi-mx)**2;syy+=(f.imdb-my)**2;});
-  const r = (sxy/Math.sqrt(sxx*syy)).toFixed(2);
+  const n = FILMS.length, neg = FILMS.filter(f => f.gap < -0.05).length;
+  const minF = FILMS.reduce((m, f) => f.rpdi < m.rpdi ? f : m);
+  const mx = FILMS.reduce((s, f) => s + f.rpdi, 0) / n, my = FILMS.reduce((s, f) => s + f.imdb, 0) / n;
+  let sxy = 0, sxx = 0, syy = 0; FILMS.forEach(f => { sxy += (f.rpdi - mx) * (f.imdb - my); sxx += (f.rpdi - mx) ** 2; syy += (f.imdb - my) ** 2; });
+  const r = (sxy / Math.sqrt(sxx * syy)).toFixed(2);
   document.getElementById("findings-in").innerHTML = `
     <p class="eyebrow">Findings</p><h2 class="h2">What the data shows</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:40px">
-      ${[[`${gas}/${n}`,"Films with a negative Gap","The telling is more dramatic than the facts support","#ff5a3c"],
-         [r,"Correlation with IMDb rating","Higher-rated films distort a little less, but a rating can't tell you how a film distorts","#4ECDC4"],
-         ["2","Positive-Gap films","Saving Private Ryan and U-571 (AI-scored): invented events told calmly","#f0a64a"],
-         [minFilm.rpdi.toFixed(3),"Lowest RPDI",`${minFilm.title}${minFilm.stressTest ? " (an AI stress test score)" : ""}`,"#5fd38a"]].map(s => `
-        <div style="padding:24px;background:rgba(255,255,255,.02);border:1px solid ${s[3]}2a;border-radius:16px;">
-          <div style="font-size:40px;font-weight:700;color:${s[3]};line-height:1;margin-bottom:12px;letter-spacing:-.02em">${s[0]}</div>
-          <div style="font-size:14px;color:#eee;font-weight:600;margin-bottom:8px;">${s[1]}</div>
-          <div style="font-size:13px;color:#8a8580;line-height:1.6;">${s[2]}</div></div>`).join("")}
-    </div>
-    <div style="margin-top:14px;padding:26px 28px;border-radius:16px;background:rgba(255,255,255,.02);border:1px solid var(--line);display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:22px;">
-      <div style="grid-column:1 / -1"><p class="eyebrow" style="color:#8a8580">Survey · 23 people</p><div style="font-size:13px;color:#8a8580;margin-top:8px">Why D counts for more than L in the 0.6 / 0.4 split. It supports the direction, not the exact numbers.</div></div>
-      ${[["91%","agree inaccurate historical films can hurt public understanding of real history"],["65%","say historical accuracy is what matters most when they watch one"]].map(s => `<div><div style="font-size:30px;font-weight:700;color:#fff">${s[0]}</div><div style="font-size:13px;color:#8a8580;margin-top:4px;line-height:1.5">${s[1]}</div></div>`).join("")}
-    </div>`;
+    <div class="fnd">${[[`${neg}/${n}`, "Negative Gap", "The telling is more dramatic than the facts support."],
+      [r, "Correlation with IMDb rating", "Higher-rated films distort a little less, but a rating can't say how a film distorts."],
+      ["2", "Positive-Gap films", "Saving Private Ryan and U-571 (AI-scored): invented events, told calmly."],
+      [minF.rpdi.toFixed(3), "Lowest RPDI", `${esc(minF.title)}${minF.stressTest ? " (an AI stress test score)" : ""}.`]].map(([v, k, p]) => `<div><b>${v}</b><strong>${k}</strong><p>${p}</p></div>`).join("")}</div>
+    <div class="survey"><div><p class="eyebrow">Survey · 23 people</p><p>Why D counts for more than L in the 0.6 / 0.4 split. It supports the direction, not the exact numbers.</p></div>
+      <div><b>91%</b><p>agree inaccurate historical films can hurt public understanding of real history</p></div>
+      <div><b>65%</b><p>say historical accuracy is what matters most when they watch one</p></div></div>`;
 }
 
-dashboard(); render(); findings();
+drawTop(); render(); findings();
 
-/* ---------- page behaviour ---------- */
-requestAnimationFrame(() => document.body.classList.add("go"));
-const nav = document.getElementById("nav");
-addEventListener("scroll", () => nav.classList.toggle("solid", scrollY > 40), { passive: true });
+/* page behaviour */
 const menu = document.getElementById("menu"), burger = document.getElementById("burger");
 burger.addEventListener("click", () => { const o = menu.classList.toggle("open"); burger.setAttribute("aria-expanded", o); });
 menu.addEventListener("click", e => { if (e.target.tagName === "A") menu.classList.remove("open"); });
-const secs = ["top","app","method","plane","findings","writeup"].map(id => document.getElementById(id));
-secs.forEach(s => s && new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) menu.querySelectorAll("a").forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + (e.target.id === "app" ? "database" : e.target.id))); }), { rootMargin: "-45% 0px -50% 0px" }).observe(s));
+["database","method","plane","findings","writeup"].forEach(id => { const s = document.getElementById(id); s && new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) menu.querySelectorAll("a").forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + id)); }), { rootMargin: "-45% 0px -50% 0px" }).observe(s); });
 document.getElementById("copy").addEventListener("click", async e => {
   const b = e.currentTarget;
   try { await navigator.clipboard.writeText("pathiarjun15@gmail.com"); b.textContent = "Copied"; }
@@ -837,7 +721,6 @@ document.getElementById("copy").addEventListener("click", async e => {
   setTimeout(() => b.textContent = "Copy email", 2200);
 });
 </script>
-<script src="js/hero.js"></script>
 <script type="module" src="js/plane3d.js"></script>
 </body>
 </html>
